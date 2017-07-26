@@ -1,0 +1,7 @@
+[
+  "events-generator.php",
+  "src/**/*",
+  "lang/**/*",
+  "license.txt",
+  "readme.txt"
+]
