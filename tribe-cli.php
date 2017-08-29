@@ -31,7 +31,11 @@ define( 'TRIBE_CLI_DIR', dirname( __FILE__ ) );
 define( 'TRIBE_CLI_FILE', __FILE__ );
 
 // Composer managed PHP 5.2 compatible autoloader, will include our autoloader too
-include dirname( __FILE__ ) . '/vendor/autoload_52.php';
+if ( version_compare( PHP_VERSION, '5.3.0', ">=" ) ) {
+	include dirname( __FILE__ ) . '/vendor/autoload.php';
+} else {
+	include dirname( __FILE__ ) . '/vendor/autoload_52.php';
+}
 
 $container = new tad_DI52_Container();
 
