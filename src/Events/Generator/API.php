@@ -1,16 +1,16 @@
 <?php
 
-class Tribe__Events__Generator__API__Events {
+class Tribe__CLI__Events__Generator__API {
 
 	/**
 	 * Singleton to instantiate the class.
 	 *
-	 * @return Tribe__Events__Generator__API__Events
+	 * @return Tribe__CLI__Events__Generator__API
 	 */
 	public static function instance() {
 
 		/**
-		 * @var $instance null|Tribe__Events__Generator__API__Events
+		 * @var $instance null|Tribe__CLI__Events__Generator__API
 		 */
 		static $instance;
 

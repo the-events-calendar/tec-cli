@@ -1,11 +1,11 @@
 <?php
 /*
-Plugin Name: The Events Calendar: Event Generator
-Description: This add-on generates events for test purposes.
+Plugin Name: Tribe CLI
+Description: A collection of WP-CLI utilities for testing and maintenance purposes.
 Version: 0.1
 Author: Modern Tribe, Inc.
 Author URI: http://m.tri.be/21
-Text Domain: tribe-events-generator
+Text Domain: tribe-cli
 License: GPLv2 or later
 */
 
@@ -27,11 +27,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-define( 'EVENTS_GENERATOR_DIR', dirname( __FILE__ ) );
-define( 'EVENTS_GENERATOR_FILE', __FILE__ );
+define( 'TRIBE_CLI_DIR', dirname( __FILE__ ) );
+define( 'TRIBE_CLI_FILE', __FILE__ );
 
-include EVENTS_GENERATOR_DIR . '/src/Tribe/Main.php';
+// Composer managed PHP 5.2 compatible autoloader, will include our autoloader too
+include dirname( __FILE__ ) . '/vendor/autoload_52.php';
 
-if ( class_exists( 'Tribe__Events__Generator__Main' ) ) {
-	Tribe__Events__Generator__Main::instance();
-}
+$container = new tad_DI52_Container();
+
+$container->register( 'Tribe__CLI__Main' );
+$container->register( 'Tribe__CLI__Service_Providers__Events' );

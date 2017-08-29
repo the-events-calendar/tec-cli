@@ -1,0 +1,32 @@
+{
+  "name": "moderntribe/tribe-cli",
+  "description": "A collection of WP-CLI utilities for testing and maintenance purposes.",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0",
+  "authors": [
+    {
+      "name": "Modern Tribe, Inc.",
+      "email": "tribe@tri.be"
+    }
+  ],
+  "require": {
+    "lucatume/di52": "^1.0"
+  },
+  "require-dev": {
+    "xrstf/composer-php52": "^1.0"
+  },
+  "autoload": {
+    "files": ["autoload.php"]
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "xrstf\\Composer52\\Generator::onPostInstallCmd"
+    ],
+    "post-update-cmd": [
+      "xrstf\\Composer52\\Generator::onPostInstallCmd"
+    ],
+    "post-autoload-dump": [
+      "xrstf\\Composer52\\Generator::onPostInstallCmd"
+    ]
+  }
+}

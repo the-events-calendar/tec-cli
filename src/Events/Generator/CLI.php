@@ -1,6 +1,6 @@
 <?php
 
-class Tribe__Events__Generator__CLI__Events extends \WP_CLI_Command {
+class Tribe__CLI__Events__Generator__CLI extends \WP_CLI_Command {
 
 	/**
 	 * Generate events 100 at a time (default generates one).
@@ -27,11 +27,11 @@ class Tribe__Events__Generator__CLI__Events extends \WP_CLI_Command {
 				$max_set = $count;
 			}
 
-			$api = Tribe__Events__Generator__API__Events::instance();
+			$api = Tribe__CLI__Events__Generator__API::instance();
 
 			$progress_bar = \WP_CLI\Utils\make_progress_bar(
 				sprintf(
-					_n( 'Generating event (%d/%d)', 'Genenerating %s events (%s / %s)', $max_set, 'tribe-events-generator' ),
+					_n( 'Generating event (%d/%d)', 'Genenerating %s events (%s / %s)', $max_set, 'tribe-cli' ),
 					number_format_i18n( $max_set ),
 					number_format_i18n( $total_count - $count ),
 					number_format_i18n( $total_count )
