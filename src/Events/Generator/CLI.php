@@ -12,7 +12,8 @@ class Tribe__CLI__Events__Generator__CLI extends \WP_CLI_Command {
 	 *
 	 * @param \Tribe__CLI__Events__Generator__API $api
 	 */
-	public function __construct(Tribe__CLI__Events__Generator__API $api  ) {
+	public function __construct( Tribe__CLI__Events__Generator__API $api ) {
+		parent::__construct();
 		$this->api = $api;
 	}
 
