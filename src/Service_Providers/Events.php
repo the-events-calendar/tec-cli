@@ -54,15 +54,7 @@ class Tribe__CLI__Service_Providers__Events extends Tribe__CLI__Service_Provider
 		}
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			\WP_CLI::add_command( 'tribe-events-generator', 'Tribe__CLI__Events__Generator__CLI' );
+			WP_CLI::add_command( 'tribe-events-generator', 'Tribe__CLI__Events__Generator__CLI' );
 		}
-	}
-
-	/**
-	 * Binds and sets up implementations at boot time.
-	 */
-	public function boot()
-	{
-		// no-op
 	}
 }

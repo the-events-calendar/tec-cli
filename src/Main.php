@@ -89,8 +89,7 @@ class Tribe__Cli__Main extends tad_DI52_ServiceProvider {
 	/**
 	 * Binds and sets up implementations at boot time.
 	 */
-	public function boot()
-	{
+	public function boot() {
 		// no-op
 	}
 }

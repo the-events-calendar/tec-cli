@@ -77,4 +77,11 @@ abstract class Tribe__CLI__Service_Providers__Base extends tad_DI52_ServiceProvi
 
 		printf( '<div class="notice notice-warning is-dismissible"><p>%s</p></div>', $message );
 	}
+
+	/**
+	 * Binds and sets up implementations at boot time.
+	 */
+	public function boot() {
+		// no-op
+	}
 }
