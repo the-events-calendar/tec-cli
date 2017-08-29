@@ -44,7 +44,7 @@ class Tribe__CLI__Events__Generator__CLI extends \WP_CLI_Command {
 
 			$progress_bar = \WP_CLI\Utils\make_progress_bar(
 				sprintf(
-					_n( 'Generating event (%d/%d)', 'Genenerating %s events (%s / %s)', $max_set, 'tribe-cli' ),
+					_n( 'Generating event (%d/%d)', 'Generating %s events (%s / %s)', $max_set, 'tribe-cli' ),
 					number_format_i18n( $max_set ),
 					number_format_i18n( $total_count - $count ),
 					number_format_i18n( $total_count )
