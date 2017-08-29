@@ -75,6 +75,6 @@ abstract class Tribe__CLI__Service_Providers__Base extends tad_DI52_ServiceProvi
 			'tribe-cli' );
 		$message  = sprintf( $template, $links );
 
-		printf( '<div class="error"><p>%s</p></div>', $message );
+		printf( '<div class="notice notice-warning is-dismissible"><p>%s</p></div>', $message );
 	}
 }
