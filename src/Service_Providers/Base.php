@@ -59,7 +59,6 @@ abstract class Tribe__CLI__Service_Providers__Base extends tad_DI52_ServiceProvi
 	 * Hooked to the admin_notices action
 	 */
 	public function admin_notices() {
-
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			return;
 		}
@@ -71,12 +70,11 @@ abstract class Tribe__CLI__Service_Providers__Base extends tad_DI52_ServiceProvi
 				esc_attr( $plugin['short_name'] ), esc_html( $plugin['short_name'] ) );
 		}
 
-		$message = sprintf(
-			esc_html__( 'To begin using ' . $this->get_display_name() . ', please install and activate the latest versions of %1$s.', 'tribe-cli' ),
-			$links[0]
-		);
+		$links    = implode( ', ', $links );
+		$template = esc_html__( 'To begin using ' . $this->get_display_name() . ', please install and activate the latest versions of %1$s.',
+			'tribe-cli' );
+		$message  = sprintf( $template, $links );
 
 		printf( '<div class="error"><p>%s</p></div>', $message );
-
 	}
 }
