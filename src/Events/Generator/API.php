@@ -1,36 +1,6 @@
 <?php
 
-class Tribe__Events__Generator__API__Events {
-
-	/**
-	 * Singleton to instantiate the class.
-	 *
-	 * @return Tribe__Events__Generator__API__Events
-	 */
-	public static function instance() {
-
-		/**
-		 * @var $instance null|Tribe__Events__Generator__API__Events
-		 */
-		static $instance;
-
-		if ( ! $instance ) {
-			$instance = new self;
-		}
-
-		return $instance;
-
-	}
-
-	/**
-	 * Constructor method.
-	 */
-	public function __construct() {
-
-		// Nothing to do here
-
-	}
-
+class Tribe__CLI__Events__Generator__API {
 	/**
 	 * Generate multiple events at once.
 	 *

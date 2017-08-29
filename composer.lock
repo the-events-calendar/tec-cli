@@ -1,0 +1,92 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "3378e800e7258b3645a299f9e00990d4",
+    "packages": [
+        {
+            "name": "lucatume/di52",
+            "version": "1.4.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lucatume/di52.git",
+                "reference": "f8f67c0e9e74b2ea210cfbedfcde4992bdb578c4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lucatume/di52/zipball/f8f67c0e9e74b2ea210cfbedfcde4992bdb578c4",
+                "reference": "f8f67c0e9e74b2ea210cfbedfcde4992bdb578c4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2",
+                "xrstf/composer-php52": "1.*"
+            },
+            "require-dev": {
+                "phpunit/phpunit-mock-objects-php52": "dev-1.1.0-php52",
+                "phpunit/phpunit-php52": "dev-3.6.12-php52"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "tad_DI52_": [
+                        "src/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Luca Tumedei",
+                    "email": "luca@theaveragedev.com"
+                }
+            ],
+            "description": "A PHP 5.2 compatible dependency injection container.",
+            "time": "2017-01-19T12:56:51+00:00"
+        },
+        {
+            "name": "xrstf/composer-php52",
+            "version": "v1.0.20",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer-php52/composer-php52.git",
+                "reference": "bd41459d5e27df8d33057842b32377c39e97a5a8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer-php52/composer-php52/zipball/bd41459d5e27df8d33057842b32377c39e97a5a8",
+                "reference": "bd41459d5e27df8d33057842b32377c39e97a5a8",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-default": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "xrstf\\Composer52": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "time": "2016-04-16T21:52:24+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

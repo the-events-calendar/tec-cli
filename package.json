@@ -6,9 +6,9 @@
   "_zipfoldername": "the-events-calendar-generator",
   "_resourcepath": "src/resources",
   "_domainPath": "lang",
-  "_textDomain": "tribe-events-generator",
+  "_textDomain": "tribe-cli",
   "_glotPressUrl": "http://translations.theeventscalendar.com",
-  "_glotPressSlug": "tribe-events-generator",
+  "_glotPressSlug": "tribe-cli",
   "_glotPressFileFormat": "%textdomain%-%wp_locale%.%format%",
   "_glotPressFormats": [
     "po",

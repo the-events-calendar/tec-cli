@@ -1,6 +1,21 @@
 <?php
 
-class Tribe__Events__Generator__CLI__Events extends \WP_CLI_Command {
+class Tribe__CLI__Events__Generator__CLI extends \WP_CLI_Command {
+
+	/**
+	 * @var \Tribe__CLI__Events__Generator__API
+	 */
+	private $api;
+
+	/**
+	 * Tribe__CLI__Events__Generator__CLI constructor.
+	 *
+	 * @param \Tribe__CLI__Events__Generator__API $api
+	 */
+	public function __construct( Tribe__CLI__Events__Generator__API $api ) {
+		parent::__construct();
+		$this->api = $api;
+	}
 
 	/**
 	 * Generate events 100 at a time (default generates one).
@@ -27,11 +42,9 @@ class Tribe__Events__Generator__CLI__Events extends \WP_CLI_Command {
 				$max_set = $count;
 			}
 
-			$api = Tribe__Events__Generator__API__Events::instance();
-
 			$progress_bar = \WP_CLI\Utils\make_progress_bar(
 				sprintf(
-					_n( 'Generating event (%d/%d)', 'Genenerating %s events (%s / %s)', $max_set, 'tribe-events-generator' ),
+					_n( 'Generating event (%d/%d)', 'Genenerating %s events (%s / %s)', $max_set, 'tribe-cli' ),
 					number_format_i18n( $max_set ),
 					number_format_i18n( $total_count - $count ),
 					number_format_i18n( $total_count )
@@ -42,7 +55,7 @@ class Tribe__Events__Generator__CLI__Events extends \WP_CLI_Command {
 			for ( $x = 0; $x < $max_set; $x ++ ) {
 				$memory_used = memory_get_usage();
 
-				$api->generate_event();
+				$this->api->generate_event();
 
 				$progress_bar->tick();
 
