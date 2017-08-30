@@ -1,6 +1,6 @@
 <?php
 
-class Tribe__CLI__Tickets__Command extends \WP_CLI_Command {
+class Tribe__CLI__Tickets__Command extends WP_CLI_Command {
 
 	/**
 	 * @var \Tribe__CLI__Tickets__Generator__RSVP__CLI

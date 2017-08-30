@@ -42,3 +42,4 @@ $container = new tad_DI52_Container();
 $container->register( 'Tribe__CLI__Main' );
 $container->register( 'Tribe__CLI__Service_Providers__Events' );
 $container->register( 'Tribe__CLI__Service_Providers__Tickets' );
+$container->register( 'Tribe__CLI__Service_Providers__Tickets_Plus' );
