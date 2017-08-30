@@ -1,6 +1,6 @@
 <?php
 
-class Tribe__CLI__Events__Generator__CLI extends \WP_CLI_Command {
+class Tribe__CLI__Events__Generator__CLI extends WP_CLI_Command {
 
 	/**
 	 * @var \Tribe__CLI__Events__Generator__API
