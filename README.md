@@ -6,9 +6,9 @@ WP-CLI tools for Modern Tribe plugins.
 * [Events](#events)
     * [Events generator](#events-generator)
     * [Reset events content](#reset-events)
-* [Tickets commands](#tickets)
+* [Tickets](#tickets)
     * [RSVP tickets attendees generator](#rsvp-tickets-attendees-generator)
-    * [Reset RSVP tickets reset](#reset-rsvp-tickets)
+    * [Reset RSVP tickets](#reset-rsvp-tickets)
 
 ## Events
 
