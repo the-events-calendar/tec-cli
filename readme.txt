@@ -1,4 +1,4 @@
-=== The Events Calendar: Event Generator ===
+=== Tribe-CLI ===
 
 Contributors: ModernTribe, barry.hughes, bordoni, borkweb, brianjessee, brook-tribe, faction23, geoffgraham, ggwicz, jazbek, jbrinley, joshlimecuda, leahkoerper, lucatume, mastromktg, mat-lipe, mdbitz, neillmcshea, nicosantos, peterchester, reid.peifer, roblagatta, ryancurban, shane.pearlman, thatdudebutch,  zbtirrell
 Tags: widget, events, simple, tooltips, grid, month, list, calendar, event, venue, community, registration, api, dates, date, plugin, posts, sidebar, template, theme, time, google maps, google, maps, conference, workshop, concert, meeting, seminar, summit, forum, shortcode, The Events Calendar, The Events Calendar PRO, Community Events, tickets, RSVP, registration
@@ -8,11 +8,11 @@ Tested up to: 4.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Event Generator is an add-on for The Events Calendar, Community Events, Event Tickets, and Tickets Plus. Users submitting events via Community Events can now add tickets to their events, and the site admin can collect fees from ticket sales.
+Tribe-CLI is an add-on for The Events Calendar, Community Events, Event Tickets, and Tickets Plus. Users submitting events via Community Events can now add tickets to their events, and the site admin can collect fees from ticket sales.
 
 == Description ==
 
-= The Events Calendar: Event Generator =
+= Tribe-CLI =
 
 * Frontend user ticket creation for events
 * Users can create free or paid tickets
@@ -33,17 +33,17 @@ Note: you'll need to have the latest versions of <a href="http://m.tri.be/3j">Th
 
 = Requirements =
 
-* PHP 5.2.4 or greater (recommended: PHP 5.4 or greater)
-* WordPress 3.9 or above
+* PHP 5.3.29 or greater (recommended: PHP 5.4 or greater)
+* WordPress 4.5 or above
 * jQuery 1.11.x
-* The Events Calendar 3.12.4 or above
+* The Events Calendar 4.5.4 or above
 * Community Events 3.12.1 or above
-* Event Tickets 4.0 or above
+* Event Tickets 4.5.4 or above
 * Tickets Plus 4.0 or above
 
 == Documentation ==
 
-Event Generator extends the functionality of Modern Tribe's The Events Calendar (http://m.tri.be/3j), Community Events, Event Tickets, and Tickets Plus to allow for frontend event submission with tickets on your WordPress site.
+Tribe-CLI extends the functionality of Modern Tribe's The Events Calendar (http://m.tri.be/3j), Community Events, Event Tickets, and Tickets Plus to allow for frontend event submission with tickets on your WordPress site.
 
 All of our online documentation can be found on <a href="http://m.tri.be/eu">our documentation site</a>.
 

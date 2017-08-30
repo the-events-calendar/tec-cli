@@ -60,8 +60,9 @@ class Tribe__CLI__Tickets__Command extends \WP_CLI_Command {
 	 *      wp event-ticket generate-attendees 23
 	 *      wp event-ticket generate-attendees 23 --count=89
 	 *      wp event-ticket generate-attendees 23 --tickets_min=3
-	 *      wp event-ticket generate-attendees 23 --tickets_min=3 --ticket_max=10
-	 *      wp event-ticket generate-attendees 23 --tickets_min=3 --ticket_max=10 --ticket_status=no
+	 *      wp event-ticket generate-attendees 23 --tickets_min=3 --tickets_max=10
+	 *      wp event-ticket generate-attendees 23 --tickets_min=3 --tickets_max=10 --ticket_status=no
+	 *      wp event-ticket generate-attendees 23 --ticket_id=89
 	 *
 	 * @subcommand generate-rsvp-attendees
 	 */
@@ -79,6 +80,11 @@ class Tribe__CLI__Tickets__Command extends \WP_CLI_Command {
 	 *
 	 * [--ticket_id=<ticket_id>]
 	 * : only remove attendees for this RSVP ticket attached to the post
+	 *
+	 * ## EXAMPLES
+	 *
+	 *      wp event-ticket reset-rsvp-attendees 23
+	 *      wp event-ticket reset-rsvp-attendees 23 --ticket_id=89
 	 *
 	 * @subcommand reset-rsvp-attendees
 	 */
