@@ -108,6 +108,7 @@ class Tribe__CLI__Tickets__Generator__RSVP__CLI {
 					$tickets->email                            => $attendee_email,
 					'_tribe_tickets_attendee_user_id'          => 0,
 					'_tribe_rsvp_attendee_ticket_sent'         => 1,
+					'_tribe_cli_generated'                     => 1,
 				);
 
 				foreach ( $meta as $key => $value ) {
