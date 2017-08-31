@@ -57,12 +57,12 @@ class Tribe__CLI__Tickets__Command extends WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *      wp event-ticket generate-attendees 23
-	 *      wp event-ticket generate-attendees 23 --count=89
-	 *      wp event-ticket generate-attendees 23 --tickets_min=3
-	 *      wp event-ticket generate-attendees 23 --tickets_min=3 --tickets_max=10
-	 *      wp event-ticket generate-attendees 23 --tickets_min=3 --tickets_max=10 --ticket_status=no
-	 *      wp event-ticket generate-attendees 23 --ticket_id=89
+	 *      wp event-tickets generate-attendees 23
+	 *      wp event-tickets generate-attendees 23 --count=89
+	 *      wp event-tickets generate-attendees 23 --tickets_min=3
+	 *      wp event-tickets generate-attendees 23 --tickets_min=3 --tickets_max=10
+	 *      wp event-tickets generate-attendees 23 --tickets_min=3 --tickets_max=10 --ticket_status=no
+	 *      wp event-tickets generate-attendees 23 --ticket_id=89
 	 *
 	 * @subcommand generate-rsvp-attendees
 	 */
@@ -83,8 +83,8 @@ class Tribe__CLI__Tickets__Command extends WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *      wp event-ticket reset-rsvp-attendees 23
-	 *      wp event-ticket reset-rsvp-attendees 23 --ticket_id=89
+	 *      wp event-tickets reset-rsvp-attendees 23
+	 *      wp event-tickets reset-rsvp-attendees 23 --ticket_id=89
 	 *
 	 * @subcommand reset-rsvp-attendees
 	 */
