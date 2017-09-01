@@ -3,16 +3,16 @@
 class Tribe__CLI__Tickets_Plus__Command extends WP_CLI_Command {
 
 	/**
-	 * @var \Tribe__CLI__Tickets__Plus_Generator__WooCommerce__CLI
+	 * @var \Tribe__CLI__Tickets_Plus__Generator__WooCommerce__CLI
 	 */
 	protected $wc_generator;
 
 	/**
 	 * Tribe__CLI__Tickets_Plus__Command constructor.
 	 *
-	 * @param \Tribe__CLI__Tickets__Plus_Generator__WooCommerce__CLI $wc_generator
+	 * @param \Tribe__CLI__Tickets_Plus__Generator__WooCommerce__CLI $wc_generator
 	 */
-	public function __construct( Tribe__CLI__Tickets__Plus_Generator__WooCommerce__CLI $wc_generator ) {
+	public function __construct( Tribe__CLI__Tickets_Plus__Generator__WooCommerce__CLI $wc_generator ) {
 		parent::__construct();
 		$this->wc_generator = $wc_generator;
 	}
@@ -48,12 +48,17 @@ class Tribe__CLI__Tickets_Plus__Command extends WP_CLI_Command {
 	 * ---
 	 * default: random
 	 * options:
-	 *      - yes
-	 *      - no
+	 *      - completed
+	 *      - processing
+	 *      - failed
+	 *      - random
 	 * ---
 	 *
 	 * [--ticket_id=<ticket_id>]
 	 * : the ID of the ticket orders should be assigned to
+	 *
+	 * [--no_create_users]
+	 * : use available subscribers to make orderd and avoid creating users
 	 *
 	 * ## EXAMPLES
 	 *
@@ -63,6 +68,7 @@ class Tribe__CLI__Tickets_Plus__Command extends WP_CLI_Command {
 	 *      wp event-tickets-plus generate-orders 23 --tickets_min=3 --tickets_max=10
 	 *      wp event-tickets-plus generate-orders 23 --tickets_min=3 --tickets_max=10 --ticket_status=no
 	 *      wp event-tickets-plus generate-orders 23 --ticket_id=89
+	 *      wp event-tickets-plus generate-orders 23 --ticket_id=89 --create_users=no
 	 *
 	 * @subcommand generate-wc-orders
 	 */

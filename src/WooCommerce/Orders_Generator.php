@@ -10,18 +10,16 @@
  */
 class Tribe__CLI__WooCommerce__Orders_Generator {
 
-	private $users = array();
-	public $settings = array();
+	protected $users;
 
-	public function generate_orders( $count, array $product_ids, array $args = array() ) {
-		global $wpdb, $woocommerce;
+	public function generate_orders( $count, array $product_ids, array $args ) {
+		/** @var WooCommerce $woocommerce */
+		global $woocommerce;
 
 		set_time_limit( 0 );
 
 		$woocommerce->init();
 		$woocommerce->frontend_includes();
-
-		$session_class = apply_filters( 'woocommerce_session_handler', 'WC_Session_Handler' );
 
 		// Class instances
 		require_once WC()->plugin_path() . '/includes/abstracts/abstract-wc-session.php';
@@ -44,31 +42,29 @@ class Tribe__CLI__WooCommerce__Orders_Generator {
 		$woocommerce->cart->empty_cart();
 
 		for ( $x = 0; $x < $count; $x ++ ) {
-			$cart               = array();
-			$order_min_quantity = $this->settings['min_order_products'];
-			$order_max_quantity = $this->settings['max_order_products'];
-			$num_products       = rand( $order_min_quantity, $order_max_quantity );
-			$create_user        = false;
-
-			if ( $this->settings['create_users'] ) {
-				$create_user = ( rand( 1, 100 ) <= 50 ) ? true : false;
-			}
+			$order_min_quantity = $args['tickets_min'];
+			$order_max_quantity = $args['tickets_max'];
+			$num_products       = mt_rand( $order_min_quantity, $order_max_quantity );
+			$create_user        = isset( $args['create_users'] ) ? (bool) $args['create_users'] : true;
 
 			if ( $create_user ) {
-				$user_id = self::create_user();
+				$user_id = $this->create_user();
 			} else {
-				$user_id = self::get_random_user();
+				$user_id = $this->get_random_user();
 			}
 
 			// add random products to cart
 			for ( $i = 0; $i < $num_products; $i ++ ) {
-				$idx        = rand( 0, count( $product_ids ) - 1 );
+				$idx        = mt_rand( 0, count( $product_ids ) - 1 );
 				$product_id = $product_ids[ $idx ];
 				$woocommerce->cart->add_to_cart( $product_id, 1 );
 			}
 
+			$available_gateways = $woocommerce->payment_gateways()->get_available_payment_gateways();
+			$payment_method     = array_rand( $available_gateways );
+
 			// process checkout
-			$data     = array(
+			$data           = array(
 				'billing_country'    => get_user_meta( $user_id, 'billing_country', true ),
 				'billing_first_name' => get_user_meta( $user_id, 'billing_first_name', true ),
 				'billing_last_name'  => get_user_meta( $user_id, 'billing_last_name', true ),
@@ -81,6 +77,8 @@ class Tribe__CLI__WooCommerce__Orders_Generator {
 				'billing_email'      => get_user_meta( $user_id, 'billing_email', true ),
 				'billing_phone'      => get_user_meta( $user_id, 'billing_phone', true ),
 
+				'payment_method' => $payment_method,
+
 				'shipping_country'    => get_user_meta( $user_id, 'shipping_country', true ),
 				'shipping_first_name' => get_user_meta( $user_id, 'shipping_first_name', true ),
 				'shipping_last_name'  => get_user_meta( $user_id, 'shipping_last_name', true ),
@@ -92,6 +90,7 @@ class Tribe__CLI__WooCommerce__Orders_Generator {
 				'shipping_postcode'   => get_user_meta( $user_id, 'shipping_postcode', true ),
 				'shipping_email'      => get_user_meta( $user_id, 'shipping_email', true ),
 				'shipping_phone'      => get_user_meta( $user_id, 'shipping_phone', true ),
+
 			);
 			$checkout = new WC_Checkout();
 
@@ -116,20 +115,10 @@ class Tribe__CLI__WooCommerce__Orders_Generator {
 
 				$order = new WC_Order( $order_id );
 
-				// figure out the order status
-				$status         = 'completed';
-				$rand           = mt_rand( 1, 100 );
-				$completed_pct  = $this->settings['order_completed_pct']; // e.g. 90
-				$processing_pct = $completed_pct + $this->settings['order_processing_pct']; // e.g. 90 + 5
-				$failed_pct     = $processing_pct + $this->settings['order_failed_pct']; // e.g. 95 + 5
+				$status = $args['ticket_status'];
 
-				if ( $this->settings['order_completed_pct'] > 0 && $rand <= $completed_pct ) {
-					$status = 'completed';
-				} elseif ( $this->settings['order_processing_pct'] > 0 && $rand <= $processing_pct ) {
-					$status = 'processing';
-				} elseif ( $this->settings['order_failed_pct'] > 0 && $rand <= $failed_pct ) {
-					$status = 'failed';
-				}
+				// avoid sending emails
+				update_post_meta( $order_id, '_tribe_mail_sent', true );
 
 				if ( $status == 'failed' ) {
 					$order->update_status( $status );
@@ -145,25 +134,16 @@ class Tribe__CLI__WooCommerce__Orders_Generator {
 	}
 
 	public function create_user() {
-		global $wpdb;
-
-		$user_id = 0;
-
-		do {
-			$user_row = $wpdb->get_row( "SELECT * FROM fakenames ORDER BY RAND() LIMIT 1" );
-
-			$count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}users WHERE user_login = '{$user_row->username}'" );
-
-			$unique = ( $count == 0 ) ? true : false;
-		} while ( ! $unique );
-
+		$faker = Faker\Factory::create();
+		$faker->addProvider( new Faker\Provider\en_US\Address( $faker ) );
+		$faker->addProvider( new Faker\Provider\en_US\PhoneNumber( $faker ) );
 
 		$user = array(
-			'user_login' => $user_row->username,
-			'user_pass'  => '75nineteen',
-			'user_email' => $user_row->emailaddress,
-			'first_name' => $user_row->givenname,
-			'last_name'  => $user_row->surname,
+			'user_login' => $faker->userName,
+			'user_pass'  => 'password',
+			'user_email' => $faker->email,
+			'first_name' => $faker->firstName,
+			'last_name'  => $faker->lastName,
 			'role'       => 'customer',
 		);
 
@@ -171,24 +151,24 @@ class Tribe__CLI__WooCommerce__Orders_Generator {
 
 		// billing/shipping address
 		$meta = array(
-			'billing_country'     => $user_row->country,
-			'billing_first_name'  => $user_row->givenname,
-			'billing_last_name'   => $user_row->surname,
-			'billing_address_1'   => $user_row->streetaddress,
-			'billing_city'        => $user_row->city,
-			'billing_state'       => $user_row->state,
-			'billing_postcode'    => $user_row->zipcode,
-			'billing_email'       => $user_row->emailaddress,
-			'billing_phone'       => $user_row->telephonenumber,
-			'shipping_country'    => $user_row->country,
-			'shipping_first_name' => $user_row->givenname,
-			'shipping_last_name'  => $user_row->surname,
-			'shipping_address_1'  => $user_row->streetaddress,
-			'shipping_city'       => $user_row->city,
-			'shipping_state'      => $user_row->state,
-			'shipping_postcode'   => $user_row->zipcode,
-			'shipping_email'      => $user_row->emailaddress,
-			'shipping_phone'      => $user_row->telephonenumber,
+			'billing_country'     => $faker->country,
+			'billing_first_name'  => $faker->firstName,
+			'billing_last_name'   => $faker->lastName,
+			'billing_address_1'   => $faker->streetAddress,
+			'billing_city'        => $faker->city,
+			'billing_state'       => $faker->state,
+			'billing_postcode'    => $faker->postcode,
+			'billing_email'       => $faker->email,
+			'billing_phone'       => $faker->phoneNumber,
+			'shipping_country'    => $faker->country,
+			'shipping_first_name' => $faker->firstName,
+			'shipping_last_name'  => $faker->lastName,
+			'shipping_address_1'  => $faker->streetAddress,
+			'shipping_city'       => $faker->city,
+			'shipping_state'      => $faker->state,
+			'shipping_postcode'   => $faker->postcode,
+			'shipping_email'      => $faker->email,
+			'shipping_phone'      => $faker->phoneNumber,
 		);
 
 		foreach ( $meta as $key => $value ) {
@@ -201,6 +181,10 @@ class Tribe__CLI__WooCommerce__Orders_Generator {
 	public function get_random_user() {
 		if ( ! $this->users ) {
 			$this->users = get_users( array( 'role' => 'Subscriber', 'fields' => 'ID' ) );
+		}
+
+		if ( empty( $this->users ) ) {
+			WP_CLI::error( __( 'At least on Subscriber user must exist if not creating users.', 'tribe-cli' ) );
 		}
 
 		$length = count( $this->users );

@@ -1,4 +1,5 @@
 <?php
+
 class Tribe__CLI__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__CLI__Tickets__Generator__RSVP__CLI {
 
 	/**
@@ -10,8 +11,8 @@ class Tribe__CLI__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__CLI__
 		$this->orders_generator = $orders_generator;
 	}
 
-	public function generate_orders( array $args = null, array $assoc_args = null ) {
-		$post_id = $args[0];
+	public function generate_orders( array $generator_args = null, array $assoc_args = null ) {
+		$post_id = $generator_args[0];
 		$post    = get_post( absint( $post_id ) );
 
 		if ( empty( $post ) ) {
@@ -35,14 +36,14 @@ class Tribe__CLI__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__CLI__
 			WP_CLI::error( __( 'Tickets max should be a value greater than 0 and greater or equal the tickets minimum value.', 'tribe-cli' ) );
 		}
 
-		// @todo use WC stati here
-		$stati         = array( 'yes', 'no' );
+		$legit_stati = array( 'completed', 'processing', 'failed' );
+		$stati       = array_merge( $legit_stati, array( 'random' ) );
 
 		if ( ! in_array( $assoc_args['ticket_status'], $stati ) ) {
 			WP_CLI::error( __( 'Ticket status must be a valid WooCommerce order status or be omitted.', 'tribe-cli' ) );
 		}
 
-		$tickets = Tribe__Tickets_Plus__Commerce__WooCommerce__Main::get_instance();
+		$tickets      = Tribe__Tickets_Plus__Commerce__WooCommerce__Main::get_instance();
 		$post_tickets = $tickets->get_tickets_ids( $post_id );
 
 		if (
@@ -52,6 +53,11 @@ class Tribe__CLI__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__CLI__
 			)
 		) {
 			WP_CLI::error( __( 'The specified ticket ID does not exist, is not associated to the specified event or is not a valid value.' ) );
+		}
+
+		$create_users = true;
+		if ( isset( $assoc_args['no_create_users'] ) ) {
+			$create_users = false;
 		}
 
 		$post_tickets = isset( $assoc_args['ticket_id'] )
@@ -69,7 +75,9 @@ class Tribe__CLI__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__CLI__
 
 		$tickets_min   = (int) $assoc_args['tickets_min'];
 		$tickets_max   = (int) $assoc_args['tickets_max'];
-		$ticket_status = $assoc_args['ticket_status'];
+		$ticket_status = 'random' === $assoc_args['ticket_status']
+			? $legit_stati[ array_rand( $legit_stati ) ]
+			: $assoc_args['ticket_status'];
 
 		$counts = array();
 		for ( $i = 0; $i < $count; $i ++ ) {
@@ -82,111 +90,69 @@ class Tribe__CLI__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__CLI__
 			sprintf( __( 'Generating %1$d ticket orders for post %2$d', 'tribe-cli' ), $counts_sum, $post_id ), $counts_sum
 		);
 
+		$generator_args = array(
+			'create_users' => $create_users,
+		);
+
 		foreach ( $counts as $n => $tickets_count ) {
-			$faker          = Faker\Factory::create();
-			$attendee_name  = $faker->name;
-			$attendee_email = $faker->email;
-			$ticket_id      = $post_tickets[ array_rand( $post_tickets ) ];
-			$ticket_status  = ! empty( $ticket_status ) ? $ticket_status : $stati[ array_rand( $stati ) ];
+			$this_args = $generator_args;
 
-	$this->orders_generator->generate_orders(1,$ticket_id,);
+			$this_args['ticket_status'] = $ticket_status;
+			$this_args['tickets_min']   = $tickets_count;
+			$this_args['tickets_max']   = $tickets_count;
 
+			$ticket_id     = $post_tickets[ array_rand( $post_tickets ) ];
+			$ticket_status = ! empty( $ticket_status ) ? $ticket_status : $legit_stati[ array_rand( $legit_stati ) ];
 
+			$this->orders_generator->generate_orders( 1, array( $ticket_id ), $this_args );
 
-
-
-
-
-			for ( $i = 1; $i <= $tickets_count; $i ++ ) {
-				$postarr = array(
-					'post_title'     => "{$attendee_name} | {$i}",
-					'post_status'    => 'publish',
-					'comment_status' => 'closed',
-					'ping_status'    => 'closed',
-					'post_name'      => sanitize_title( $attendee_name ),
-					'post_type'      => Tribe__Tickets__RSVP::ATTENDEE_OBJECT,
-				);
-
-				$attendee_id = wp_insert_post( $postarr );
-
-				if ( empty( $attendee_id ) ) {
-					WP_CLI::error( __( 'There was an error while inserting the attendee post...' ) );
-				}
-
-				$order_id = md5( time() . rand() );
-
-				$meta = array(
-					Tribe__Tickets__RSVP::ATTENDEE_PRODUCT_KEY => $ticket_id,
-					Tribe__Tickets__RSVP::ATTENDEE_EVENT_KEY   => $post_id,
-					Tribe__Tickets__RSVP::ATTENDEE_RSVP_KEY    => $ticket_status,
-					$tickets->security_code                    => $tickets->generate_security_code( $attendee_id ),
-					$tickets->order_key                        => $order_id,
-					Tribe__Tickets__RSVP::ATTENDEE_OPTOUT_KEY  => '',
-					$tickets->full_name                        => $attendee_name,
-					$tickets->email                            => $attendee_email,
-					'_tribe_tickets_attendee_user_id'          => 0,
-					'_tribe_rsvp_attendee_ticket_sent'         => 1,
-				);
-
-				foreach ( $meta as $key => $value ) {
-					update_post_meta( $attendee_id, $key, $value );
-				}
-
-				$sales[ $ticket_id ] += 1;
-
-				$progress_bar->tick();
-			}
+			$progress_bar->tick( $tickets_count );
 		}
 
-		foreach ( $sales as $ticket_id => $qty ) {
-			$current_sales = (int) get_post_meta( $ticket_id, 'total_sales', true );
-			$updated_sales = $current_sales + $qty;
-			update_post_meta( $ticket_id, 'total_sales', $updated_sales );
-		}
-
-		WP_CLI::success( sprintf( __( 'Generated %1$d RSVP attendees for post %2$d', 'tribe-cli' ), $counts_sum, $post_id ) );
+		WP_CLI::success( sprintf( __( 'Generated %1$d WooCommerce orders for post %2$d', 'tribe-cli' ), $counts_sum, $post_id ) );
 	}
 
 	public function reset_orders( array $args = null, array $assoc_args = null ) {
-		$post_id = $args[0];
-		$post    = get_post( absint( $post_id ) );
-
-		if ( empty( $post ) ) {
-			WP_CLI::error( sprintf( __( 'Post with ID %d does not exist.', 'tribe-cli' ), $post_id ) );
-		}
-
-		$tickets      = Tribe__Tickets__RSVP::get_instance();
-		$post_tickets = $tickets->get_tickets_ids( $post_id );
-
-		if ( empty( $post_tickets ) ) {
-			WP_CLI::error( __( 'The specified post should have at least one ticket assigned.', 'tribe-cli' ) );
-		}
-
-		if ( isset( $assoc_args['ticket_id'] ) && ( ! filter_var( $assoc_args['ticket_id'],
-					FILTER_VALIDATE_INT ) || ! get_post( $assoc_args['ticket_id'] ) ) ) {
-			WP_CLI::error( __( 'The specified ticket ID does not exist.', 'tribe-cli' ) );
-		}
-
-		if ( isset( $assoc_args['ticket_id'] ) && ! in_array( $assoc_args['ticket_id'], $post_tickets ) ) {
-			WP_CLI::error( __( 'The specified ticket ID is not assigned to the specified post.', 'tribe-cli' ) );
-		}
-
-		$post_tickets = isset( $assoc_args['ticket_id'] ) ? array( (int) $assoc_args['ticket_id'] ) : $post_tickets;
-
-		$attendees = $tickets->get_attendees_by_id( $post_id );
-
-		$progress_bar = \WP_CLI\Utils\make_progress_bar( sprintf( __( 'Deleting RSVP attendees', 'tribe-cli' ) ),
-			count( $attendees ) );
-
-		foreach ( $post_tickets as $ticket ) {
-			$this_ticket_attendees = array_filter( $attendees, function ( array $attendee ) use ( $ticket ) {
-				return isset( $attendee['product_id'] ) && $attendee['product_id'] == $ticket;
-			} );
-			foreach ( $this_ticket_attendees as $attendee ) {
-				wp_delete_post( $attendee['order_id'], true );
-				$progress_bar->tick();
-			}
-			update_post_meta( $ticket, 'total_sales', 0 );
-		}
+		// @todo this needs to actually delete orders
+		//		$post_id = $args[0];
+		//		$post    = get_post( absint( $post_id ) );
+		//
+		//		if ( empty( $post ) ) {
+		//			WP_CLI::error( sprintf( __( 'Post with ID %d does not exist.', 'tribe-cli' ), $post_id ) );
+		//		}
+		//
+		//		$tickets      = Tribe__Tickets__RSVP::get_instance();
+		//		$post_tickets = $tickets->get_tickets_ids( $post_id );
+		//
+		//		if ( empty( $post_tickets ) ) {
+		//			WP_CLI::error( __( 'The specified post should have at least one ticket assigned.', 'tribe-cli' ) );
+		//		}
+		//
+		//		if ( isset( $assoc_args['ticket_id'] ) && ( ! filter_var( $assoc_args['ticket_id'],
+		//					FILTER_VALIDATE_INT ) || ! get_post( $assoc_args['ticket_id'] ) ) ) {
+		//			WP_CLI::error( __( 'The specified ticket ID does not exist.', 'tribe-cli' ) );
+		//		}
+		//
+		//		if ( isset( $assoc_args['ticket_id'] ) && ! in_array( $assoc_args['ticket_id'], $post_tickets ) ) {
+		//			WP_CLI::error( __( 'The specified ticket ID is not assigned to the specified post.', 'tribe-cli' ) );
+		//		}
+		//
+		//		$post_tickets = isset( $assoc_args['ticket_id'] ) ? array( (int) $assoc_args['ticket_id'] ) : $post_tickets;
+		//
+		//		$attendees = $tickets->get_attendees_by_id( $post_id );
+		//
+		//		$progress_bar = \WP_CLI\Utils\make_progress_bar( sprintf( __( 'Deleting RSVP attendees', 'tribe-cli' ) ),
+		//			count( $attendees ) );
+		//
+		//		foreach ( $post_tickets as $ticket ) {
+		//			$this_ticket_attendees = array_filter( $attendees, function ( array $attendee ) use ( $ticket ) {
+		//				return isset( $attendee['product_id'] ) && $attendee['product_id'] == $ticket;
+		//			} );
+		//			foreach ( $this_ticket_attendees as $attendee ) {
+		//				wp_delete_post( $attendee['order_id'], true );
+		//				$progress_bar->tick();
+		//			}
+		//			update_post_meta( $ticket, 'total_sales', 0 );
+		//		}
 	}
 }
