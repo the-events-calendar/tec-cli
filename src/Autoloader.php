@@ -1,6 +1,6 @@
 <?php
 
-class Tribe__CLI__Autoloader {
+class Tribe__Cli__Autoloader {
 
 	/**
 	 * @var array A prefix to path map for autoloading.

@@ -8,7 +8,7 @@
  * @link https://github.com/75nineteen/order-simulator-woocommerce
  * @link https://raw.githubusercontent.com/75nineteen/order-simulator-woocommerce/master/woocommerce-order-simulator.php
  */
-class Tribe__CLI__WooCommerce__Orders_Generator {
+class Tribe__Cli__WooCommerce__Orders_Generator {
 
 	protected $users;
 
@@ -151,24 +151,25 @@ class Tribe__CLI__WooCommerce__Orders_Generator {
 
 		// billing/shipping address
 		$meta = array(
-			'billing_country'     => $faker->country,
-			'billing_first_name'  => $faker->firstName,
-			'billing_last_name'   => $faker->lastName,
-			'billing_address_1'   => $faker->streetAddress,
-			'billing_city'        => $faker->city,
-			'billing_state'       => $faker->state,
-			'billing_postcode'    => $faker->postcode,
-			'billing_email'       => $faker->email,
-			'billing_phone'       => $faker->phoneNumber,
-			'shipping_country'    => $faker->country,
-			'shipping_first_name' => $faker->firstName,
-			'shipping_last_name'  => $faker->lastName,
-			'shipping_address_1'  => $faker->streetAddress,
-			'shipping_city'       => $faker->city,
-			'shipping_state'      => $faker->state,
-			'shipping_postcode'   => $faker->postcode,
-			'shipping_email'      => $faker->email,
-			'shipping_phone'      => $faker->phoneNumber,
+			'billing_country'                          => $faker->country,
+			'billing_first_name'                       => $faker->firstName,
+			'billing_last_name'                        => $faker->lastName,
+			'billing_address_1'                        => $faker->streetAddress,
+			'billing_city'                             => $faker->city,
+			'billing_state'                            => $faker->state,
+			'billing_postcode'                         => $faker->postcode,
+			'billing_email'                            => $faker->email,
+			'billing_phone'                            => $faker->phoneNumber,
+			'shipping_country'                         => $faker->country,
+			'shipping_first_name'                      => $faker->firstName,
+			'shipping_last_name'                       => $faker->lastName,
+			'shipping_address_1'                       => $faker->streetAddress,
+			'shipping_city'                            => $faker->city,
+			'shipping_state'                           => $faker->state,
+			'shipping_postcode'                        => $faker->postcode,
+			'shipping_email'                           => $faker->email,
+			'shipping_phone'                           => $faker->phoneNumber,
+			Tribe__Cli__Meta_keys::$generated_meta_key => 1,
 		);
 
 		foreach ( $meta as $key => $value ) {

@@ -1,18 +1,18 @@
 <?php
 
-class Tribe__CLI__Events__Generator__CLI extends WP_CLI_Command {
+class Tribe__Cli__Events__Generator__CLI extends WP_CLI_Command {
 
 	/**
-	 * @var \Tribe__CLI__Events__Generator__API
+	 * @var \Tribe__Cli__Events__Generator__API
 	 */
 	private $api;
 
 	/**
 	 * Tribe__CLI__Events__Generator__CLI constructor.
 	 *
-	 * @param \Tribe__CLI__Events__Generator__API $api
+	 * @param \Tribe__Cli__Events__Generator__API $api
 	 */
-	public function __construct( Tribe__CLI__Events__Generator__API $api ) {
+	public function __construct( Tribe__Cli__Events__Generator__API $api ) {
 		parent::__construct();
 		$this->api = $api;
 	}
@@ -79,7 +79,7 @@ class Tribe__CLI__Events__Generator__CLI extends WP_CLI_Command {
 		$options = [];
 
 		if ( ! isset( $assoc_args['all'] ) ) {
-			$options['meta_key'] = Tribe__CLI__Meta_Keys::$generated_meta_key;
+			$options['meta_key'] = Tribe__Cli__Meta_keys::$generated_meta_key;
 			$options['meta_value'] = 1;
 		}
 

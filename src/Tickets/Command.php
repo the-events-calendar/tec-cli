@@ -1,18 +1,18 @@
 <?php
 
-class Tribe__CLI__Tickets__Command extends WP_CLI_Command {
+class Tribe__Cli__Tickets__Command extends WP_CLI_Command {
 
 	/**
-	 * @var \Tribe__CLI__Tickets__Generator__RSVP__CLI
+	 * @var \Tribe__Cli__Tickets__Generator__RSVP__CLI
 	 */
 	protected $rsvp;
 
 	/**
 	 * Tribe__CLI__Tickets__Command constructor.
 	 *
-	 * @param \Tribe__CLI__Tickets__Generator__RSVP__CLI $rsvp
+	 * @param \Tribe__Cli__Tickets__Generator__RSVP__CLI $rsvp
 	 */
-	public function __construct( Tribe__CLI__Tickets__Generator__RSVP__CLI $rsvp ) {
+	public function __construct( Tribe__Cli__Tickets__Generator__RSVP__CLI $rsvp ) {
 		parent::__construct();
 		$this->rsvp = $rsvp;
 	}

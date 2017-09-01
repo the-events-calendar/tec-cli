@@ -1,13 +1,13 @@
 <?php
 
-class Tribe__CLI__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__CLI__Tickets__Generator__RSVP__CLI {
+class Tribe__Cli__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__Cli__Tickets__Generator__RSVP__CLI {
 
 	/**
-	 * @var \Tribe__CLI__WooCommerce__Orders_Generator
+	 * @var \Tribe__Cli__WooCommerce__Orders_Generator
 	 */
 	protected $orders_generator;
 
-	public function __construct( Tribe__CLI__WooCommerce__Orders_Generator $orders_generator ) {
+	public function __construct( Tribe__Cli__WooCommerce__Orders_Generator $orders_generator ) {
 		$this->orders_generator = $orders_generator;
 	}
 
@@ -135,7 +135,7 @@ class Tribe__CLI__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__CLI__
 
 		$attendees = $tickets->get_attendees_by_id( $post_id );
 
-		$progress_bar = \WP_CLI\Utils\make_progress_bar( sprintf( __( 'Deleting WooCommerce tickets attendees', 'tribe-cli' ) ),
+		$progress_bar = \WP_CLI\Utils\make_progress_bar( sprintf( __( 'Deleting WooCommerce tickets orders', 'tribe-cli' ) ),
 			count( $attendees ) );
 
 		foreach ( $post_tickets as $ticket ) {
@@ -144,6 +144,25 @@ class Tribe__CLI__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__CLI__
 			} );
 			foreach ( $this_ticket_attendees as $attendee ) {
 				wp_delete_post( $attendee['order_id'], true );
+				$progress_bar->tick();
+			}
+		}
+
+		$user_query = new WP_User_Query( array(
+			'role'       => 'customer',
+			'meta_key'   => Tribe__Cli__Meta_keys::$generated_meta_key,
+			'meta_value' => 1,
+			'fields'     => 'ID',
+			'paged'      => false,
+		) );
+
+		$users = $user_query->get_results();
+
+		if ( ! empty( $users ) ) {
+			$progress_bar = \WP_CLI\Utils\make_progress_bar( sprintf( __( 'Deleting the random users', 'tribe-cli' ) ),
+				count( $users ) );
+			foreach ( $users as $user_id ) {
+				wp_delete_user( $user_id );
 				$progress_bar->tick();
 			}
 		}

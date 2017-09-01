@@ -1,6 +1,6 @@
 <?php
 
-abstract class Tribe__CLI__Service_Providers__Base extends tad_DI52_ServiceProvider {
+abstract class Tribe__Cli__Service_Providers__Base extends tad_DI52_ServiceProvider {
 
 	/**
 	 * Returns each plugin required by this one to run

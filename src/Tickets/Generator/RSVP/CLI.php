@@ -1,6 +1,6 @@
 <?php
 
-class Tribe__CLI__Tickets__Generator__RSVP__CLI {
+class Tribe__Cli__Tickets__Generator__RSVP__CLI {
 
 	public function generate_attendees( array $args = null, array $assoc_args = null ) {
 		$post_id = $args[0];
@@ -110,7 +110,7 @@ class Tribe__CLI__Tickets__Generator__RSVP__CLI {
 					$tickets->email                            => $attendee_email,
 					'_tribe_tickets_attendee_user_id'          => 0,
 					'_tribe_rsvp_attendee_ticket_sent'         => 1,
-					Tribe__CLI__Meta_Keys::$generated_meta_key => 1,
+					Tribe__Cli__Meta_keys::$generated_meta_key => 1,
 				);
 
 				foreach ( $meta as $key => $value ) {

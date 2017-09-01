@@ -1,6 +1,6 @@
 <?php
 
-class Tribe__CLI__Service_Providers__Tickets extends Tribe__CLI__Service_Providers__Base {
+class Tribe__Cli__Service_Providers__Tickets extends Tribe__Cli__Service_Providers__Base {
 
 	/**
 	 * Minimum required version of Event Tickets
@@ -53,7 +53,7 @@ class Tribe__CLI__Service_Providers__Tickets extends Tribe__CLI__Service_Provide
 		}
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			WP_CLI::add_command( 'event-tickets', $this->container->make( 'Tribe__CLI__Tickets__Command' ) );
+			WP_CLI::add_command( 'event-tickets', $this->container->make( 'Tribe__Cli__Tickets__Command' ) );
 		}
 	}
 }

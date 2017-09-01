@@ -1,18 +1,18 @@
 <?php
 
-class Tribe__CLI__Tickets_Plus__Command extends WP_CLI_Command {
+class Tribe__Cli__Tickets_Plus__Command extends WP_CLI_Command {
 
 	/**
-	 * @var \Tribe__CLI__Tickets_Plus__Generator__WooCommerce__CLI
+	 * @var \Tribe__Cli__Tickets_Plus__Generator__WooCommerce__CLI
 	 */
 	protected $wc_generator;
 
 	/**
 	 * Tribe__CLI__Tickets_Plus__Command constructor.
 	 *
-	 * @param \Tribe__CLI__Tickets_Plus__Generator__WooCommerce__CLI $wc_generator
+	 * @param \Tribe__Cli__Tickets_Plus__Generator__WooCommerce__CLI $wc_generator
 	 */
-	public function __construct( Tribe__CLI__Tickets_Plus__Generator__WooCommerce__CLI $wc_generator ) {
+	public function __construct( Tribe__Cli__Tickets_Plus__Generator__WooCommerce__CLI $wc_generator ) {
 		parent::__construct();
 		$this->wc_generator = $wc_generator;
 	}
