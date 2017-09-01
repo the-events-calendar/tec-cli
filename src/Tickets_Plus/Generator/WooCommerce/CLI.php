@@ -64,11 +64,6 @@ class Tribe__CLI__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__CLI__
 			? array( (int) $assoc_args['ticket_id'] )
 			: $post_tickets;
 
-		$sales = array();
-		foreach ( $post_tickets as $ticket_id ) {
-			$sales[ $ticket_id ] = 0;
-		}
-
 		if ( empty( $post_tickets ) ) {
 			WP_CLI::error( __( 'The specified post should have at least one WooCommerce ticket assigned.', 'tribe-cli' ) );
 		}
@@ -113,46 +108,44 @@ class Tribe__CLI__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__CLI__
 	}
 
 	public function reset_orders( array $args = null, array $assoc_args = null ) {
-		// @todo this needs to actually delete orders
-		//		$post_id = $args[0];
-		//		$post    = get_post( absint( $post_id ) );
-		//
-		//		if ( empty( $post ) ) {
-		//			WP_CLI::error( sprintf( __( 'Post with ID %d does not exist.', 'tribe-cli' ), $post_id ) );
-		//		}
-		//
-		//		$tickets      = Tribe__Tickets__RSVP::get_instance();
-		//		$post_tickets = $tickets->get_tickets_ids( $post_id );
-		//
-		//		if ( empty( $post_tickets ) ) {
-		//			WP_CLI::error( __( 'The specified post should have at least one ticket assigned.', 'tribe-cli' ) );
-		//		}
-		//
-		//		if ( isset( $assoc_args['ticket_id'] ) && ( ! filter_var( $assoc_args['ticket_id'],
-		//					FILTER_VALIDATE_INT ) || ! get_post( $assoc_args['ticket_id'] ) ) ) {
-		//			WP_CLI::error( __( 'The specified ticket ID does not exist.', 'tribe-cli' ) );
-		//		}
-		//
-		//		if ( isset( $assoc_args['ticket_id'] ) && ! in_array( $assoc_args['ticket_id'], $post_tickets ) ) {
-		//			WP_CLI::error( __( 'The specified ticket ID is not assigned to the specified post.', 'tribe-cli' ) );
-		//		}
-		//
-		//		$post_tickets = isset( $assoc_args['ticket_id'] ) ? array( (int) $assoc_args['ticket_id'] ) : $post_tickets;
-		//
-		//		$attendees = $tickets->get_attendees_by_id( $post_id );
-		//
-		//		$progress_bar = \WP_CLI\Utils\make_progress_bar( sprintf( __( 'Deleting RSVP attendees', 'tribe-cli' ) ),
-		//			count( $attendees ) );
-		//
-		//		foreach ( $post_tickets as $ticket ) {
-		//			$this_ticket_attendees = array_filter( $attendees, function ( array $attendee ) use ( $ticket ) {
-		//				return isset( $attendee['product_id'] ) && $attendee['product_id'] == $ticket;
-		//			} );
-		//			foreach ( $this_ticket_attendees as $attendee ) {
-		//				wp_delete_post( $attendee['order_id'], true );
-		//				$progress_bar->tick();
-		//			}
-		//			update_post_meta( $ticket, 'total_sales', 0 );
-		//		}
+		$post_id = $args[0];
+		$post    = get_post( absint( $post_id ) );
+
+		if ( empty( $post ) ) {
+			WP_CLI::error( sprintf( __( 'Post with ID %d does not exist.', 'tribe-cli' ), $post_id ) );
+		}
+
+		$tickets      = Tribe__Tickets_Plus__Commerce__WooCommerce__Main::get_instance();
+		$post_tickets = $tickets->get_tickets_ids( $post_id );
+
+		if ( empty( $post_tickets ) ) {
+			WP_CLI::error( __( 'The specified post should have at least one WooCommerce ticket assigned.', 'tribe-cli' ) );
+		}
+
+		if ( isset( $assoc_args['ticket_id'] ) && ( ! filter_var( $assoc_args['ticket_id'],
+					FILTER_VALIDATE_INT ) || ! get_post( $assoc_args['ticket_id'] ) ) ) {
+			WP_CLI::error( __( 'The specified ticket ID does not exist.', 'tribe-cli' ) );
+		}
+
+		if ( isset( $assoc_args['ticket_id'] ) && ! in_array( $assoc_args['ticket_id'], $post_tickets ) ) {
+			WP_CLI::error( __( 'The specified ticket ID is not assigned to the specified post.', 'tribe-cli' ) );
+		}
+
+		$post_tickets = isset( $assoc_args['ticket_id'] ) ? array( (int) $assoc_args['ticket_id'] ) : $post_tickets;
+
+		$attendees = $tickets->get_attendees_by_id( $post_id );
+
+		$progress_bar = \WP_CLI\Utils\make_progress_bar( sprintf( __( 'Deleting WooCommerce tickets attendees', 'tribe-cli' ) ),
+			count( $attendees ) );
+
+		foreach ( $post_tickets as $ticket ) {
+			$this_ticket_attendees = array_filter( $attendees, function ( array $attendee ) use ( $ticket ) {
+				return isset( $attendee['product_id'] ) && $attendee['product_id'] == $ticket;
+			} );
+			foreach ( $this_ticket_attendees as $attendee ) {
+				wp_delete_post( $attendee['order_id'], true );
+				$progress_bar->tick();
+			}
+		}
 	}
 }
