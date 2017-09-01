@@ -76,19 +76,16 @@ class Tribe__CLI__Events__Generator__CLI extends \WP_CLI_Command {
 	 * @subcommand reset
 	 */
 	public function reset( $args, $assoc_args ) {
-		global $tribe_cli_container;
-
 		$options = [];
 
 		if ( ! isset( $assoc_args['all'] ) ) {
-			$options['meta_key'] = $tribe_cli_container->getVar( 'generated-meta-key' );
+			$options['meta_key'] = Tribe__CLI__Meta_Keys::$generated_meta_key;
 			$options['meta_value'] = 1;
 		}
 
 		$this->delete_posts( Tribe__Events__Main::POSTTYPE, $options );
 		$this->delete_posts( Tribe__Events__Main::VENUE_POST_TYPE, $options );
 		$this->delete_posts( Tribe__Events__Main::ORGANIZER_POST_TYPE, $options );
-
 	}
 
 	/**
