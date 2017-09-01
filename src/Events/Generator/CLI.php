@@ -72,22 +72,29 @@ class Tribe__CLI__Events__Generator__CLI extends \WP_CLI_Command {
 	/**
 	 * Reset all TEC event data.
 	 *
+	 * @synopsis   [--all]
 	 * @subcommand reset
 	 */
 	public function reset( $args, $assoc_args ) {
+		$options = [];
 
-		$this->delete_posts( Tribe__Events__Main::POSTTYPE );
-		$this->delete_posts( Tribe__Events__Main::VENUE_POST_TYPE );
-		$this->delete_posts( Tribe__Events__Main::ORGANIZER_POST_TYPE );
+		if ( ! isset( $assoc_args['all'] ) ) {
+			$options['meta_key'] = Tribe__CLI__Meta_Keys::$generated_meta_key;
+			$options['meta_value'] = 1;
+		}
 
+		$this->delete_posts( Tribe__Events__Main::POSTTYPE, $options );
+		$this->delete_posts( Tribe__Events__Main::VENUE_POST_TYPE, $options );
+		$this->delete_posts( Tribe__Events__Main::ORGANIZER_POST_TYPE, $options );
 	}
 
 	/**
 	 * Delete posts for a post type.
 	 *
 	 * @param string $post_type
+	 * @param array $options
 	 */
-	protected function delete_posts( $post_type ) {
+	protected function delete_posts( $post_type, $options = [] ) {
 
 		$counter = 0;
 
@@ -98,6 +105,8 @@ class Tribe__CLI__Events__Generator__CLI extends \WP_CLI_Command {
 			'paged'          => 1,
 			'fields'         => 'ids',
 		);
+
+		$args = array_merge( $args, $options );
 
 		$post_type_obj = get_post_type_object( $post_type );
 

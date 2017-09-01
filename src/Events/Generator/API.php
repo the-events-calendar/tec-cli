@@ -153,6 +153,11 @@ class Tribe__CLI__Events__Generator__API {
 
 		$event_id = tribe_create_event( $args );
 
+		// mark event, venue, and organizers as generated from tribe-cli
+		add_post_meta( $event_id, Tribe__CLI__Meta_Keys::$generated_meta_key, 1 );
+		add_post_meta( $venue, Tribe__CLI__Meta_Keys::$generated_meta_key, 1 );
+		add_post_meta( $organizer, Tribe__CLI__Meta_Keys::$generated_meta_key, 1 );
+
 		return $event_id;
 
 	}
