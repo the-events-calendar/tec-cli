@@ -27,8 +27,10 @@ class Tribe__CLI__Tickets__Generator__RSVP__CLI {
 			WP_CLI::error( __( 'Tickets max should be a value greater than 0 and greater or equal the tickets minimum value.', 'tribe-cli' ) );
 		}
 
-		if ( ! in_array( $assoc_args['ticket_status'], array( 'random', 'yes', 'no' ) ) ) {
-			WP_CLI::error( __( 'Ticket status must be "yes", "no" or omitted.', 'tribe-cli' ) );
+		$supported_stati = array( 'yes', 'no' );
+
+		if ( ! in_array( $assoc_args['ticket_status'], $supported_stati ) ) {
+			WP_CLI::error( __( 'Ticket status must be "yes", "no" or be omitted.', 'tribe-cli' ) );
 		}
 
 		$tickets      = Tribe__Tickets__RSVP::get_instance();
@@ -77,7 +79,7 @@ class Tribe__CLI__Tickets__Generator__RSVP__CLI {
 			$attendee_name  = $faker->name;
 			$attendee_email = $faker->email;
 			$ticket_id      = $post_tickets[ array_rand( $post_tickets ) ];
-			$rsvp_status    = 'random' !== $ticket_status ? $ticket_status : $stati[ array_rand( $stati ) ];
+			$rsvp_status    = ! empty( $ticket_status ) ? $ticket_status : $stati[ array_rand( $stati ) ];
 
 			for ( $i = 1; $i <= $tickets_count; $i ++ ) {
 				$postarr = array(

@@ -46,7 +46,6 @@ class Tribe__CLI__Tickets__Command extends WP_CLI_Command {
 	 * [--ticket_status=<ticket_status>]
 	 * : the RSVP status of the tickets
 	 * ---
-	 * default: random
 	 * options:
 	 *      - yes
 	 *      - no

@@ -1,5 +1,14 @@
 <?php
-class Tribe__CLI__Tickets__Plus_Generator__WooCommerce__CLI {
+class Tribe__CLI__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__CLI__Tickets__Generator__RSVP__CLI {
+
+	/**
+	 * @var \Tribe__CLI__WooCommerce__Orders_Generator
+	 */
+	protected $orders_generator;
+
+	public function __construct( Tribe__CLI__WooCommerce__Orders_Generator $orders_generator ) {
+		$this->orders_generator = $orders_generator;
+	}
 
 	public function generate_orders( array $args = null, array $assoc_args = null ) {
 		$post_id = $args[0];
@@ -26,11 +35,14 @@ class Tribe__CLI__Tickets__Plus_Generator__WooCommerce__CLI {
 			WP_CLI::error( __( 'Tickets max should be a value greater than 0 and greater or equal the tickets minimum value.', 'tribe-cli' ) );
 		}
 
-		if ( ! in_array( $assoc_args['ticket_status'], array( 'random', 'yes', 'no' ) ) ) {
-			WP_CLI::error( __( 'Ticket status must be "yes", "no" or omitted.', 'tribe-cli' ) );
+		// @todo use WC stati here
+		$stati         = array( 'yes', 'no' );
+
+		if ( ! in_array( $assoc_args['ticket_status'], $stati ) ) {
+			WP_CLI::error( __( 'Ticket status must be a valid WooCommerce order status or be omitted.', 'tribe-cli' ) );
 		}
 
-		$tickets      = Tribe__Tickets__RSVP::get_instance();
+		$tickets = Tribe__Tickets_Plus__Commerce__WooCommerce__Main::get_instance();
 		$post_tickets = $tickets->get_tickets_ids( $post_id );
 
 		if (
@@ -52,13 +64,12 @@ class Tribe__CLI__Tickets__Plus_Generator__WooCommerce__CLI {
 		}
 
 		if ( empty( $post_tickets ) ) {
-			WP_CLI::error( __( 'The specified post should have at least one ticket assigned.', 'tribe-cli' ) );
+			WP_CLI::error( __( 'The specified post should have at least one WooCommerce ticket assigned.', 'tribe-cli' ) );
 		}
 
 		$tickets_min   = (int) $assoc_args['tickets_min'];
 		$tickets_max   = (int) $assoc_args['tickets_max'];
 		$ticket_status = $assoc_args['ticket_status'];
-		$stati         = array( 'yes', 'no' );
 
 		$counts = array();
 		for ( $i = 0; $i < $count; $i ++ ) {
@@ -68,7 +79,7 @@ class Tribe__CLI__Tickets__Plus_Generator__WooCommerce__CLI {
 		$counts_sum = array_sum( $counts );
 
 		$progress_bar = \WP_CLI\Utils\make_progress_bar(
-			sprintf( __( 'Generating %1$d RSVP attendees for post %2$d', 'tribe-cli' ), $counts_sum, $post_id ), $counts_sum
+			sprintf( __( 'Generating %1$d ticket orders for post %2$d', 'tribe-cli' ), $counts_sum, $post_id ), $counts_sum
 		);
 
 		foreach ( $counts as $n => $tickets_count ) {
@@ -76,7 +87,15 @@ class Tribe__CLI__Tickets__Plus_Generator__WooCommerce__CLI {
 			$attendee_name  = $faker->name;
 			$attendee_email = $faker->email;
 			$ticket_id      = $post_tickets[ array_rand( $post_tickets ) ];
-			$rsvp_status    = 'random' !== $ticket_status ? $ticket_status : $stati[ array_rand( $stati ) ];
+			$ticket_status  = ! empty( $ticket_status ) ? $ticket_status : $stati[ array_rand( $stati ) ];
+
+	$this->orders_generator->generate_orders(1,$ticket_id,);
+
+
+
+
+
+
 
 			for ( $i = 1; $i <= $tickets_count; $i ++ ) {
 				$postarr = array(
@@ -99,7 +118,7 @@ class Tribe__CLI__Tickets__Plus_Generator__WooCommerce__CLI {
 				$meta = array(
 					Tribe__Tickets__RSVP::ATTENDEE_PRODUCT_KEY => $ticket_id,
 					Tribe__Tickets__RSVP::ATTENDEE_EVENT_KEY   => $post_id,
-					Tribe__Tickets__RSVP::ATTENDEE_RSVP_KEY    => $rsvp_status,
+					Tribe__Tickets__RSVP::ATTENDEE_RSVP_KEY    => $ticket_status,
 					$tickets->security_code                    => $tickets->generate_security_code( $attendee_id ),
 					$tickets->order_key                        => $order_id,
 					Tribe__Tickets__RSVP::ATTENDEE_OPTOUT_KEY  => '',
