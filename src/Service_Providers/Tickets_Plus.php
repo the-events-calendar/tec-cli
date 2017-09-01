@@ -5,7 +5,7 @@ class Tribe__CLI__Service_Providers__Tickets_Plus extends Tribe__CLI__Service_Pr
 	/**
 	 * Minimum required version of Event Tickets Plus
 	 */
-	const REQUIRED_TICKETS_PLUS_VERSION = '4.5.3';
+	const REQUIRED_TICKETS_PLUS_VERSION = '4.5.0';
 
 	/**
 	 * Returns each plugin required by this one to run
