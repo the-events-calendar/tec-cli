@@ -140,8 +140,12 @@ class Tribe__Cli__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__Cli__
 
 		foreach ( $post_tickets as $ticket ) {
 			$this_ticket_attendees = array_filter( $attendees, function ( array $attendee ) use ( $ticket ) {
-				return isset( $attendee['product_id'] ) && $attendee['product_id'] == $ticket;
+				$for_this_ticket = isset( $attendee['product_id'] ) && $attendee['product_id'] == $ticket;
+				$generated       = ! empty( get_post_meta( $attendee['order_id'], Tribe__Cli__Meta_keys::$generated_meta_key, true ) );
+
+				return $for_this_ticket && $generated;
 			} );
+
 			foreach ( $this_ticket_attendees as $attendee ) {
 				wp_delete_post( $attendee['order_id'], true );
 				$progress_bar->tick();
