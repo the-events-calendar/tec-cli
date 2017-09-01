@@ -3,6 +3,8 @@
 class Tribe__CLI__Tickets__Generator__RSVP__CLI {
 
 	public function generate_attendees( array $args = null, array $assoc_args = null ) {
+		global $tribe_cli_container;
+
 		$post_id = $args[0];
 		$post    = get_post( absint( $post_id ) );
 
@@ -98,17 +100,17 @@ class Tribe__CLI__Tickets__Generator__RSVP__CLI {
 				$order_id = md5( time() . rand() );
 
 				$meta = array(
-					Tribe__Tickets__RSVP::ATTENDEE_PRODUCT_KEY => $ticket_id,
-					Tribe__Tickets__RSVP::ATTENDEE_EVENT_KEY   => $post_id,
-					Tribe__Tickets__RSVP::ATTENDEE_RSVP_KEY    => $rsvp_status,
-					$tickets->security_code                    => $tickets->generate_security_code( $attendee_id ),
-					$tickets->order_key                        => $order_id,
-					Tribe__Tickets__RSVP::ATTENDEE_OPTOUT_KEY  => '',
-					$tickets->full_name                        => $attendee_name,
-					$tickets->email                            => $attendee_email,
-					'_tribe_tickets_attendee_user_id'          => 0,
-					'_tribe_rsvp_attendee_ticket_sent'         => 1,
-					'_tribe_cli_generated'                     => 1,
+					Tribe__Tickets__RSVP::ATTENDEE_PRODUCT_KEY           => $ticket_id,
+					Tribe__Tickets__RSVP::ATTENDEE_EVENT_KEY             => $post_id,
+					Tribe__Tickets__RSVP::ATTENDEE_RSVP_KEY              => $rsvp_status,
+					$tickets->security_code                              => $tickets->generate_security_code( $attendee_id ),
+					$tickets->order_key                                  => $order_id,
+					Tribe__Tickets__RSVP::ATTENDEE_OPTOUT_KEY            => '',
+					$tickets->full_name                                  => $attendee_name,
+					$tickets->email                                      => $attendee_email,
+					'_tribe_tickets_attendee_user_id'                    => 0,
+					'_tribe_rsvp_attendee_ticket_sent'                   => 1,
+					$tribe_cli_container->getVar( 'generated-meta-key' ) => 1,
 				);
 
 				foreach ( $meta as $key => $value ) {

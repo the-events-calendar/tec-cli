@@ -37,8 +37,13 @@ if ( version_compare( PHP_VERSION, '5.3.0', ">=" ) ) {
 	include dirname( __FILE__ ) . '/vendor/autoload_52.php';
 }
 
-$container = new tad_DI52_Container();
+global $tribe_cli_container;
 
-$container->register( 'Tribe__CLI__Main' );
-$container->register( 'Tribe__CLI__Service_Providers__Events' );
-$container->register( 'Tribe__CLI__Service_Providers__Tickets' );
+$tribe_cli_container = new tad_DI52_Container();
+
+// meta key used to track CLI generated posts
+$tribe_cli_container->setVar( 'generated-meta-key', '_tribe_cli_generated' );
+
+$tribe_cli_container->register( 'Tribe__CLI__Main' );
+$tribe_cli_container->register( 'Tribe__CLI__Service_Providers__Events' );
+$tribe_cli_container->register( 'Tribe__CLI__Service_Providers__Tickets' );

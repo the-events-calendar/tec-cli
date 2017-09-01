@@ -76,10 +76,12 @@ class Tribe__CLI__Events__Generator__CLI extends \WP_CLI_Command {
 	 * @subcommand reset
 	 */
 	public function reset( $args, $assoc_args ) {
+		global $tribe_cli_container;
+
 		$options = [];
 
 		if ( ! isset( $assoc_args['all'] ) ) {
-			$options['meta_key'] = '_tribe_cli_generated';
+			$options['meta_key'] = $tribe_cli_container->getVar( 'generated-meta-key' );
 			$options['meta_value'] = 1;
 		}
 
