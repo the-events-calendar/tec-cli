@@ -3,15 +3,21 @@
 /**
  * Class Tribe__CLI__WooCommerce__Orders_Generator
  *
+ * @since 0.1.0
+ *
  * A modified version of the class found in 75nineteen/order-simulator-woocommerce
  *
  * @link https://github.com/75nineteen/order-simulator-woocommerce
  * @link https://raw.githubusercontent.com/75nineteen/order-simulator-woocommerce/master/woocommerce-order-simulator.php
  */
 class Tribe__Cli__WooCommerce__Orders_Generator {
+	protected $users = array();
 
-	protected $users;
-
+	/**
+	 * Generates a number of orders for the specified WooCommerce product IDs.
+	 *
+	 * @since 0.1.0
+	 */
 	public function generate_orders( $count, array $product_ids, array $args ) {
 		/** @var WooCommerce $woocommerce */
 		global $woocommerce;
@@ -134,6 +140,13 @@ class Tribe__Cli__WooCommerce__Orders_Generator {
 		}
 	}
 
+	/**
+	 * Inserts a random customer user in the database.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return int|\WP_Error
+	 */
 	public function create_user() {
 		$faker = Faker\Factory::create();
 		$faker->addProvider( new Faker\Provider\en_US\Address( $faker ) );
@@ -180,6 +193,13 @@ class Tribe__Cli__WooCommerce__Orders_Generator {
 		return $user_id;
 	}
 
+	/**
+	 * Returns the ID of a random subscriber user from the database.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return int
+	 */
 	public function get_random_user() {
 		if ( ! $this->users ) {
 			$this->users = get_users( array( 'role' => 'Subscriber', 'fields' => 'ID' ) );

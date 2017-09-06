@@ -1,14 +1,21 @@
 <?php
 
+/**
+ * Class Tribe__Cli__Events__Generator__CLI
+ *
+ * @since 0.1.0
+ */
 class Tribe__Cli__Events__Generator__CLI extends WP_CLI_Command {
 
 	/**
 	 * @var \Tribe__Cli__Events__Generator__API
 	 */
-	private $api;
+	protected $api;
 
 	/**
 	 * Tribe__CLI__Events__Generator__CLI constructor.
+	 *
+	 * @since 0.1.0
 	 *
 	 * @param \Tribe__Cli__Events__Generator__API $api
 	 */
@@ -19,6 +26,8 @@ class Tribe__Cli__Events__Generator__CLI extends WP_CLI_Command {
 
 	/**
 	 * Generate events 100 at a time (default generates one).
+	 *
+	 * @since 0.1.0
 	 *
 	 * @synopsis   [--count=<count>]
 	 * @subcommand generate
@@ -72,6 +81,8 @@ class Tribe__Cli__Events__Generator__CLI extends WP_CLI_Command {
 	/**
 	 * Reset all TEC event data.
 	 *
+	 * @since 0.1.0
+	 *
 	 * @synopsis   [--all]
 	 * @subcommand reset
 	 */
@@ -90,6 +101,8 @@ class Tribe__Cli__Events__Generator__CLI extends WP_CLI_Command {
 
 	/**
 	 * Delete posts for a post type.
+	 *
+	 * @since 0.1.0
 	 *
 	 * @param string $post_type
 	 * @param array $options
@@ -144,6 +157,8 @@ class Tribe__Cli__Events__Generator__CLI extends WP_CLI_Command {
 
 	/**
 	 * Sleep and help avoid hitting memory limit
+	 *
+	 * @since 0.1.0
 	 *
 	 * @param int $sleep_time Amount of seconds to sleep
 	 */

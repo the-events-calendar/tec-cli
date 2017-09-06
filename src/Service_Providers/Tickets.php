@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class Tribe__Cli__Service_Providers__Tickets
+ *
+ * @since 0.1.0
+ */
 class Tribe__Cli__Service_Providers__Tickets extends Tribe__Cli__Service_Providers__Base {
 
 	/**
@@ -9,6 +14,8 @@ class Tribe__Cli__Service_Providers__Tickets extends Tribe__Cli__Service_Provide
 
 	/**
 	 * Returns each plugin required by this one to run
+	 *
+	 * @since 0.1.0
 	 *
 	 * @return array {
 	 *      List of required plugins.
@@ -35,6 +42,8 @@ class Tribe__Cli__Service_Providers__Tickets extends Tribe__Cli__Service_Provide
 	/**
 	 * Returns the display name of this functionality.
 	 *
+	 * @since 0.1.0
+	 *
 	 * @return string
 	 */
 	protected function get_display_name() {
@@ -43,6 +52,8 @@ class Tribe__Cli__Service_Providers__Tickets extends Tribe__Cli__Service_Provide
 
 	/**
 	 * Binds and sets up implementations.
+	 *
+	 * @since 0.1.0
 	 */
 	public function register() {
 		if ( ! $this->should_run() ) {

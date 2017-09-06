@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Class Tribe__Cli__Service_Providers__Tickets_Plus
+ *
+ * @since 0.1.0
+ *
+ */
 class Tribe__Cli__Service_Providers__Tickets_Plus extends Tribe__Cli__Service_Providers__Base {
 
 	/**
@@ -9,6 +15,8 @@ class Tribe__Cli__Service_Providers__Tickets_Plus extends Tribe__Cli__Service_Pr
 
 	/**
 	 * Returns each plugin required by this one to run
+	 *
+	 * @since 0.1.0
 	 *
 	 * @return array {
 	 *      List of required plugins.
@@ -44,6 +52,8 @@ class Tribe__Cli__Service_Providers__Tickets_Plus extends Tribe__Cli__Service_Pr
 
 	/**
 	 * Binds and sets up implementations.
+	 *
+	 * @since 0.1.0
 	 */
 	public function register() {
 		if ( ! $this->should_run() ) {
@@ -58,10 +68,20 @@ class Tribe__Cli__Service_Providers__Tickets_Plus extends Tribe__Cli__Service_Pr
 		}
 
 		// avoid sending emails for fake orders
-		add_filter( 'woocommerce_email_classes', array( $this, 'avoid_sending_emails' ), 999 );
+		add_filter( 'woocommerce_email_classes', array( $this, 'filter_woocommerce_email_classes' ), 999 );
 	}
 
-	public function avoid_sending_emails( $classes ) {
+	/**
+	 * Filters the classes of emails WooCommerce will send to avoid sending tickets confirmations
+	 * for generated tickets.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param array $classes An array of classes that WooCommerce will call to send confirmation emails.
+	 *
+	 * @return array The filtered classes array
+	 */
+	public function filter_woocommerce_email_classes( $classes ) {
 		unset( $classes['Tribe__Tickets__Woo__Email'] );
 
 		return $classes;

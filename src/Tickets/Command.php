@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class Tribe__Cli__Tickets__Command
+ *
+ * @since 0.1.0
+ */
 class Tribe__Cli__Tickets__Command extends WP_CLI_Command {
 
 	/**
@@ -10,6 +15,8 @@ class Tribe__Cli__Tickets__Command extends WP_CLI_Command {
 	/**
 	 * Tribe__CLI__Tickets__Command constructor.
 	 *
+	 * @since 0.1.0
+	 *
 	 * @param \Tribe__Cli__Tickets__Generator__RSVP__CLI $rsvp
 	 */
 	public function __construct( Tribe__Cli__Tickets__Generator__RSVP__CLI $rsvp ) {
@@ -19,6 +26,8 @@ class Tribe__Cli__Tickets__Command extends WP_CLI_Command {
 
 	/**
 	 * Generates RSVP attendees for a ticketed post.
+	 *
+	 * @since 0.1.0
 	 *
 	 * ## OPTIONS
 	 *
@@ -71,6 +80,8 @@ class Tribe__Cli__Tickets__Command extends WP_CLI_Command {
 
 	/**
 	 * Removes all the RSVP attendees from a ticketed post.
+	 *
+	 * @since 0.1.0
 	 *
 	 * ## OPTIONS
 	 *

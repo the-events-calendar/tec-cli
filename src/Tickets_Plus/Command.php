@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class Tribe__Cli__Tickets_Plus__Command
+ *
+ * @since 0.1.0
+ */
 class Tribe__Cli__Tickets_Plus__Command extends WP_CLI_Command {
 
 	/**
@@ -10,6 +15,8 @@ class Tribe__Cli__Tickets_Plus__Command extends WP_CLI_Command {
 	/**
 	 * Tribe__CLI__Tickets_Plus__Command constructor.
 	 *
+	 * @since 0.1.0
+	 *
 	 * @param \Tribe__Cli__Tickets_Plus__Generator__WooCommerce__CLI $wc_generator
 	 */
 	public function __construct( Tribe__Cli__Tickets_Plus__Generator__WooCommerce__CLI $wc_generator ) {
@@ -19,6 +26,8 @@ class Tribe__Cli__Tickets_Plus__Command extends WP_CLI_Command {
 
 	/**
 	 * Generates WooCommerce orders for a WooCommerce ticketed post.
+	 *
+	 * @since 0.1.0
 	 *
 	 * ## OPTIONS
 	 *
@@ -78,6 +87,8 @@ class Tribe__Cli__Tickets_Plus__Command extends WP_CLI_Command {
 
 	/**
 	 * Removes all WC orders from a WooCommerce ticketed post.
+	 *
+	 * @since 0.1.0
 	 *
 	 * ## OPTIONS
 	 *

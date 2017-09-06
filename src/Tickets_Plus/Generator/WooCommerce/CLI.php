@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class Tribe__Cli__Tickets_Plus__Generator__WooCommerce__CLI
+ *
+ * @since 0.1.0
+ */
 class Tribe__Cli__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__Cli__Tickets__Generator__RSVP__CLI {
 
 	/**
@@ -7,10 +12,25 @@ class Tribe__Cli__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__Cli__
 	 */
 	protected $orders_generator;
 
+	/**
+	 * Tribe__Cli__Tickets_Plus__Generator__WooCommerce__CLI constructor.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param \Tribe__Cli__WooCommerce__Orders_Generator $orders_generator
+	 */
 	public function __construct( Tribe__Cli__WooCommerce__Orders_Generator $orders_generator ) {
 		$this->orders_generator = $orders_generator;
 	}
 
+	/**
+	 * Generates random ticket orders for a post.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param array|null $generator_args
+	 * @param array|null $assoc_args
+	 */
 	public function generate_orders( array $generator_args = null, array $assoc_args = null ) {
 		$post_id = $generator_args[0];
 		$post    = get_post( absint( $post_id ) );
@@ -107,6 +127,14 @@ class Tribe__Cli__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__Cli__
 		WP_CLI::success( sprintf( __( 'Generated %1$d WooCommerce orders for post %2$d', 'tribe-cli' ), $counts_sum, $post_id ) );
 	}
 
+	/**
+	 * Removed generated ticket orders for a post.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param array|null $args
+	 * @param array|null $assoc_args
+	 */
 	public function reset_orders( array $args = null, array $assoc_args = null ) {
 		$post_id = $args[0];
 		$post    = get_post( absint( $post_id ) );

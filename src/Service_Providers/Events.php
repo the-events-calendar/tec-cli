@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class Tribe__Cli__Service_Providers__Events
+ *
+ * @since 0.1.0
+ */
 class Tribe__Cli__Service_Providers__Events extends Tribe__Cli__Service_Providers__Base {
 	/**
 	 * Required Events Calendar Version.
@@ -11,6 +16,8 @@ class Tribe__Cli__Service_Providers__Events extends Tribe__Cli__Service_Provider
 	/**
 	 * Returns the display name of this functionality.
 	 *
+	 * @since 0.1.0
+	 *
 	 * @return string
 	 */
 	public function get_display_name() {
@@ -19,6 +26,8 @@ class Tribe__Cli__Service_Providers__Events extends Tribe__Cli__Service_Provider
 
 	/**
 	 * Returns each plugin required by this one to run
+	 *
+	 * @since 0.1.0
 	 *
 	 * @return array {
 	 *      List of required plugins.
@@ -44,6 +53,8 @@ class Tribe__Cli__Service_Providers__Events extends Tribe__Cli__Service_Provider
 
 	/**
 	 * Binds and sets up implementations.
+	 *
+	 * @since 0.1.0
 	 */
 	public function register() {
 		if ( ! $this->should_run() ) {

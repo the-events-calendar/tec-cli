@@ -1,7 +1,20 @@
 <?php
 
+/**
+ * Class Tribe__Cli__Tickets__Generator__RSVP__CLI
+ *
+ * @since 0.1.0
+ */
 class Tribe__Cli__Tickets__Generator__RSVP__CLI {
 
+	/**
+	 * Generates a number of random RSVP attendees for a post.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param array|null $args
+	 * @param array|null $assoc_args
+	 */
 	public function generate_attendees( array $args = null, array $assoc_args = null ) {
 		$post_id = $args[0];
 		$post    = get_post( absint( $post_id ) );
@@ -132,6 +145,14 @@ class Tribe__Cli__Tickets__Generator__RSVP__CLI {
 		WP_CLI::success( sprintf( __( 'Generated %1$d RSVP attendees for post %2$d', 'tribe-cli' ), $counts_sum, $post_id ) );
 	}
 
+	/**
+	 * Deletes generated RSVP attendees for a post.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param array|null $args
+	 * @param array|null $assoc_args
+	 */
 	public function reset_attendees( array $args = null, array $assoc_args = null ) {
 		$post_id = $args[0];
 		$post    = get_post( absint( $post_id ) );

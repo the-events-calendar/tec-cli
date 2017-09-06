@@ -1,8 +1,13 @@
 <?php
 
+/**
+ * Class Tribe__Cli__Meta_keys
+ *
+ * @since 0.1.0
+ */
 class Tribe__Cli__Meta_keys {
 	/**
-	 * meta key used to track CLI generated posts
+	 * Meta key used to track CLI generated posts
 	 *
 	 * @var string
 	 */
