@@ -91,7 +91,7 @@ class Tribe__Cli__Events__Generator__API {
 		$organizer = tribe_create_organizer( $organizer );
 
 		$args = array(
-			'post_title'     => $faker->words(),
+			'post_title'     => ucwords( $faker->words( 3, true ) ),
 			'post_content'   => $content,
 			'post_status'    => $status,
 			'EventStartDate' => date_i18n( 'Y-m-d', $start_date ),
