@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class Tribe__Cli__Main
+ *
+ * @since 0.1.0
+ */
 class Tribe__Cli__Main extends tad_DI52_ServiceProvider {
 
 	/**
@@ -38,7 +43,9 @@ class Tribe__Cli__Main extends tad_DI52_ServiceProvider {
 	public $plugin_url;
 
 	/**
-	 * Bootstrap the plugin with the plugins_loaded action.
+	 * Bootstraps the plugin with the plugins_loaded action.
+	 *
+	 * @since 0.1.0
 	 */
 	public function plugins_loaded() {
 		$this->register_active_plugin();
@@ -59,6 +66,8 @@ class Tribe__Cli__Main extends tad_DI52_ServiceProvider {
 	/**
 	 * Registers this plugin as being active for other tribe plugins and extensions.
 	 *
+	 * @since 0.1.0
+	 *
 	 * @return bool Indicates if Tribe Common wants the plugin to run
 	 */
 	public function register_active_plugin() {
@@ -73,6 +82,8 @@ class Tribe__Cli__Main extends tad_DI52_ServiceProvider {
 
 	/**
 	 * Binds and sets up implementations.
+	 *
+	 * @since 0.1.0
 	 */
 	public function register() {
 		$this->container->singleton( 'tribe-cli.main', $this );
@@ -88,6 +99,8 @@ class Tribe__Cli__Main extends tad_DI52_ServiceProvider {
 
 	/**
 	 * Binds and sets up implementations at boot time.
+	 *
+	 * @since 0.1.0
 	 */
 	public function boot() {
 		// no-op

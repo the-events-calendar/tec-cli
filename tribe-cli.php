@@ -39,6 +39,7 @@ if ( version_compare( PHP_VERSION, '5.3.0', ">=" ) ) {
 
 $container = new tad_DI52_Container();
 
-$container->register( 'Tribe__CLI__Main' );
-$container->register( 'Tribe__CLI__Service_Providers__Events' );
-$container->register( 'Tribe__CLI__Service_Providers__Tickets' );
+$container->register( 'Tribe__Cli__Main' );
+$container->register( 'Tribe__Cli__Service_Providers__Events' );
+$container->register( 'Tribe__Cli__Service_Providers__Tickets' );
+$container->register( 'Tribe__Cli__Service_Providers__Tickets_Plus' );

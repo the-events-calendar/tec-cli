@@ -1,7 +1,20 @@
 <?php
 
-class Tribe__CLI__Tickets__Generator__RSVP__CLI {
+/**
+ * Class Tribe__Cli__Tickets__Generator__RSVP__CLI
+ *
+ * @since 0.1.0
+ */
+class Tribe__Cli__Tickets__Generator__RSVP__CLI {
 
+	/**
+	 * Generates a number of random RSVP attendees for a post.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param array|null $args
+	 * @param array|null $assoc_args
+	 */
 	public function generate_attendees( array $args = null, array $assoc_args = null ) {
 		$post_id = $args[0];
 		$post    = get_post( absint( $post_id ) );
@@ -27,8 +40,10 @@ class Tribe__CLI__Tickets__Generator__RSVP__CLI {
 			WP_CLI::error( __( 'Tickets max should be a value greater than 0 and greater or equal the tickets minimum value.', 'tribe-cli' ) );
 		}
 
-		if ( ! in_array( $assoc_args['ticket_status'], array( 'random', 'yes', 'no' ) ) ) {
-			WP_CLI::error( __( 'Ticket status must be "yes", "no" or omitted.', 'tribe-cli' ) );
+		$supported_stati = array( 'yes', 'no' );
+
+		if ( ! in_array( $assoc_args['ticket_status'], $supported_stati ) ) {
+			WP_CLI::error( __( 'Ticket status must be "yes", "no" or be omitted.', 'tribe-cli' ) );
 		}
 
 		$tickets      = Tribe__Tickets__RSVP::get_instance();
@@ -77,7 +92,7 @@ class Tribe__CLI__Tickets__Generator__RSVP__CLI {
 			$attendee_name  = $faker->name;
 			$attendee_email = $faker->email;
 			$ticket_id      = $post_tickets[ array_rand( $post_tickets ) ];
-			$rsvp_status    = 'random' !== $ticket_status ? $ticket_status : $stati[ array_rand( $stati ) ];
+			$rsvp_status    = ! empty( $ticket_status ) ? $ticket_status : $stati[ array_rand( $stati ) ];
 
 			for ( $i = 1; $i <= $tickets_count; $i ++ ) {
 				$postarr = array(
@@ -108,7 +123,7 @@ class Tribe__CLI__Tickets__Generator__RSVP__CLI {
 					$tickets->email                            => $attendee_email,
 					'_tribe_tickets_attendee_user_id'          => 0,
 					'_tribe_rsvp_attendee_ticket_sent'         => 1,
-					Tribe__CLI__Meta_Keys::$generated_meta_key => 1,
+					Tribe__Cli__Meta_keys::$generated_meta_key => 1,
 				);
 
 				foreach ( $meta as $key => $value ) {
@@ -130,6 +145,14 @@ class Tribe__CLI__Tickets__Generator__RSVP__CLI {
 		WP_CLI::success( sprintf( __( 'Generated %1$d RSVP attendees for post %2$d', 'tribe-cli' ), $counts_sum, $post_id ) );
 	}
 
+	/**
+	 * Deletes generated RSVP attendees for a post.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param array|null $args
+	 * @param array|null $assoc_args
+	 */
 	public function reset_attendees( array $args = null, array $assoc_args = null ) {
 		$post_id = $args[0];
 		$post    = get_post( absint( $post_id ) );

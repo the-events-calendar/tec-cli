@@ -1,6 +1,11 @@
 <?php
 
-class Tribe__CLI__Service_Providers__Events extends Tribe__CLI__Service_Providers__Base {
+/**
+ * Class Tribe__Cli__Service_Providers__Events
+ *
+ * @since 0.1.0
+ */
+class Tribe__Cli__Service_Providers__Events extends Tribe__Cli__Service_Providers__Base {
 	/**
 	 * Required Events Calendar Version.
 	 *
@@ -11,6 +16,8 @@ class Tribe__CLI__Service_Providers__Events extends Tribe__CLI__Service_Provider
 	/**
 	 * Returns the display name of this functionality.
 	 *
+	 * @since 0.1.0
+	 *
 	 * @return string
 	 */
 	public function get_display_name() {
@@ -19,6 +26,8 @@ class Tribe__CLI__Service_Providers__Events extends Tribe__CLI__Service_Provider
 
 	/**
 	 * Returns each plugin required by this one to run
+	 *
+	 * @since 0.1.0
 	 *
 	 * @return array {
 	 *      List of required plugins.
@@ -44,6 +53,8 @@ class Tribe__CLI__Service_Providers__Events extends Tribe__CLI__Service_Provider
 
 	/**
 	 * Binds and sets up implementations.
+	 *
+	 * @since 0.1.0
 	 */
 	public function register() {
 		if ( ! $this->should_run() ) {
@@ -54,7 +65,7 @@ class Tribe__CLI__Service_Providers__Events extends Tribe__CLI__Service_Provider
 		}
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			WP_CLI::add_command( 'tribe-events-generator', $this->container->make( 'Tribe__CLI__Events__Generator__CLI' ) );
+			WP_CLI::add_command( 'tribe-events-generator', $this->container->make( 'Tribe__Cli__Events__Generator__CLI' ) );
 		}
 	}
 }

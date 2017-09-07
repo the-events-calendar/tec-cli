@@ -1,6 +1,12 @@
 <?php
 
-class Tribe__CLI__Autoloader {
+/**
+ * Class Tribe__Cli__Autoloader
+ *
+ * @since 0.1.0
+ *
+ */
+class Tribe__Cli__Autoloader {
 
 	/**
 	 * @var array A prefix to path map for autoloading.
@@ -14,6 +20,8 @@ class Tribe__CLI__Autoloader {
 
 	/**
 	 * Registers a prefix and path couple in the autoloader.
+	 *
+	 * @since 0.1.0
 	 *
 	 * Classes are loaded from the specified path removing the prefix.
 	 * Example:
@@ -32,6 +40,8 @@ class Tribe__CLI__Autoloader {
 
 	/**
 	 * Loads a class managed by this autoloader if possible.
+	 *
+	 * @since 0.1.0
 	 *
 	 * @param string $class The class to autoload
 	 *
@@ -65,6 +75,8 @@ class Tribe__CLI__Autoloader {
 
 	/**
 	 * Registers a single class to path mapping.
+	 *
+	 * @since 0.1.0
 	 *
 	 * @param string $class
 	 * @param string $path The absolute path to the class file.

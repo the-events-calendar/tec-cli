@@ -1,24 +1,33 @@
 <?php
 
-class Tribe__CLI__Events__Generator__CLI extends \WP_CLI_Command {
+/**
+ * Class Tribe__Cli__Events__Generator__CLI
+ *
+ * @since 0.1.0
+ */
+class Tribe__Cli__Events__Generator__CLI extends WP_CLI_Command {
 
 	/**
-	 * @var \Tribe__CLI__Events__Generator__API
+	 * @var \Tribe__Cli__Events__Generator__API
 	 */
-	private $api;
+	protected $api;
 
 	/**
 	 * Tribe__CLI__Events__Generator__CLI constructor.
 	 *
-	 * @param \Tribe__CLI__Events__Generator__API $api
+	 * @since 0.1.0
+	 *
+	 * @param \Tribe__Cli__Events__Generator__API $api
 	 */
-	public function __construct( Tribe__CLI__Events__Generator__API $api ) {
+	public function __construct( Tribe__Cli__Events__Generator__API $api ) {
 		parent::__construct();
 		$this->api = $api;
 	}
 
 	/**
 	 * Generate events 100 at a time (default generates one).
+	 *
+	 * @since 0.1.0
 	 *
 	 * @synopsis   [--count=<count>]
 	 * @subcommand generate
@@ -72,6 +81,8 @@ class Tribe__CLI__Events__Generator__CLI extends \WP_CLI_Command {
 	/**
 	 * Reset all TEC event data.
 	 *
+	 * @since 0.1.0
+	 *
 	 * @synopsis   [--all]
 	 * @subcommand reset
 	 */
@@ -79,7 +90,7 @@ class Tribe__CLI__Events__Generator__CLI extends \WP_CLI_Command {
 		$options = [];
 
 		if ( ! isset( $assoc_args['all'] ) ) {
-			$options['meta_key'] = Tribe__CLI__Meta_Keys::$generated_meta_key;
+			$options['meta_key'] = Tribe__Cli__Meta_keys::$generated_meta_key;
 			$options['meta_value'] = 1;
 		}
 
@@ -90,6 +101,8 @@ class Tribe__CLI__Events__Generator__CLI extends \WP_CLI_Command {
 
 	/**
 	 * Delete posts for a post type.
+	 *
+	 * @since 0.1.0
 	 *
 	 * @param string $post_type
 	 * @param array $options
@@ -144,6 +157,8 @@ class Tribe__CLI__Events__Generator__CLI extends \WP_CLI_Command {
 
 	/**
 	 * Sleep and help avoid hitting memory limit
+	 *
+	 * @since 0.1.0
 	 *
 	 * @param int $sleep_time Amount of seconds to sleep
 	 */

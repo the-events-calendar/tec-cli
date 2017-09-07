@@ -1,6 +1,6 @@
 <?php
 
-abstract class Tribe__CLI__Service_Providers__Base extends tad_DI52_ServiceProvider {
+abstract class Tribe__Cli__Service_Providers__Base extends tad_DI52_ServiceProvider {
 
 	/**
 	 * Returns each plugin required by this one to run
@@ -66,8 +66,21 @@ abstract class Tribe__CLI__Service_Providers__Base extends tad_DI52_ServiceProvi
 		$links = array();
 
 		foreach ( $this->get_requisite_plugins() as $plugin ) {
-			$links[] = sprintf( '<a href="%1$s" class="thickbox" title="%2$s">%3$s</a>', esc_attr( $plugin['thickbox_url'] ),
-				esc_attr( $plugin['short_name'] ), esc_html( $plugin['short_name'] ) );
+			if ( isset( $plugin['external_download'] ) && true === $plugin['external_download'] ) {
+				$links[] = sprintf(
+					'<a href="%1$s" title="%2$s" target="_blank">%3$s</a>',
+					esc_attr( $plugin['thickbox_url'] ),
+					esc_attr( $plugin['short_name'] ),
+					esc_html( $plugin['short_name'] )
+				);
+			} else {
+				$links[] = sprintf(
+					'<a href="%1$s" class="thickbox" title="%2$s">%3$s</a>',
+					esc_attr( $plugin['thickbox_url'] ),
+					esc_attr( $plugin['short_name'] ),
+					esc_html( $plugin['short_name'] )
+				);
+			}
 		}
 
 		$links    = implode( ', ', $links );
