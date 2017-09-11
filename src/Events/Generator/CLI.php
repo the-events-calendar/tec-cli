@@ -117,6 +117,7 @@ class Tribe__Cli__Events__Generator__CLI extends WP_CLI_Command {
 			'posts_per_page' => 1,
 			'paged'          => 1,
 			'fields'         => 'ids',
+			'ep_integrate'   => false, // Force ep_integrate to off
 		);
 
 		$args = array_merge( $args, $options );
