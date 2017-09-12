@@ -27,8 +27,6 @@ class Tribe__Cli__Tickets_Plus__Command extends WP_CLI_Command {
 	/**
 	 * Generates WooCommerce orders for a WooCommerce ticketed post.
 	 *
-	 * @since 0.1.0
-	 *
 	 * ## OPTIONS
 	 *
 	 * <post_id>
@@ -80,6 +78,8 @@ class Tribe__Cli__Tickets_Plus__Command extends WP_CLI_Command {
 	 *      wp event-tickets-plus generate-wc-orders 23 --ticket_id=89 --create_users=no
 	 *
 	 * @subcommand generate-wc-orders
+	 *
+	 * @since 0.1.0
 	 */
 	public function generate_wc_orders( array $args = null, array $assoc_args = null ) {
 		$this->wc_generator->generate_orders( $args, $assoc_args );
@@ -87,8 +87,6 @@ class Tribe__Cli__Tickets_Plus__Command extends WP_CLI_Command {
 
 	/**
 	 * Removes all WC orders from a WooCommerce ticketed post.
-	 *
-	 * @since 0.1.0
 	 *
 	 * ## OPTIONS
 	 *
@@ -104,6 +102,8 @@ class Tribe__Cli__Tickets_Plus__Command extends WP_CLI_Command {
 	 *      wp event-tickets-plus reset-wc-orders 23 --ticket_id=89
 	 *
 	 * @subcommand reset-wc-orders
+	 *
+	 * @since 0.1.0
 	 */
 	public function reset_wc_orders( array $args = null, array $assoc_args = null ) {
 		$this->wc_generator->reset_orders( $args, $assoc_args );

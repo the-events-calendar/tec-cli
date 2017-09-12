@@ -27,8 +27,6 @@ class Tribe__Cli__Tickets__Command extends WP_CLI_Command {
 	/**
 	 * Generates RSVP attendees for a ticketed post.
 	 *
-	 * @since 0.1.0
-	 *
 	 * ## OPTIONS
 	 *
 	 * <post_id>
@@ -73,6 +71,8 @@ class Tribe__Cli__Tickets__Command extends WP_CLI_Command {
 	 *      wp event-tickets generate-attendees 23 --ticket_id=89
 	 *
 	 * @subcommand generate-rsvp-attendees
+	 *
+	 * @since 0.1.0
 	 */
 	public function generate_rsvp_attendees( array $args = null, array $assoc_args = null ) {
 		$this->rsvp->generate_attendees( $args, $assoc_args );
@@ -80,8 +80,6 @@ class Tribe__Cli__Tickets__Command extends WP_CLI_Command {
 
 	/**
 	 * Removes all the RSVP attendees from a ticketed post.
-	 *
-	 * @since 0.1.0
 	 *
 	 * ## OPTIONS
 	 *
@@ -97,6 +95,8 @@ class Tribe__Cli__Tickets__Command extends WP_CLI_Command {
 	 *      wp event-tickets reset-rsvp-attendees 23 --ticket_id=89
 	 *
 	 * @subcommand reset-rsvp-attendees
+	 *
+	 * @since 0.1.0
 	 */
 	public function reset_rsvp_attendees( array $args = null, array $assoc_args = null ) {
 		$this->rsvp->reset_attendees( $args, $assoc_args );
