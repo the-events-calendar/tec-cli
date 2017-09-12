@@ -67,7 +67,7 @@ class Tribe__Cli__Tickets_Plus__Command extends WP_CLI_Command {
 	 * : the ID of the ticket orders should be assigned to
 	 *
 	 * [--no_create_users]
-	 * : use available subscribers to make orderd and avoid creating users
+	 * : use available subscribers to make orders and avoid creating users
 	 *
 	 * ## EXAMPLES
 	 *
