@@ -71,13 +71,13 @@ class Tribe__Cli__Tickets_Plus__Command extends WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *      wp event-tickets-plus generate-orders 23
-	 *      wp event-tickets-plus generate-orders 23 --count=89
-	 *      wp event-tickets-plus generate-orders 23 --tickets_min=3
-	 *      wp event-tickets-plus generate-orders 23 --tickets_min=3 --tickets_max=10
-	 *      wp event-tickets-plus generate-orders 23 --tickets_min=3 --tickets_max=10 --ticket_status=no
-	 *      wp event-tickets-plus generate-orders 23 --ticket_id=89
-	 *      wp event-tickets-plus generate-orders 23 --ticket_id=89 --create_users=no
+	 *      wp event-tickets-plus generate-wc-orders 23
+	 *      wp event-tickets-plus generate-wc-orders 23 --count=89
+	 *      wp event-tickets-plus generate-wc-orders 23 --tickets_min=3
+	 *      wp event-tickets-plus generate-wc-orders 23 --tickets_min=3 --tickets_max=10
+	 *      wp event-tickets-plus generate-wc-orders 23 --tickets_min=3 --tickets_max=10 --ticket_status=no
+	 *      wp event-tickets-plus generate-wc-orders 23 --ticket_id=89
+	 *      wp event-tickets-plus generate-wc-orders 23 --ticket_id=89 --create_users=no
 	 *
 	 * @subcommand generate-wc-orders
 	 */
