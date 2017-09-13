@@ -27,10 +27,10 @@ class Tribe__Cli__Events__Generator__CLI extends WP_CLI_Command {
 	/**
 	 * Generate events 100 at a time (default generates one).
 	 *
-	 * @since 0.1.0
-	 *
 	 * @synopsis   [--count=<count>]
 	 * @subcommand generate
+	 *
+	 * @since 0.1.0
 	 */
 	public function generate( $args, $assoc_args ) {
 
@@ -81,10 +81,10 @@ class Tribe__Cli__Events__Generator__CLI extends WP_CLI_Command {
 	/**
 	 * Reset all TEC event data.
 	 *
-	 * @since 0.1.0
-	 *
 	 * @synopsis   [--all]
 	 * @subcommand reset
+	 *
+	 * @since 0.1.0
 	 */
 	public function reset( $args, $assoc_args ) {
 		$options = [];

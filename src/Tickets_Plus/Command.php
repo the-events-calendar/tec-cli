@@ -27,8 +27,6 @@ class Tribe__Cli__Tickets_Plus__Command extends WP_CLI_Command {
 	/**
 	 * Generates WooCommerce orders for a WooCommerce ticketed post.
 	 *
-	 * @since 0.1.0
-	 *
 	 * ## OPTIONS
 	 *
 	 * <post_id>
@@ -67,19 +65,21 @@ class Tribe__Cli__Tickets_Plus__Command extends WP_CLI_Command {
 	 * : the ID of the ticket orders should be assigned to
 	 *
 	 * [--no_create_users]
-	 * : use available subscribers to make orderd and avoid creating users
+	 * : use available subscribers to make orders and avoid creating users
 	 *
 	 * ## EXAMPLES
 	 *
-	 *      wp event-tickets-plus generate-orders 23
-	 *      wp event-tickets-plus generate-orders 23 --count=89
-	 *      wp event-tickets-plus generate-orders 23 --tickets_min=3
-	 *      wp event-tickets-plus generate-orders 23 --tickets_min=3 --tickets_max=10
-	 *      wp event-tickets-plus generate-orders 23 --tickets_min=3 --tickets_max=10 --ticket_status=no
-	 *      wp event-tickets-plus generate-orders 23 --ticket_id=89
-	 *      wp event-tickets-plus generate-orders 23 --ticket_id=89 --create_users=no
+	 *      wp event-tickets-plus generate-wc-orders 23
+	 *      wp event-tickets-plus generate-wc-orders 23 --count=89
+	 *      wp event-tickets-plus generate-wc-orders 23 --tickets_min=3
+	 *      wp event-tickets-plus generate-wc-orders 23 --tickets_min=3 --tickets_max=10
+	 *      wp event-tickets-plus generate-wc-orders 23 --tickets_min=3 --tickets_max=10 --ticket_status=no
+	 *      wp event-tickets-plus generate-wc-orders 23 --ticket_id=89
+	 *      wp event-tickets-plus generate-wc-orders 23 --ticket_id=89 --create_users=no
 	 *
 	 * @subcommand generate-wc-orders
+	 *
+	 * @since 0.1.0
 	 */
 	public function generate_wc_orders( array $args = null, array $assoc_args = null ) {
 		$this->wc_generator->generate_orders( $args, $assoc_args );
@@ -87,8 +87,6 @@ class Tribe__Cli__Tickets_Plus__Command extends WP_CLI_Command {
 
 	/**
 	 * Removes all WC orders from a WooCommerce ticketed post.
-	 *
-	 * @since 0.1.0
 	 *
 	 * ## OPTIONS
 	 *
@@ -104,6 +102,8 @@ class Tribe__Cli__Tickets_Plus__Command extends WP_CLI_Command {
 	 *      wp event-tickets-plus reset-wc-orders 23 --ticket_id=89
 	 *
 	 * @subcommand reset-wc-orders
+	 *
+	 * @since 0.1.0
 	 */
 	public function reset_wc_orders( array $args = null, array $assoc_args = null ) {
 		$this->wc_generator->reset_orders( $args, $assoc_args );
