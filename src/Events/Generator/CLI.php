@@ -90,7 +90,7 @@ class Tribe__Cli__Events__Generator__CLI extends WP_CLI_Command {
 		$options = [];
 
 		if ( ! isset( $assoc_args['all'] ) ) {
-			$options['meta_key'] = Tribe__Cli__Meta_keys::$generated_meta_key;
+			$options['meta_key'] = Tribe__Cli__Meta_Keys::$generated_meta_key;
 			$options['meta_value'] = 1;
 		}
 

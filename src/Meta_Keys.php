@@ -5,7 +5,7 @@
  *
  * @since 0.1.0
  */
-class Tribe__Cli__Meta_keys {
+class Tribe__Cli__Meta_Keys {
 	/**
 	 * Meta key used to track CLI generated posts
 	 *

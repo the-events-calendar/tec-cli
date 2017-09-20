@@ -169,7 +169,7 @@ class Tribe__Cli__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__Cli__
 		foreach ( $post_tickets as $ticket ) {
 			$this_ticket_attendees = array_filter( $attendees, function ( array $attendee ) use ( $ticket ) {
 				$for_this_ticket = isset( $attendee['product_id'] ) && $attendee['product_id'] == $ticket;
-				$generated       = ! empty( get_post_meta( $attendee['order_id'], Tribe__Cli__Meta_keys::$generated_meta_key, true ) );
+				$generated       = ! empty( get_post_meta( $attendee['order_id'], Tribe__Cli__Meta_Keys::$generated_meta_key, true ) );
 
 				return $for_this_ticket && $generated;
 			} );
@@ -182,7 +182,7 @@ class Tribe__Cli__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__Cli__
 
 		$user_query = new WP_User_Query( array(
 			'role'       => 'customer',
-			'meta_key'   => Tribe__Cli__Meta_keys::$generated_meta_key,
+			'meta_key'   => Tribe__Cli__Meta_Keys::$generated_meta_key,
 			'meta_value' => 1,
 			'fields'     => 'ID',
 			'paged'      => false,
