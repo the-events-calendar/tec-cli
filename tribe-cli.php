@@ -37,11 +37,13 @@ if ( version_compare( PHP_VERSION, '5.3.0', ">=" ) ) {
 	include dirname( __FILE__ ) . '/vendor/autoload_52.php';
 }
 
-add_action( 'plugins_loaded', function() {
+function tribe_cli_init() {
 	$container = new tad_DI52_Container();
 
 	$container->register( 'Tribe__Cli__Main' );
 	$container->register( 'Tribe__Cli__Service_Providers__Events' );
 	$container->register( 'Tribe__Cli__Service_Providers__Tickets' );
 	$container->register( 'Tribe__Cli__Service_Providers__Tickets_Plus' );
-} );
+}
+
+add_action( 'plugins_loaded', 'tribe_cli_init' );
