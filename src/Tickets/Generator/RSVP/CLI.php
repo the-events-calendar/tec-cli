@@ -41,7 +41,9 @@ class Tribe__Cli__Tickets__Generator__RSVP__CLI {
 		}
 
 		$supported_stati = array( 'yes', 'no' );
-
+		if ( ! isset( $assoc_args['ticket_status '] ) ) {
+			$assoc_args['ticket_status'] = reset( $supported_stati );
+		}
 		if ( ! in_array( $assoc_args['ticket_status'], $supported_stati ) ) {
 			WP_CLI::error( __( 'Ticket status must be "yes", "no" or be omitted.', 'tribe-cli' ) );
 		}
