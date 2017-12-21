@@ -144,6 +144,10 @@ class Tribe__Cli__Tickets__Generator__RSVP__CLI {
 			update_post_meta( $ticket_id, 'total_sales', $updated_sales );
 		}
 
+		WP_CLI::log( sprintf( __( 'Clearing the attendees cache for post %1$d', 'tribe-cli' ), $post_id ) );
+
+		$tickets->clear_attendees_cache( $post_id );
+
 		WP_CLI::success( sprintf( __( 'Generated %1$d RSVP attendees for post %2$d', 'tribe-cli' ), $counts_sum, $post_id ) );
 	}
 
