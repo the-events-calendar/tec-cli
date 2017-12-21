@@ -54,12 +54,12 @@ This command will generate attendees for a post with RSVP tickets.
 #### Example
 
 ```bash
-$ wp event-ticket generate-attendees 23
-$ wp event-ticket generate-attendees 23 --count=89
-$ wp event-ticket generate-attendees 23 --tickets_min=3
-$ wp event-ticket generate-attendees 23 --tickets_min=3 --tickets_max=10
-$ wp event-ticket generate-attendees 23 --tickets_min=3 --tickets_max=10 --ticket_status=no
-$ wp event-ticket generate-attendees 23 --ticket_id=89
+$ wp event-tickets generate-rsvp-attendees 23
+$ wp event-tickets generate-rsvp-attendees 23 --count=89
+$ wp event-tickets generate-rsvp-attendees 23 --tickets_min=3
+$ wp event-tickets generate-rsvp-attendees 23 --tickets_min=3 --tickets_max=10
+$ wp event-tickets generate-rsvp-attendees 23 --tickets_min=3 --tickets_max=10 --ticket_status=no
+$ wp event-tickets generate-rsvp-attendees 23 --ticket_id=89
 ```
 
 ### Reset RSVP tickets
@@ -74,8 +74,8 @@ This command will reset attendees for RSVP tickets assigned to a post.
 #### Example
 
 ```bash
-$ wp event-ticket reset-rsvp-attendees 23
-$ wp event-ticket reset-rsvp-attendees 23 --ticket_id=89
+$ wp event-tickets reset-rsvp-attendees 23
+$ wp event-tickets reset-rsvp-attendees 23 --ticket_id=89
 ```
 
 [2209-0001]: https://wordpress.org/plugins/the-events-calendar/
