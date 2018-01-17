@@ -3,10 +3,28 @@
 use function WP_CLI\Utils\format_items;
 use function WP_CLI\Utils\make_progress_bar;
 
+/**
+ * Class Tribe__Cli__Commerce__Generator__PayPal__CLI
+ *
+ * @since TBD
+ */
 class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 
+	/**
+	 * @var string The current order status, a utility field
+	 */
 	protected $order_status;
 
+	/**
+	 * Generates the PayPal orders for a post.
+	 *
+	 * @since TBD
+	 *
+	 * @param array $args
+	 * @param array $assoc_args
+	 *
+	 * @throws \WP_CLI\ExitException
+	 */
 	public function generate_orders( array $args, array $assoc_args = array() ) {
 		$post_id = $this->parse_post_id( $args );
 
@@ -141,9 +159,14 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	}
 
 	/**
+	 * Parses, validating it, the user-proviced post ID.
+	 *
+	 * @since TBD
+	 *
 	 * @param array $args
 	 *
 	 * @return int
+	 *
 	 * @throws \WP_CLI\ExitException
 	 */
 	protected function parse_post_id( array $args ) {
@@ -168,11 +191,15 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	}
 
 	/**
+	 * Parses, validating and checking it, the user-provided ticket ID.
+	 *
+	 * @since TBD
+	 *
 	 * @param array $assoc_args
-	 * @param       $paypal
-	 * @param       $post_id
+	 * @param int   $post_id
 	 *
 	 * @return array
+	 *
 	 * @throws \WP_CLI\ExitException
 	 */
 	protected function parse_ticket_ids( array $assoc_args, $post_id ) {
@@ -194,6 +221,18 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		return $ticket_ids;
 	}
 
+	/**
+	 * Parses, validating and sanity-checking them, the user-provided
+	 * attendee min and max values.
+	 *
+	 * @since TBD
+	 *
+	 * @param array $assoc_args
+	 *
+	 * @return array
+	 *
+	 * @throws \WP_CLI\ExitException
+	 */
 	protected function parse_attendees_min_max( array $assoc_args ) {
 		if ( ! (
 				filter_var( $assoc_args['attendees_min'], FILTER_VALIDATE_INT )
@@ -210,7 +249,13 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	}
 
 	/**
+	 * Parse and validates the user-provided orders count.
+	 *
+	 * @since TBD
+	 *
 	 * @param array $assoc_args
+	 *
+	 * @return int
 	 *
 	 * @throws \WP_CLI\ExitException
 	 */
@@ -222,6 +267,17 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		return (int) $assoc_args['count'];
 	}
 
+	/**
+	 * Parses and validate the user-provided PayPal order status.
+	 *
+	 * @since TBD
+	 *
+	 * @param array $assoc_args
+	 *
+	 * @return string
+	 *
+	 * @throws \WP_CLI\ExitException
+	 */
 	protected function parse_order_status( array $assoc_args ) {
 		$order_status = trim( $assoc_args['order_status'] );
 
@@ -240,7 +296,34 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	}
 
 	/**
-	 * @param $ticket_id
+	 * Hijack some PayPal related hooks to make all work.
+	 *
+	 * @since TBD
+	 */
+	protected function hijack_request_flow() {
+		// all transactions are valid, we are generating fake numbers
+		add_filter( 'tribe_tickets_commerce_paypal_validate_transaction', '__return_true' );
+
+		// mark all generated attendees as generated
+		add_action( 'event_tickets_tpp_attendee_created', function ( $attendee_id ) {
+			update_post_meta( $attendee_id, Tribe__Cli__Meta_Keys::$generated_meta_key, 1 );
+		} );
+
+		// no, do not send emails to the fake attendees
+		add_filter( 'tribe_tickets_tpp_send_mail', '__return_false' );
+
+		// do not `die` after generating tickets
+		add_filter( 'tribe_exit', function () {
+			return '__return_true';
+		} );
+	}
+
+	/**
+	 * Backups the total sales for a ticket before the generation kicks in.
+	 *
+	 * @since TBD
+	 *
+	 * @param int $ticket_id
 	 */
 	protected function backup_ticket_total_sales( $ticket_id ) {
 		$backup_key        = Tribe__Cli__Meta_Keys::$total_sales_backup_meta_key;
@@ -250,6 +333,17 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		}
 	}
 
+	/**
+	 * Applies a signum to a number depending on the order status.
+	 *
+	 * Some order stati will require a negative value, e.g. refunds.
+	 *
+	 * @since TBD
+	 *
+	 * @param int $fee
+	 *
+	 * @return string
+	 */
 	protected function signed_value( $fee ) {
 		if ( Tribe__Tickets__Commerce__PayPal__Stati::$refunded === $this->order_status ) {
 			return '-' . $fee;
@@ -258,6 +352,15 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		return '' . $fee;
 	}
 
+	/**
+	 * Updates the fees in the data depending on the current order status.
+	 *
+	 * @since TBD
+	 *
+	 * @param array $data
+	 *
+	 * @return array
+	 */
 	protected function update_fees( array $data ) {
 		$fee_fields = array(
 			'payment_fee',
@@ -278,10 +381,12 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	}
 
 	/**
-	 * @param $gateway
-	 * @param $transaction_data
-	 * @param $paypal
-	 * @param $order_status
+	 * Generate the tickets using the PayPal code API.
+	 *
+	 * @since TBD
+	 *
+	 * @param array  $transaction_data
+	 * @param string $order_status
 	 */
 	protected function generate_tickets( $order_status, $transaction_data ) {
 		/** @var \Tribe__Tickets__Commerce__PayPal__Main $paypal */
@@ -298,17 +403,5 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 
 
 		$paypal->generate_tickets( $order_status, false );
-	}
-
-	protected function hijack_request_flow() {
-		add_action( 'event_tickets_tpp_attendee_created', function ( $attendee_id ) {
-			update_post_meta( $attendee_id, Tribe__Cli__Meta_Keys::$generated_meta_key, 1 );
-		} );
-
-		add_filter( 'tribe_tickets_tpp_send_mail', '__return_false' );
-
-		add_filter( 'tribe_exit', function () {
-			return '__return_true';
-		} );
 	}
 }
