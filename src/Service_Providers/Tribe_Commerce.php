@@ -1,21 +1,10 @@
 <?php
+class Tribe__Cli__Service_Providers__Tribe_Commerce extends Tribe__Cli__Service_Providers__Base  {
 
-/**
- * Class Tribe__Cli__Service_Providers__Tickets
- *
- * @since 0.1.0
- */
-class Tribe__Cli__Service_Providers__Tickets extends Tribe__Cli__Service_Providers__Base {
-
-	/**
-	 * Minimum required version of Event Tickets
-	 */
-	const REQUIRED_TICKETS_VERSION = '4.5.4';
+	const REQUIRED_TICKETS_VERSION = '4.7dev';
 
 	/**
 	 * Returns each plugin required by this one to run
-	 *
-	 * @since 0.1.0
 	 *
 	 * @return array {
 	 *      List of required plugins.
@@ -30,7 +19,7 @@ class Tribe__Cli__Service_Providers__Tickets extends Tribe__Cli__Service_Provide
 	protected function get_requisite_plugins() {
 		return array(
 			array(
-				'short_name'   => 'Event Tickets',
+				'short_name'   => 'Event Tickets (with Tribe Commerce)',
 				'class'        => 'Tribe__Tickets__Main',
 				'thickbox_url' => 'plugin-install.php?tab=plugin-information&plugin=event-tickets&TB_iframe=true',
 				'min_version'  => self::REQUIRED_TICKETS_VERSION,
@@ -42,18 +31,14 @@ class Tribe__Cli__Service_Providers__Tickets extends Tribe__Cli__Service_Provide
 	/**
 	 * Returns the display name of this functionality.
 	 *
-	 * @since 0.1.0
-	 *
 	 * @return string
 	 */
 	protected function get_display_name() {
-		return 'Event Tickets WP-CLI Tools';
+		return 'Tribe Commerce WP-CLI Tools';
 	}
 
 	/**
 	 * Binds and sets up implementations.
-	 *
-	 * @since 0.1.0
 	 */
 	public function register() {
 		if ( ! $this->should_run() ) {
@@ -64,7 +49,7 @@ class Tribe__Cli__Service_Providers__Tickets extends Tribe__Cli__Service_Provide
 		}
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			WP_CLI::add_command( 'event-tickets', $this->container->make( 'Tribe__Cli__Tickets__Command' ), array( 'shortdesc' => $this->get_display_name() ) );
+			WP_CLI::add_command( 'commerce', $this->container->make( 'Tribe__Cli__Commerce__Command' ), array('shortdesc' => $this->get_display_name()) );
 		}
 	}
 }

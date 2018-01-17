@@ -12,4 +12,5 @@ class Tribe__Cli__Meta_Keys {
 	 * @var string
 	 */
 	public static $generated_meta_key = '_tribe_cli_generated';
+	public static $total_sales_backup_meta_key = '_tribe_cli_total_sales_backup';
 }

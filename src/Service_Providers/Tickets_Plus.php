@@ -64,7 +64,7 @@ class Tribe__Cli__Service_Providers__Tickets_Plus extends Tribe__Cli__Service_Pr
 		}
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			WP_CLI::add_command( 'event-tickets-plus', $this->container->make( 'Tribe__Cli__Tickets_Plus__Command' ) );
+			WP_CLI::add_command( 'event-tickets-plus', $this->container->make( 'Tribe__Cli__Tickets_Plus__Command' ), array( 'shortdesc' => $this->get_display_name() ) );
 		}
 
 		// avoid sending emails for fake orders
