@@ -75,9 +75,31 @@ class Tribe__Cli__Commerce__Command extends WP_CLI_Command {
 	 *
 	 * @subcommand generate-paypal-orders
 	 *
-	 * @since 0.1.0
+	 * @since TBD
+	 *
 	 */
 	public function generate_paypal_orders( array $args = null, array $assoc_args = null ) {
 		$this->paypal->generate_orders( $args, $assoc_args );
+	}
+
+	/**
+	 * Removes generated PayPal orders from a ticketed post.
+	 *
+	 * ## OPTIONS
+	 *
+	 * <post_id>
+	 * : PayPal orders will be removed from this post
+	 *
+	 * ## EXAMPLES
+	 *
+	 *      wp commerce reset-paypal-orders 23
+	 *
+	 * @subcommand reset-paypal-orders
+	 *
+	 * @since TBD
+	 *
+	 */
+	public function reset_paypal_orders(  array $args = null, array $assoc_args = null  ) {
+		$this->paypal->reset_orders( $args, $assoc_args );
 	}
 }

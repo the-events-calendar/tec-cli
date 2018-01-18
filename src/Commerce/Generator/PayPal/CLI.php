@@ -1,5 +1,7 @@
 <?php
 
+use Tribe__Cli__Meta_Keys as Meta_Keys;
+use Tribe__Tickets__Commerce__PayPal__Order as Order;
 use function WP_CLI\Utils\format_items;
 use function WP_CLI\Utils\make_progress_bar;
 
@@ -25,7 +27,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	 *
 	 * @throws \WP_CLI\ExitException
 	 */
-	public function generate_orders( array $args, array $assoc_args = array() ) {
+	public function generate_orders( array $args = array(), array $assoc_args = array() ) {
 		$post_id = $this->parse_post_id( $args );
 
 		/** @var \Tribe__Tickets__Commerce__PayPal__Main $paypal */
@@ -306,7 +308,13 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 
 		// mark all generated attendees as generated
 		add_action( 'event_tickets_tpp_attendee_created', function ( $attendee_id ) {
-			update_post_meta( $attendee_id, Tribe__Cli__Meta_Keys::$generated_meta_key, 1 );
+			update_post_meta( $attendee_id, Meta_Keys::$generated_meta_key, 1 );
+		} );
+
+		add_filter( 'tribe_tickets_tpp_order_postarr', function ( $postarr ) {
+			$postarr['meta_input'][ Meta_Keys::$generated_meta_key ] = 1;
+
+			return $postarr;
 		} );
 
 		// no, do not send emails to the fake attendees
@@ -326,7 +334,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	 * @param int $ticket_id
 	 */
 	protected function backup_ticket_total_sales( $ticket_id ) {
-		$backup_key        = Tribe__Cli__Meta_Keys::$total_sales_backup_meta_key;
+		$backup_key        = Meta_Keys::$total_sales_backup_meta_key;
 		$saved_total_sales = get_post_meta( $ticket_id, $backup_key, true );
 		if ( '' === $saved_total_sales ) {
 			update_post_meta( $ticket_id, $backup_key, get_post_meta( $ticket_id, 'total_sales', true ) );
@@ -403,5 +411,70 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 
 
 		$paypal->generate_tickets( $order_status, false );
+	}
+
+	public function reset_orders( array $args = array(), array $assoc_args = array() ) {
+		$post_id = $this->parse_post_id( $args );
+
+		$pre_deleted_attendees_count = (int) get_post_meta( $post_id, '_tribe_deleted_attendees_count', true );
+
+		WP_CLI::log( "Removing generated PayPal orders from post {$post_id}" );
+
+		$orders = Order::find_by( array( 'post_id' => $post_id, 'posts_per_page' => - 1 ) );
+
+		if ( empty( $orders ) ) {
+			WP_CLI::success( "There are no orders for post {$post_id}" );
+		}
+
+		$generated_orders = array_filter( $orders, function ( Order $order ) {
+			return (bool) $order->get_meta( Meta_Keys::$generated_meta_key );
+		} );
+
+		if ( empty( $generated_orders ) ) {
+			WP_CLI::success( "No generated orders found for post {$post_id}" );
+		}
+
+		$progress_bar = make_progress_bar( 'Removing generated orders', count( $generated_orders ) );
+
+		$restored_total_sales_ticket_ids = array();
+		/** @var Order $orders */
+		foreach ( $generated_orders as $order ) {
+			$post_ids = $order->get_related_post_ids();
+
+			if ( ! in_array( $post_id, $post_ids ) ) {
+				continue;
+			}
+
+			if ( 1 === ! count( $post_ids ) ) {
+				WP_CLI::error( 'This tool does not support creating or deleting orders for multiple tickets or posts (yet).' );
+			}
+
+			$attendees = $order->get_attendees();
+			$order->delete( true, true );
+
+			foreach ( $attendees as $attendee ) {
+				wp_delete_post( $attendee['attendee_id'], true );
+			}
+
+			$ticket_ids = $order->get_ticket_ids();
+			foreach ( $ticket_ids as $ticket_id ) {
+				if ( in_array( $ticket_id, $restored_total_sales_ticket_ids ) ) {
+					continue;
+				}
+				$original_total_sales = (int) get_post_meta( $ticket_id, Meta_Keys::$total_sales_backup_meta_key, true );
+				update_post_meta( $ticket_id, 'total_sales', $original_total_sales );
+				delete_post_meta( $ticket_id, Meta_Keys::$total_sales_backup_meta_key );
+				$restored_total_sales_ticket_ids[] = $ticket_id;
+			}
+
+			$progress_bar->tick();
+		}
+
+		$progress_bar->finish();
+
+		/** @var Tribe__Tickets__Commerce__PayPal__Main $paypal */
+		$paypal = tribe( 'tickets.commerce.paypal' );
+		$paypal->clear_attendees_cache( $post_id );
+		update_post_meta( $post_id, '_tribe_deleted_attendees_count', $pre_deleted_attendees_count );
 	}
 }
