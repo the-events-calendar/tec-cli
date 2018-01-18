@@ -73,6 +73,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 			$progress->tick();
 
 			$faker = Faker\Factory::create();
+			$faker->addProvider( new Faker\Provider\en_US\Address( $faker ) );
 
 			$transaction_id = strtoupper( substr( md5( $faker->sentence ), 0, 17 ) );
 			$receiver_id    = strtoupper( substr( md5( $faker->sentence ), 0, 13 ) );
@@ -87,7 +88,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 			$data = array(
 				'last_name'              => $faker->lastName,
 				'shipping_method'        => 'Default',
-				'address_state'          => 'CA',
+				'address_state'          => $faker->stateAbbr,
 				'receiver_email'         => $receiver_email,
 				'custom'                 => '{"user_id":' . $user_id . ',"tribe_handler":"tpp"}',
 				'item_name1'             => "{$ticket->name} - {$post->post_title}",
@@ -97,7 +98,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 				'payer_email'            => $faker->email,
 				'protection_eligibility' => 'Eligible',
 				'item_number1'           => "{$post_id}:{$ticket_id}",
-				'address_zip'            => '95131',
+				'address_zip'            => $faker->postcode,
 				'mc_handling1'           => '0.00',
 				'payment_fee'            => $this->signed_value( 0.09 ),
 				'transaction_subject'    => '',
@@ -112,7 +113,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 				'verify_sign'            => 'Au138tmgDC7.8B8qKvd-30AoY8IgAFfYkrYMbXOdLJmWDmKOip2XAIyQ',
 				'mc_shipping1'           => '0.00',
 				'business'               => $receiver_email,
-				'address_city'           => 'San Jose',
+				'address_city'           => $faker->city,
 				'first_name'             => $faker->firstName,
 				'address_name'           => $faker->name,
 				'mc_shipping'            => '0.00',
@@ -122,7 +123,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 				'ipn_track_id'           => $ipn_track_id,
 				'payment_gross'          => $this->signed_value( $payment_gross ),
 				'address_country_code'   => 'US',
-				'address_street'         => '1 Main St',
+				'address_street'         => $faker->streetAddress,
 				'payment_type'           => 'instant',
 				'payer_id'               => $payer_id,
 				'quantity1'              => $ticket_qty,
