@@ -12,4 +12,11 @@ class Tribe__Cli__Meta_Keys {
 	 * @var string
 	 */
 	public static $generated_meta_key = '_tribe_cli_generated';
+
+	/**
+	 * Meta key used to store a backup of the total sales for a commerce related post.
+	 *
+	 * @var string
+	 */
+	public static $total_sales_backup_meta_key = '_tribe_cli_total_sales_backup';
 }

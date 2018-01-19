@@ -65,7 +65,7 @@ class Tribe__Cli__Service_Providers__Events extends Tribe__Cli__Service_Provider
 		}
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			WP_CLI::add_command( 'tribe-events-generator', $this->container->make( 'Tribe__Cli__Events__Generator__CLI' ) );
+			WP_CLI::add_command( 'tribe-events-generator', $this->container->make( 'Tribe__Cli__Events__Generator__CLI' ), array( 'shortdesc' => $this->get_display_name() ) );
 		}
 	}
 }

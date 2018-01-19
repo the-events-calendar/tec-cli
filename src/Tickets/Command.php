@@ -17,11 +17,11 @@ class Tribe__Cli__Tickets__Command extends WP_CLI_Command {
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param \Tribe__Cli__Tickets__Generator__RSVP__CLI $rsvp
+	 * @param \Tribe__Cli__Tickets__Generator__RSVP__CLI $paypal
 	 */
-	public function __construct( Tribe__Cli__Tickets__Generator__RSVP__CLI $rsvp ) {
+	public function __construct( Tribe__Cli__Tickets__Generator__RSVP__CLI $paypal ) {
 		parent::__construct();
-		$this->rsvp = $rsvp;
+		$this->rsvp = $paypal;
 	}
 
 	/**
@@ -64,12 +64,12 @@ class Tribe__Cli__Tickets__Command extends WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *      wp event-tickets generate-attendees 23
-	 *      wp event-tickets generate-attendees 23 --count=89
-	 *      wp event-tickets generate-attendees 23 --tickets_min=3
-	 *      wp event-tickets generate-attendees 23 --tickets_min=3 --tickets_max=10
-	 *      wp event-tickets generate-attendees 23 --tickets_min=3 --tickets_max=10 --ticket_status=no
-	 *      wp event-tickets generate-attendees 23 --ticket_id=89
+	 *      wp event-tickets generate-rsvp-attendees 23
+	 *      wp event-tickets generate-rsvp-attendees 23 --count=89
+	 *      wp event-tickets generate-rsvp-attendees 23 --tickets_min=3
+	 *      wp event-tickets generate-rsvp-attendees 23 --tickets_min=3 --tickets_max=10
+	 *      wp event-tickets generate-rsvp-attendees 23 --tickets_min=3 --tickets_max=10 --ticket_status=no
+	 *      wp event-tickets generate-rsvp-attendees 23 --ticket_id=89
 	 *
 	 * @subcommand generate-rsvp-attendees
 	 *
