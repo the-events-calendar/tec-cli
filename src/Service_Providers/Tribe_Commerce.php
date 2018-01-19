@@ -1,10 +1,18 @@
 <?php
+
+/**
+ * Class Tribe__Cli__Service_Providers__Tribe_Commerce
+ *
+ * @since 0.2.0
+ */
 class Tribe__Cli__Service_Providers__Tribe_Commerce extends Tribe__Cli__Service_Providers__Base  {
 
 	const REQUIRED_TICKETS_VERSION = '4.7dev';
 
 	/**
 	 * Returns each plugin required by this one to run
+	 *
+	 * @since 0.2.0
 	 *
 	 * @return array {
 	 *      List of required plugins.
@@ -31,6 +39,8 @@ class Tribe__Cli__Service_Providers__Tribe_Commerce extends Tribe__Cli__Service_
 	/**
 	 * Returns the display name of this functionality.
 	 *
+	 * @since 0.2.0
+	 *
 	 * @return string
 	 */
 	protected function get_display_name() {
@@ -39,6 +49,8 @@ class Tribe__Cli__Service_Providers__Tribe_Commerce extends Tribe__Cli__Service_
 
 	/**
 	 * Binds and sets up implementations.
+	 *
+	 * @since 0.2.0
 	 */
 	public function register() {
 		if ( ! $this->should_run() ) {

@@ -8,7 +8,7 @@ use function WP_CLI\Utils\make_progress_bar;
 /**
  * Class Tribe__Cli__Commerce__Generator__PayPal__CLI
  *
- * @since TBD
+ * @since 0.2.0
  */
 class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 
@@ -20,7 +20,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	/**
 	 * Generates the PayPal orders for a post.
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @param array $args
 	 * @param array $assoc_args
@@ -164,7 +164,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	/**
 	 * Parses, validating it, the user-proviced post ID.
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @param array $args
 	 *
@@ -196,7 +196,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	/**
 	 * Parses, validating and checking it, the user-provided ticket ID.
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @param array $assoc_args
 	 * @param int   $post_id
@@ -228,7 +228,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	 * Parses, validating and sanity-checking them, the user-provided
 	 * attendee min and max values.
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @param array $assoc_args
 	 *
@@ -254,7 +254,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	/**
 	 * Parse and validates the user-provided orders count.
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @param array $assoc_args
 	 *
@@ -273,7 +273,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	/**
 	 * Parses and validate the user-provided PayPal order status.
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @param array $assoc_args
 	 *
@@ -301,7 +301,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	/**
 	 * Hijack some PayPal related hooks to make all work.
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 */
 	protected function hijack_request_flow() {
 		// all transactions are valid, we are generating fake numbers
@@ -330,7 +330,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	/**
 	 * Backups the total sales for a ticket before the generation kicks in.
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @param int $ticket_id
 	 */
@@ -347,7 +347,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	 *
 	 * Some order stati will require a negative value, e.g. refunds.
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @param int $fee
 	 *
@@ -364,7 +364,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	/**
 	 * Updates the fees in the data depending on the current order status.
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @param array $data
 	 *
@@ -392,7 +392,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	/**
 	 * Generate the tickets using the PayPal code API.
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @param array  $transaction_data
 	 * @param string $order_status
