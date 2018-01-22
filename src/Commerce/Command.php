@@ -25,12 +25,12 @@ class Tribe__Cli__Commerce__Command extends WP_CLI_Command {
 	}
 
 	/**
-	 * Generates PayPal orders for a ticketed post.
+	 * Generates PayPal orders for one or more tickets.
 	 *
 	 * ## OPTIONS
 	 *
-	 * <post_id>
-	 * : PayPal orders will be attached to this post
+	 * <ticket_id>
+	 * : PayPal orders will be attached to this ticket(s); either a ticket post ID or a CSV list of ticket post IDs
 	 *
 	 * [--count=<count>]
 	 * : the number of PayPal orders to generate
@@ -61,17 +61,16 @@ class Tribe__Cli__Commerce__Command extends WP_CLI_Command {
 	 *      - refunded
 	 * ---
 	 *
-	 * [--ticket_id=<ticket_id>]
-	 * : the ID of the ticket PayPal orders should be generated for
-	 *
 	 * ## EXAMPLES
 	 *
 	 *      wp commerce generate-paypal-orders 23
+	 *      wp commerce generate-paypal-orders 23,89
+	 *      wp commerce generate-paypal-orders 23,89,31
 	 *      wp commerce generate-paypal-orders 23 --count=89
+	 *      wp commerce generate-paypal-orders 23,31 --count=89
 	 *      wp commerce generate-paypal-orders 23 --attendees_min=3
 	 *      wp commerce generate-paypal-orders 23 --attendees_min=3 --attendees_max=10
 	 *      wp commerce generate-paypal-orders 23 --attendees_min=3 --attendees_max=10 --order_status=denied
-	 *      wp commerce generate-paypal-orders 23 --ticket_id=89
 	 *
 	 * @subcommand generate-paypal-orders
 	 *
@@ -83,12 +82,12 @@ class Tribe__Cli__Commerce__Command extends WP_CLI_Command {
 	}
 
 	/**
-	 * Removes generated PayPal orders from a ticketed post.
+	 * Removes generated PayPal orders for a specifid ticket or ticketed post.
 	 *
 	 * ## OPTIONS
 	 *
 	 * <post_id>
-	 * : PayPal orders will be removed from this post
+	 * : PayPal orders will be removed from this post or for this ticket ID
 	 *
 	 * ## EXAMPLES
 	 *
