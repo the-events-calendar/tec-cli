@@ -493,7 +493,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 
 			if ( $is_ticket ) {
 				$attendees = array_filter( $attendees, function ( array $attendee ) use ( $ticket_id ) {
-					return isset( $attendee['product_id'] ) &&  $attendee['product_id']==$ticket_id;
+					return isset( $attendee['product_id'] ) && $attendee['product_id'] == $ticket_id;
 				} );
 			} else {
 				$attendees = array_filter( $attendees, function ( array $attendee ) use ( $post_ids ) {
