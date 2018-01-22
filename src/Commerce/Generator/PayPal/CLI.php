@@ -99,6 +99,10 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 				$items_index++;
 			}
 
+			if ( empty( $items_data ) ) {
+				continue;
+			}
+
 			$items_data = call_user_func_array('array_merge',$items_data);
 
 			$this->order_status = $order_status;
