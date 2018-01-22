@@ -501,7 +501,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 				} );
 			}
 
-			if (count($post_ids) === 1) {
+			if ( count( $post_ids ) === 1 ) {
 				$order->delete( true, true );
 			} else {
 				foreach ( $attendees as $attendee ) {
