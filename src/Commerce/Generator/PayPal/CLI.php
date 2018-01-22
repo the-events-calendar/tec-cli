@@ -74,8 +74,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 				$this->backup_ticket_total_sales( $ticket_id );
 
 				$inventory  = $ticket->inventory();
-				$inventory  = - 1 === $inventory ? 'unlimited' : $inventory;
-				$this_ticket_qty = 'unlimited' === $inventory ? $this_ticket_qty : min( $this_ticket_qty, (int) $inventory );
+				$this_ticket_qty = -1 === $inventory ? $this_ticket_qty : min( $this_ticket_qty, (int) $inventory );
 
 				if ( $this_ticket_qty === 0 ) {
 					WP_CLI::log( "Not generating attendees for ticket {$ticket_id} as it ran out of inventory" );
@@ -461,7 +460,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		$paypal = tribe( 'tickets.commerce.paypal' );
 
 		$is_ticket = true;
-		if (!$post->post_type === $paypal->ticket_object) {
+		if ( ! $post->post_type === $paypal->ticket_object ) {
 			$is_ticket = false;
 			WP_CLI::log( "Removing generated PayPal orders from post {$post_id}" );
 			$orders = Order::find_by( array( 'post_id' => $post_id, 'posts_per_page' => - 1 ) );
