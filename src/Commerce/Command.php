@@ -74,7 +74,7 @@ class Tribe__Cli__Commerce__Command extends WP_CLI_Command {
 	 *
 	 * @subcommand generate-paypal-orders
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 */
 	public function generate_paypal_orders( array $args = null, array $assoc_args = null ) {
@@ -95,7 +95,7 @@ class Tribe__Cli__Commerce__Command extends WP_CLI_Command {
 	 *
 	 * @subcommand reset-paypal-orders
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 */
 	public function reset_paypal_orders(  array $args = null, array $assoc_args = null  ) {
