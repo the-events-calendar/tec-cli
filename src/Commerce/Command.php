@@ -82,7 +82,7 @@ class Tribe__Cli__Commerce__Command extends WP_CLI_Command {
 	}
 
 	/**
-	 * Removes generated PayPal orders for a specifid ticket or ticketed post.
+	 * Removes generated PayPal orders for a specific ticket or ticketed post.
 	 *
 	 * ## OPTIONS
 	 *
