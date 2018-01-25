@@ -187,7 +187,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		}
 
 		$progress->finish();
-		WP_CLI::success( "Generated {$orders_count} orders for post {$post_id}" );
+		WP_CLI::success( "Generated {$orders_count} orders for post {$ticket_id}" );
 		format_items( 'table', $generated, array( 'Order ID', 'Attendees count' ) );
 	}
 
@@ -464,7 +464,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		$paypal = tribe( 'tickets.commerce.paypal' );
 
 		$is_ticket = true;
-		if ( ! $post->post_type === $paypal->ticket_object ) {
+		if ( $post->post_type !== $paypal->ticket_object ) {
 			$is_ticket = false;
 			WP_CLI::log( "Removing generated PayPal orders from post {$post_id}" );
 			$orders = Order::find_by( array( 'post_id' => $post_id, 'posts_per_page' => - 1 ) );
