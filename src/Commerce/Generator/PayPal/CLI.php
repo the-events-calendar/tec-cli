@@ -187,7 +187,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		}
 
 		$progress->finish();
-		WP_CLI::success( "Generated {$orders_count} orders for post {$post_id}" );
+		WP_CLI::success( "Generated {$orders_count} orders for post {$ticket_id}" );
 		format_items( 'table', $generated, array( 'Order ID', 'Attendees count' ) );
 	}
 
