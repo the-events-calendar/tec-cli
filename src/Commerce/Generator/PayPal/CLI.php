@@ -73,7 +73,10 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 
 				$this->backup_ticket_total_sales( $ticket_id );
 
-				$inventory  = $ticket->inventory();
+				add_filter( 'tribe_tickets_tpp_pending_stock_ignore', '__return_true' );
+				$inventory = $ticket->inventory();
+				add_filter( 'tribe_tickets_tpp_pending_stock_ignore', '__return_false' );
+
 				$this_ticket_qty = -1 === $inventory ? $this_ticket_qty : min( $this_ticket_qty, (int) $inventory );
 
 				if ( $this_ticket_qty === 0 ) {
