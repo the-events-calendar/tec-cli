@@ -399,6 +399,8 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	 * @param string $order_status
 	 */
 	protected function place_order( $order_status, $transaction_data ) {
+		$this->hijack_request_flow();
+
 		/** @var \Tribe__Tickets__Commerce__PayPal__Main $paypal */
 		$paypal = tribe( 'tickets.commerce.paypal' );
 
