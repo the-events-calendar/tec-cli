@@ -2,6 +2,7 @@
 
 use Tribe__Cli__Meta_Keys as Meta_Keys;
 use Tribe__Tickets__Commerce__PayPal__Order as Order;
+use Tribe__Tickets__Commerce__PayPal__Stati as Stati;
 use function WP_CLI\Utils\format_items;
 use function WP_CLI\Utils\make_progress_bar;
 
@@ -44,22 +45,22 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		$this->hijack_request_flow();
 
 		for ( $k = 0; $k < $orders_count; $k ++ ) {
-			$user_id   = 0;
+			$user_id    = 0;
 			$ticket_qty = array();
 			foreach ( $ticket_ids as $ticket_id ) {
 				$ticket_qty[ $ticket_id ] = mt_rand( $tickets_min, $tickets_max );
 			}
 
-			$items_data = array();
-			$items_index = 1;
-			$payment_gross  = 0;
+			$items_data    = array();
+			$items_index   = 1;
+			$payment_gross = 0;
 
 			/** @var \Tribe__Tickets__Commerce__PayPal__Main $paypal */
 			$paypal = tribe( 'tickets.commerce.paypal' );
 
-			foreach ($ticket_ids as $ticket_id) {
+			foreach ( $ticket_ids as $ticket_id ) {
 				$this_ticket_qty = $ticket_qty[ $ticket_id ];
-				$post_id   = (int) get_post_meta( $ticket_id, $paypal->event_key, true );
+				$post_id         = (int) get_post_meta( $ticket_id, $paypal->event_key, true );
 
 				if ( empty( $post_id ) ) {
 					WP_CLI::error( "Ticket with ID {$ticket_id} is not related to a post, please edit the ticket and retry." );
@@ -77,7 +78,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 				$inventory = $ticket->inventory();
 				add_filter( 'tribe_tickets_tpp_pending_stock_ignore', '__return_false' );
 
-				$this_ticket_qty = -1 === $inventory ? $this_ticket_qty : min( $this_ticket_qty, (int) $inventory );
+				$this_ticket_qty = - 1 === $inventory ? $this_ticket_qty : min( $this_ticket_qty, (int) $inventory );
 
 				if ( $this_ticket_qty === 0 ) {
 					WP_CLI::log( "Not generating attendees for ticket {$ticket_id} as it ran out of inventory" );
@@ -87,7 +88,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 				WP_CLI::log( "Generating an order for {$this_ticket_qty} attendees for ticket {$ticket_id}, current ticket inventory is {$inventory}" );
 				$ticket_qty[ $ticket_id ] = $this_ticket_qty;
 
-				$mc_gross = $ticket->price * $this_ticket_qty;
+				$mc_gross      = $ticket->price * $this_ticket_qty;
 				$payment_gross += $mc_gross;
 
 				$items_data[] = array(
@@ -99,14 +100,14 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 					"tax{$items_index}"         => '0.00',
 					"quantity{$items_index}"    => $this_ticket_qty,
 				);
-				$items_index++;
+				$items_index ++;
 			}
 
 			if ( empty( $items_data ) ) {
 				continue;
 			}
 
-			$items_data = call_user_func_array('array_merge',$items_data);
+			$items_data = call_user_func_array( 'array_merge', $items_data );
 
 			$this->order_status = $order_status;
 
@@ -166,22 +167,22 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 
 			$data = array_merge( $data, $items_data );
 
-			if ( $order_status === Tribe__Tickets__Commerce__PayPal__Stati::$refunded ) {
+			if ( $order_status === Stati::$refunded ) {
 				// complete the order to be refunded before the refund
-				$data['payment_status'] = ucwords( Tribe__Tickets__Commerce__PayPal__Stati::$completed );
-				$this->order_status     = Tribe__Tickets__Commerce__PayPal__Stati::$completed;
+				$data['payment_status'] = ucwords( Stati::$completed );
+				$this->order_status     = Stati::$completed;
 				$this->update_fees( $data );
-				$this->generate_tickets( Tribe__Tickets__Commerce__PayPal__Stati::$completed, $data );
+				$this->place_order( Stati::$completed, $data );
 
-				$data['payment_status'] = ucwords( Tribe__Tickets__Commerce__PayPal__Stati::$refunded );
-				$this->order_status     = Tribe__Tickets__Commerce__PayPal__Stati::$refunded;
+				$data['payment_status'] = ucwords( Stati::$refunded );
+				$this->order_status     = Stati::$refunded;
 				$this->update_fees( $data );
 				$data['reason_code']   = 'refund';
 				$data['parent_txn_id'] = $transaction_id;
 				$data['txn_id']        = strtoupper( substr( md5( $faker->sentence ), 0, 17 ) );
 			}
 
-			$this->generate_tickets( $order_status, $data );
+			$this->place_order( $order_status, $data );
 
 			$generated[] = array(
 				'Order ID'        => $transaction_id,
@@ -192,38 +193,6 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		$progress->finish();
 		WP_CLI::success( "Generated {$orders_count} orders for post {$ticket_id}" );
 		format_items( 'table', $generated, array( 'Order ID', 'Attendees count' ) );
-	}
-
-	/**
-	 * Parses, validating it, the user-proviced post ID.
-	 *
-	 * @since 0.2.0
-	 *
-	 * @param array $args
-	 *
-	 * @return int
-	 *
-	 * @throws \WP_CLI\ExitException
-	 */
-	protected function parse_post_id( array $args ) {
-		$post_id = (int) $args[0];
-		$post    = get_post( $post_id );
-
-		if ( empty( $post ) ) {
-			WP_CLI::error( "There is no post with an ID of {$post_id}" );
-		}
-
-		// willingly let orders be created for posts on which Tickets might not be enabled
-		// but avoid nonsense
-		$forbidden_post_types = array(
-			Tribe__Tickets__Commerce__PayPal__Main::ATTENDEE_OBJECT,
-		);
-
-		if ( in_array( $post->post_type, $forbidden_post_types ) ) {
-			WP_CLI::error( "You cannot create PayPal orders for posts of the {$post->post_type} type" );
-		}
-
-		return $post_id;
 	}
 
 	/**
@@ -317,10 +286,10 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		$order_status = trim( $assoc_args['order_status'] );
 
 		$supported_stati = array(
-			Tribe__Tickets__Commerce__PayPal__Stati::$completed,
-			Tribe__Tickets__Commerce__PayPal__Stati::$pending,
-			Tribe__Tickets__Commerce__PayPal__Stati::$refunded,
-			Tribe__Tickets__Commerce__PayPal__Stati::$denied,
+			Stati::$completed,
+			Stati::$pending,
+			Stati::$refunded,
+			Stati::$denied,
 		);
 
 		if ( ! in_array( $order_status, $supported_stati ) ) {
@@ -386,7 +355,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	 * @return string
 	 */
 	protected function signed_value( $fee ) {
-		if ( Tribe__Tickets__Commerce__PayPal__Stati::$refunded === $this->order_status ) {
+		if ( Stati::$refunded === $this->order_status ) {
 			return '-' . $fee;
 		}
 
@@ -422,26 +391,26 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	}
 
 	/**
-	 * Generate the tickets using the PayPal code API.
+	 * Places an Order using the PayPal code API.
 	 *
 	 * @since 0.2.0
 	 *
 	 * @param array  $transaction_data
 	 * @param string $order_status
 	 */
-	protected function generate_tickets( $order_status, $transaction_data ) {
+	protected function place_order( $order_status, $transaction_data ) {
 		/** @var \Tribe__Tickets__Commerce__PayPal__Main $paypal */
 		$paypal = tribe( 'tickets.commerce.paypal' );
 
 		/** @var \Tribe__Tickets__Commerce__PayPal__Gateway $gateway */
 		$gateway = tribe( 'tickets.commerce.paypal.gateway' );
 
+		$gateway->set_raw_transaction_data( $transaction_data );
 		$fake_transaction_data = $gateway->parse_transaction( $transaction_data );
 
 		add_filter( 'tribe_tickets_commerce_paypal_get_transaction_data', function () use ( $fake_transaction_data ) {
 			return $fake_transaction_data;
 		} );
-
 
 		$paypal->generate_tickets( $order_status, false );
 	}
@@ -459,9 +428,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	public function reset_orders( array $args = array(), array $assoc_args = array() ) {
 		$post_id = $this->parse_post_id( $args );
 
-		$post = get_post($post_id);
-
-		$pre_deleted_attendees_count = (int) get_post_meta( $post_id, '_tribe_deleted_attendees_count', true );
+		$post = get_post( $post_id );
 
 		/** @var \Tribe__Tickets__Commerce__PayPal__Main $paypal */
 		$paypal = tribe( 'tickets.commerce.paypal' );
@@ -471,10 +438,13 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 			$is_ticket = false;
 			WP_CLI::log( "Removing generated PayPal orders from post {$post_id}" );
 			$orders = Order::find_by( array( 'post_id' => $post_id, 'posts_per_page' => - 1 ) );
-		} else{
+			$pre_deleted_attendees_count = (int) get_post_meta( $post_id, Tribe__Tickets__Attendance::DELETED_ATTENDEES_COUNT, true );
+		} else {
 			$ticket_id = $post_id;
 			WP_CLI::log( "Removing generated PayPal orders for ticket {$post_id}" );
-			$orders = Order::find_by( array( 'ticket_id' => $post_id, 'posts_per_page' => - 1 ) );
+			$orders                      = Order::find_by( array( 'ticket_id' => $post_id, 'posts_per_page' => - 1 ) );
+			$related_post_id             = get_post_meta( $ticket_id, $paypal->event_key, true );
+			$pre_deleted_attendees_count = (int) get_post_meta( $related_post_id, Tribe__Tickets__Attendance::DELETED_ATTENDEES_COUNT, true );
 		}
 
 		if ( empty( $orders ) ) {
@@ -540,6 +510,111 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		/** @var Tribe__Tickets__Commerce__PayPal__Main $paypal */
 		$paypal = tribe( 'tickets.commerce.paypal' );
 		$paypal->clear_attendees_cache( $post_id );
-		update_post_meta( $post_id, '_tribe_deleted_attendees_count', $pre_deleted_attendees_count );
+
+		if ( $is_ticket ) {
+			update_post_meta( $related_post_id, Tribe__Tickets__Attendance::DELETED_ATTENDEES_COUNT, $pre_deleted_attendees_count );
+		} else {
+			update_post_meta( $post_id, Tribe__Tickets__Attendance::DELETED_ATTENDEES_COUNT, $pre_deleted_attendees_count );
+		}
+	}
+
+	/**
+	 * Parses, validating it, the user-proviced post ID.
+	 *
+	 * @since 0.2.0
+	 *
+	 * @param array $args
+	 *
+	 * @return int
+	 *
+	 * @throws \WP_CLI\ExitException
+	 */
+	protected function parse_post_id( array $args ) {
+		$post_id = (int) $args[0];
+		$post    = get_post( $post_id );
+
+		if ( empty( $post ) ) {
+			WP_CLI::error( "There is no post with an ID of {$post_id}" );
+		}
+
+		// willingly let orders be created for posts on which Tickets might not be enabled
+		// but avoid nonsense
+		$forbidden_post_types = array(
+			Tribe__Tickets__Commerce__PayPal__Main::ATTENDEE_OBJECT,
+		);
+
+		if ( in_array( $post->post_type, $forbidden_post_types ) ) {
+			WP_CLI::error( "You cannot create PayPal orders for posts of the {$post->post_type} type" );
+		}
+
+		return $post_id;
+	}
+
+	/**
+	 * Updates the status of an Order.
+	 *
+	 * @since TBD
+	 *
+	 * @param array $args
+	 * @param array $assoc_args
+	 *
+	 * @throws \WP_CLI\ExitException
+	 */
+	public function update_order_status( array $args = array(), array $assoc_args = array() ) {
+		$order_id     = $this->parse_order_id( $args );
+		$order_status = $this->parse_order_status( $assoc_args );
+
+		$order = Order::from_order_id( $order_id, true );
+
+		WP_CLI::log( "Settings the order status of Order {$args[0]} to {$order_status}..." );
+
+		$data = $order->get_meta( 'transaction_data' );
+
+		if ( $order_status === Stati::$refunded ) {
+
+			if ( $order->get_status() !== Stati::$completed ) {
+				WP_CLI::error( "Only completed orders can be refunded, the status of Order {$order->paypal_id()} is {$order->get_status()}" );
+			}
+
+			$faker           = Faker\Factory::create();
+			$refund_order_id = strtoupper( substr( md5( $faker->sentence ), 0, 17 ) );
+
+			WP_CLI::log( "Creating a refund order ({$refund_order_id}) for order {$order->paypal_id()}..." );
+
+			$data['payment_status'] = ucwords( Stati::$refunded );
+			$this->order_status     = Stati::$refunded;
+			$this->update_fees( $data );
+			$data['reason_code']   = 'refund';
+			$data['parent_txn_id'] = $order->paypal_id();
+			$data['txn_id']        = $refund_order_id;
+		} else {
+			$data['payment_status'] = ucwords( $order_status );
+		}
+
+		$this->place_order( $order_status, $data );
+		WP_CLI::success( "Status of order {$order->paypal_id()} updated to {$order_status}" );
+	}
+
+	/**
+	 * Parses and returns the Order post ID.
+	 *
+	 * @since TBD
+	 *
+	 * @param array $args
+	 *
+	 * @return int The order post ID if found.
+	 */
+	protected function parse_order_id( $args ) {
+		$candidate = $args[0];
+
+		$use_post_id = is_numeric( $candidate );
+
+		$order_id = Order::find_by_order_id( $candidate, $use_post_id );
+
+		if ( false === $order_id ) {
+			WP_CLI::error( "No order with a PayPal hash or post ID {$candidate} was found." );
+		}
+
+		return $order_id;
 	}
 }
