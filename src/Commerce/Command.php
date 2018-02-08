@@ -101,4 +101,38 @@ class Tribe__Cli__Commerce__Command extends WP_CLI_Command {
 	public function reset_paypal_orders(  array $args = null, array $assoc_args = null  ) {
 		$this->paypal->reset_orders( $args, $assoc_args );
 	}
+
+	/**
+	 * Updates the status of a generated PayPal order.
+	 *
+	 * ## OPTIONS
+	 *
+	 * <order_id>
+	 * : the PayPal ID (hash) or post ID of an existing PayPal order.
+	 *
+	 * --order_status=<order_status>
+	 * : the status of the PayPal orders
+	 * ---
+	 * options:
+	 *      - completed
+	 *      - pending
+	 *      - denied
+	 *      - refunded
+	 * ---
+	 *
+	 * ## EXAMPLES
+	 *
+	 *      wp commerce update-paypal-order-status 23 --order_status=completed
+	 *      wp commerce update-paypal-order-status 23 --order_status=pending
+	 *      wp commerce update-paypal-order-status 23 --order_status=denied
+	 *      wp commerce update-paypal-order-status 23 --order_status=refunded
+	 *
+	 * @subcommand update-paypal-order-status
+	 *
+	 * @since 0.2.1
+	 *
+	 */
+	public function update_paypal_order_status( array $args = null, array $assoc_args = null ) {
+		$this->paypal->update_order_status( $args, $assoc_args );
+	}
 }
