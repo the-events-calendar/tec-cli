@@ -555,7 +555,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	/**
 	 * Updates the status of an Order.
 	 *
-	 * @since TBD
+	 * @since 0.2.1
 	 *
 	 * @param array $args
 	 * @param array $assoc_args
@@ -600,7 +600,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 	/**
 	 * Parses and returns the Order post ID.
 	 *
-	 * @since TBD
+	 * @since 0.2.1
 	 *
 	 * @param array $args
 	 *

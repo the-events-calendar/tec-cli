@@ -129,7 +129,7 @@ class Tribe__Cli__Commerce__Command extends WP_CLI_Command {
 	 *
 	 * @subcommand update-paypal-order-status
 	 *
-	 * @since TBD
+	 * @since 0.2.1
 	 *
 	 */
 	public function update_paypal_order_status( array $args = null, array $assoc_args = null ) {
