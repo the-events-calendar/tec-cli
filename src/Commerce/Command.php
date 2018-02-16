@@ -61,6 +61,9 @@ class Tribe__Cli__Commerce__Command extends WP_CLI_Command {
 	 *      - refunded
 	 * ---
 	 *
+	 * [--dont-send-emails]
+	 * : if set emails will not be sent during the order generation process.
+	 *
 	 * ## EXAMPLES
 	 *
 	 *      wp commerce generate-paypal-orders 23
@@ -71,6 +74,7 @@ class Tribe__Cli__Commerce__Command extends WP_CLI_Command {
 	 *      wp commerce generate-paypal-orders 23 --attendees_min=3
 	 *      wp commerce generate-paypal-orders 23 --attendees_min=3 --attendees_max=10
 	 *      wp commerce generate-paypal-orders 23 --attendees_min=3 --attendees_max=10 --order_status=denied
+	 *      wp commerce generate-paypal-orders 23,31 --count=89 --dont-send-emails
 	 *
 	 * @subcommand generate-paypal-orders
 	 *
@@ -124,12 +128,16 @@ class Tribe__Cli__Commerce__Command extends WP_CLI_Command {
 	 *      - refunded
 	 * ---
 	 *
+	 * [--dont-send-emails]
+	 * : if set emails will not be sent during the order update process.
+	 *
 	 * ## EXAMPLES
 	 *
 	 *      wp commerce update-paypal-order-status 23 --order_status=completed
 	 *      wp commerce update-paypal-order-status 23 --order_status=pending
 	 *      wp commerce update-paypal-order-status 23 --order_status=denied
 	 *      wp commerce update-paypal-order-status 23 --order_status=refunded
+	 *      wp commerce update-paypal-order-status 23 --order_status=completed --dont-send-emails
 	 *
 	 * @subcommand update-paypal-order-status
 	 *
