@@ -513,11 +513,12 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		$paypal = tribe( 'tickets.commerce.paypal' );
 		$paypal->clear_attendees_cache( $post_id );
 
-		if ( $is_ticket ) {
-			update_post_meta( $related_post_id, Tribe__Tickets__Attendance::DELETED_ATTENDEES_COUNT, $pre_deleted_attendees_count );
-		} else {
-			update_post_meta( $post_id, Tribe__Tickets__Attendance::DELETED_ATTENDEES_COUNT, $pre_deleted_attendees_count );
+		$target_id = $is_ticket ? $related_post_id : $post_id;
+
+		if ( 0 === $pre_deleted_attendees_count ) {
+			delete_post_meta( $target_id, Tribe__Tickets__Attendance::DELETED_ATTENDEES_COUNT );
 		}
+		update_post_meta( $target_id, Tribe__Tickets__Attendance::DELETED_ATTENDEES_COUNT, $pre_deleted_attendees_count );
 	}
 
 	/**
