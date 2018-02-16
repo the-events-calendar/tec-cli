@@ -42,8 +42,6 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		$progress  = make_progress_bar( 'Generating orders', $orders_count );
 		$generated = array();
 
-		$this->hijack_request_flow();
-
 		for ( $k = 0; $k < $orders_count; $k ++ ) {
 			$user_id    = 0;
 			$ticket_qty = array();
