@@ -14,6 +14,11 @@ use function WP_CLI\Utils\make_progress_bar;
 class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 
 	/**
+	 * @var bool Whether emails should be sent while during the command execution or not.
+	 */
+	protected $dont_send_emails = false;
+
+	/**
 	 * @var string The current order status, a utility field
 	 */
 	protected $order_status;
@@ -36,13 +41,13 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		$orders_count = $this->parse_count( $assoc_args );
 		$order_status = $this->parse_order_status( $assoc_args );
 
+		$this->parse_send_emails( $assoc_args );
+
 		$ticket_ids_list = implode( ', ', $ticket_ids );
 		WP_CLI::log( "Generating {$orders_count} PayPal orders for tickets {$ticket_ids_list}" );
 
 		$progress  = make_progress_bar( 'Generating orders', $orders_count );
 		$generated = array();
-
-		$this->hijack_request_flow();
 
 		for ( $k = 0; $k < $orders_count; $k ++ ) {
 			$user_id    = 0;
@@ -73,6 +78,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 				$ticket = $paypal->get_ticket( $post_id, $ticket_id );
 
 				$this->backup_ticket_total_sales( $ticket_id );
+				$this->backup_ticket_stock( $ticket_id );
 
 				add_filter( 'tribe_tickets_tpp_pending_stock_ignore', '__return_true' );
 				$inventory = $ticket->inventory();
@@ -319,8 +325,9 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 			return $postarr;
 		} );
 
-		// no, do not send emails to the fake attendees
-		add_filter( 'tribe_tickets_tpp_send_mail', '__return_false' );
+		if ( $this->dont_send_emails ) {
+			add_filter( 'tribe_tickets_tpp_send_mail', '__return_false' );
+		}
 
 		// do not `die` after generating tickets
 		add_filter( 'tribe_exit', function () {
@@ -464,6 +471,8 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		$progress_bar = make_progress_bar( 'Removing generated orders', count( $generated_orders ) );
 
 		$restored_total_sales_ticket_ids = array();
+		$restored_stock_ticket_ids       = array();
+
 		/** @var Order $orders */
 		foreach ( $generated_orders as $order ) {
 			$post_ids = $order->get_related_post_ids();
@@ -495,13 +504,18 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 
 			$ticket_ids = $order->get_ticket_ids();
 			foreach ( $ticket_ids as $ticket_id ) {
-				if ( in_array( $ticket_id, $restored_total_sales_ticket_ids ) ) {
-					continue;
+				if ( ! in_array( $ticket_id, $restored_total_sales_ticket_ids ) ) {
+					$original_total_sales = (int) get_post_meta( $ticket_id, Meta_Keys::$total_sales_backup_meta_key, true );
+					update_post_meta( $ticket_id, 'total_sales', $original_total_sales );
+					delete_post_meta( $ticket_id, Meta_Keys::$total_sales_backup_meta_key );
+					$restored_total_sales_ticket_ids[] = $ticket_id;
 				}
-				$original_total_sales = (int) get_post_meta( $ticket_id, Meta_Keys::$total_sales_backup_meta_key, true );
-				update_post_meta( $ticket_id, 'total_sales', $original_total_sales );
-				delete_post_meta( $ticket_id, Meta_Keys::$total_sales_backup_meta_key );
-				$restored_total_sales_ticket_ids[] = $ticket_id;
+				if ( ! in_array( $ticket_id, $restored_stock_ticket_ids ) ) {
+					$original_stock = (int) get_post_meta( $ticket_id, Meta_Keys::$stock_backup_meta_key, true );
+					update_post_meta( $ticket_id, '_stock', $original_stock );
+					delete_post_meta( $ticket_id, Meta_Keys::$stock_backup_meta_key );
+					$restored_stock_ticket_ids[] = $ticket_id;
+				}
 			}
 
 			$progress_bar->tick();
@@ -572,6 +586,8 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		$order_id     = $this->parse_order_id( $args );
 		$order_status = $this->parse_order_status( $assoc_args );
 
+		$this->parse_send_emails( $assoc_args );
+
 		$order = Order::from_order_id( $order_id, true );
 
 		WP_CLI::log( "Settings the order status of Order {$args[0]} to {$order_status}..." );
@@ -624,5 +640,31 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		}
 
 		return $order_id;
+	}
+
+	/**
+	 * Parses the `--dont-send-emails` flag argument and sets the class property accordingly
+	 *
+	 * @since 0.2.1
+	 *
+	 * @param array $assoc_args
+	 */
+	public function parse_send_emails( array $assoc_args ) {
+		$this->dont_send_emails = isset( $assoc_args['dont-send-emails'] ) && (bool) $assoc_args['dont-send-emails'];
+	}
+
+	/**
+	 * Backups the stock for a ticket before the generation kicks in.
+	 *
+	 * @since 0.2.1
+	 *
+	 * @param int $ticket_id
+	 */
+	protected function backup_ticket_stock( $ticket_id ) {
+		$backup_key  = Meta_Keys::$stock_backup_meta_key;
+		$saved_stock = get_post_meta( $ticket_id, $backup_key, true );
+		if ( '' === $saved_stock ) {
+			update_post_meta( $ticket_id, $backup_key, get_post_meta( $ticket_id, '_stock', true ) );
+		}
 	}
 }

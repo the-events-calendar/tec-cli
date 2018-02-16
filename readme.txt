@@ -33,13 +33,11 @@ Note: you'll need to have the latest versions of <a href="http://m.tri.be/3j">Th
 
 = Requirements =
 
-* PHP 5.3.29 or greater (recommended: PHP 5.4 or greater)
+* PHP 5.4.29 or greater (recommended: PHP 7.0 or greater)
 * WordPress 4.5 or above
-* jQuery 1.11.x
-* The Events Calendar 4.5.4 or above
-* Community Events 3.12.1 or above
-* Event Tickets 4.5.4 or above
-* Tickets Plus 4.0 or above
+* The Events Calendar 4.5.4 or above to use The Events Calendar command
+* Event Tickets 4.5.4 or above to use Event Tickets command
+* Tickets Plus 4.0 or above to use Events Tickets Plus command
 
 == Documentation ==
 
@@ -154,95 +152,17 @@ Our Premium Plugins:
 
 == Changelog ==
 
-= [4.4.4] 2017-07-13 =
+= [0.2.1] 2017-01-19 =
 
-* Fix - Added notice when Woo, Community, or Event Tickets is not active [70357]
+* Add support for the `--reset-deleted-attendees` flag to the `reset-paypal-orders` command
+* Add support for the `--dont-send-emails` flag to the `generate-paypal-orders` and `update-paypal-order-status` commands
+* Change default behaviour of generation and update commands to send emails
+* Fix an issue where the ticket `_stock` meta would be screwed up when removing generated orders
 
-= [4.4.3] 2017-06-06 =
+= [0.2.0] 2017-01-19 =
 
-* Tweak - Compatibility with version 4.5 of Community Events
-* Tweak - Added actions: `tribe_events_community_section_before_tickets`, `tribe_events_community_section_after_tickets`
-* Tweak - Removed actions: `tribe_events_community_after_the_tickets`
-* Language - 0 new strings added, 14 updated, 0 fuzzied, and 0 obsoleted [events-generator]
+* Add PayPal ticket generation support
 
-= [4.4.2] 2017-05-17 =
-
-* Tweak - further adjustments made to our plugin licensing system [78506]
-
-= [4.4.1] 2017-05-03 =
-
-* Tweak - adjustments made to our plugin licensing system
-
-= [4.4] 2017-01-09 =
-
-* Tweak - Brings the plugin up-to-date with changes made in Event Tickets [67176, 70431]
-* Tweak - Brings the plugin up-to-date with changes made in Community Events [69762]
-* Tweak - Transitioned the dropdown selectors to the same system used in the parent plugins [69353]
-* Tweak - Text and translation fixes
-
-= [4.3.2] 2016-12-20 =
-
-* Tweak - Updated the template override instructions in a number of templates [68229]
-
-= [4.3.1] 2016-10-20 =
-
-* Tweak - Added plugin file path constant
-* Tweak - Registered plugin as active with Tribe Common [66657]
-
-= [4.3] 2016-10-13 =
-
-* Tweak - Updated to be 4.3 compatible
-
-= [4.2.2] 2016-07-06 =
-
-* Security - Tightened security around event reports
-* Tweak - re-label "PayPal client ID" setting to be "PayPal Application ID" [45120]
-* Tweak - improved integration with Woo in the custom PayPal split payment gateway [44807]
-
-= [4.2.1] 2016-06-22 =
-
-* Tweak - Fixed spacing on Fee Option Defaults tooltip
-
-= [4.2] 2016-06-08 =
-
-* Tweak - Language files in the `wp-content/languages/plugins` path will be loaded before attempting to load internal language files (Thank you to user @aafhhl for bringing this to our attention!)
-* Tweak - Move plugin CSS to PostCSS
-
-= [4.1.1] 2016-05-19 =
-
-* Fix - Default to preventing organizers from deleting tickets when sales have been made
-
-= [4.1] 2016-03-15 =
-
-* Fix - Resolved issue where the "Email Attendees" modal box didn't open in a modal box (mad fist bump to @xlr8r for the heads up!)
-
-= [4.0.4] 2016-03-02 =
-
-* Fix - PayPal payments are fully working again with split payments checkout (HTTP 1.1)
-
-= [4.0.3] 2016-02-17 =
-
-* Fix - Prevents Event Generator to output HTML on the CSV exporting tool
-
-= [4.0.2] 2015-12-16 =
-
-* Fix - Resolved fatals introduced by relocated files in WP 4.4 (Thank you Dirk for reporting this!)
-* Fix - Resolved textdomain issue that caused translations to fail
-
-= [4.0.1] 2015-12-10 =
-
-* Fix - Fixed issue where non-ticket products were removed from the cart when the "Update Cart" button was pressed
-* Fix - Resolved bug where site fees were being calculated on the entire cart regardless of whether or not all of the items in the cart were tickets
-
-= [4.0] 2015-12-02 =
-
-* Fix - Compatibility fix with PHP 5.2 when accessing the WooCommerce cart
-
-= [3.12.1] 2015-11-12 =
-
-* Fix - Ensure translations are loaded as expected (our thanks to Dirk for highlighting this issue)
-* Fix - Update some strings to ensure they can be translated as expected
-
-= [3.12] 2015-11-04 =
+= [0.1.0] 2017-09-07 =
 
 * Initial release

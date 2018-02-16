@@ -19,4 +19,11 @@ class Tribe__Cli__Meta_Keys {
 	 * @var string
 	 */
 	public static $total_sales_backup_meta_key = '_tribe_cli_total_sales_backup';
+
+	/**
+	 * Meta key used to store a backup of the stock for a commerce related post.
+	 *
+	 * @var string
+	 */
+	public static $stock_backup_meta_key = '_tribe_cli_stock_backup';
 }
