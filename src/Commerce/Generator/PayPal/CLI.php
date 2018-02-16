@@ -78,6 +78,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 				$ticket = $paypal->get_ticket( $post_id, $ticket_id );
 
 				$this->backup_ticket_total_sales( $ticket_id );
+				$this->backup_ticket_stock( $ticket_id );
 
 				add_filter( 'tribe_tickets_tpp_pending_stock_ignore', '__return_true' );
 				$inventory = $ticket->inventory();
@@ -470,6 +471,8 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		$progress_bar = make_progress_bar( 'Removing generated orders', count( $generated_orders ) );
 
 		$restored_total_sales_ticket_ids = array();
+		$restored_stock_ticket_ids       = array();
+
 		/** @var Order $orders */
 		foreach ( $generated_orders as $order ) {
 			$post_ids = $order->get_related_post_ids();
@@ -501,13 +504,18 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 
 			$ticket_ids = $order->get_ticket_ids();
 			foreach ( $ticket_ids as $ticket_id ) {
-				if ( in_array( $ticket_id, $restored_total_sales_ticket_ids ) ) {
-					continue;
+				if ( ! in_array( $ticket_id, $restored_total_sales_ticket_ids ) ) {
+					$original_total_sales = (int) get_post_meta( $ticket_id, Meta_Keys::$total_sales_backup_meta_key, true );
+					update_post_meta( $ticket_id, 'total_sales', $original_total_sales );
+					delete_post_meta( $ticket_id, Meta_Keys::$total_sales_backup_meta_key );
+					$restored_total_sales_ticket_ids[] = $ticket_id;
 				}
-				$original_total_sales = (int) get_post_meta( $ticket_id, Meta_Keys::$total_sales_backup_meta_key, true );
-				update_post_meta( $ticket_id, 'total_sales', $original_total_sales );
-				delete_post_meta( $ticket_id, Meta_Keys::$total_sales_backup_meta_key );
-				$restored_total_sales_ticket_ids[] = $ticket_id;
+				if ( ! in_array( $ticket_id, $restored_stock_ticket_ids ) ) {
+					$original_stock = (int) get_post_meta( $ticket_id, Meta_Keys::$stock_backup_meta_key, true );
+					update_post_meta( $ticket_id, '_stock', $original_stock );
+					delete_post_meta( $ticket_id, Meta_Keys::$stock_backup_meta_key );
+					$restored_stock_ticket_ids[] = $ticket_id;
+				}
 			}
 
 			$progress_bar->tick();
