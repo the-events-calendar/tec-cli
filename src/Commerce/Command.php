@@ -89,9 +89,13 @@ class Tribe__Cli__Commerce__Command extends WP_CLI_Command {
 	 * <post_id>
 	 * : PayPal orders will be removed from this post or for this ticket ID
 	 *
+	 * [--reset-deleted-attendees]
+	 * : reset the number of deleted attendees
+	 *
 	 * ## EXAMPLES
 	 *
 	 *      wp commerce reset-paypal-orders 23
+	 *      wp commerce reset-paypal-orders 23 --reset-deleted-attendees
 	 *
 	 * @subcommand reset-paypal-orders
 	 *
