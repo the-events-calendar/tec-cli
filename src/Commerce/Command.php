@@ -96,10 +96,17 @@ class Tribe__Cli__Commerce__Command extends WP_CLI_Command {
 	 * [--reset-deleted-attendees]
 	 * : reset the number of deleted attendees
 	 *
+	 * [--reset-total-sales]
+	 * : reset the total sales to 0; for tickets only
+	 *
+	 *
 	 * ## EXAMPLES
 	 *
 	 *      wp commerce reset-paypal-orders 23
 	 *      wp commerce reset-paypal-orders 23 --reset-deleted-attendees
+	 *      wp commerce reset-paypal-orders 23 --reset-total-sales
+	 *      wp commerce reset-paypal-orders 23 --reset-total-sales=3
+	 *      wp commerce reset-paypal-orders 23 --reset-total-sales=3 --reset-deleted-attendees
 	 *
 	 * @subcommand reset-paypal-orders
 	 *

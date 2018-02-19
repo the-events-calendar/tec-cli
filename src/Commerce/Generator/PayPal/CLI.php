@@ -538,6 +538,11 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 			delete_post_meta( $target_id, Tribe__Tickets__Attendance::DELETED_ATTENDEES_COUNT );
 			WP_CLI::log( 'Deleted attendees count reset to 0' );
 		}
+
+		if ( $is_ticket && isset( $assoc_args['reset-total-sales'] ) ) {
+			update_post_meta( $target_id, 'total_sales', 0 );
+			WP_CLI::log( "Total sales count reset to 0" );
+		}
 	}
 
 	/**

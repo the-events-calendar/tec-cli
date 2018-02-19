@@ -152,7 +152,10 @@ Our Premium Plugins:
 
 == Changelog ==
 
-= [0.2.1] 2017-01-19 =
+= [0.2.2] 2017-02-19 =
+* Add support for the `--reset-deleted-sales` flag to the `reset-paypal-orders` command
+
+= [0.2.1] 2017-02-18 =
 
 * Add support for the `--reset-deleted-attendees` flag to the `reset-paypal-orders` command
 * Add support for the `--dont-send-emails` flag to the `generate-paypal-orders` and `update-paypal-order-status` commands
