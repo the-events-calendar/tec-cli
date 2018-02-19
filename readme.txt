@@ -153,7 +153,7 @@ Our Premium Plugins:
 == Changelog ==
 
 = [0.2.2] 2017-02-19 =
-* Add support for the `--reset-deleted-sales` flag to the `reset-paypal-orders` command
+* Add support for the `--reset-total-sales` flag to the `reset-paypal-orders` command
 
 = [0.2.1] 2017-02-18 =
 
