@@ -346,7 +346,9 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		$backup_key        = Meta_Keys::$total_sales_backup_meta_key;
 		$saved_total_sales = get_post_meta( $ticket_id, $backup_key, true );
 		if ( '' === $saved_total_sales ) {
-			update_post_meta( $ticket_id, $backup_key, (int) get_post_meta( $ticket_id, 'total_sales', true ) );
+			$total_sales = (int) get_post_meta( $ticket_id, 'total_sales', true );
+			WP_CLI::log( "Backing up the ticket total sales, currently {$total_sales}" );
+			update_post_meta( $ticket_id, $backup_key, $total_sales );
 		}
 	}
 
@@ -509,12 +511,14 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 					update_post_meta( $ticket_id, 'total_sales', $original_total_sales );
 					delete_post_meta( $ticket_id, Meta_Keys::$total_sales_backup_meta_key );
 					$restored_total_sales_ticket_ids[] = $ticket_id;
+					WP_CLI::log( "Restored ticket {$ticket_id} total sales to its previous value of {$original_total_sales}" );
 				}
 				if ( ! in_array( $ticket_id, $restored_stock_ticket_ids ) ) {
 					$original_stock = (int) get_post_meta( $ticket_id, Meta_Keys::$stock_backup_meta_key, true );
 					update_post_meta( $ticket_id, '_stock', $original_stock );
 					delete_post_meta( $ticket_id, Meta_Keys::$stock_backup_meta_key );
 					$restored_stock_ticket_ids[] = $ticket_id;
+					WP_CLI::log( "Restored ticket {$ticket_id} stock to its previous value of {$original_stock}" );
 				}
 			}
 
@@ -530,10 +534,13 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		$target_id = $is_ticket ? $related_post_id : $post_id;
 
 		if ( ! isset( $assoc_args['reset-deleted-attendees'] ) ) {
+
 			if ( 0 === $pre_deleted_attendees_count ) {
 				delete_post_meta( $target_id, Tribe__Tickets__Attendance::DELETED_ATTENDEES_COUNT );
 			}
+
 			update_post_meta( $target_id, Tribe__Tickets__Attendance::DELETED_ATTENDEES_COUNT, $pre_deleted_attendees_count );
+			WP_CLI::log( "Restored deleted attendees count to its previous value of {$pre_deleted_attendees_count}" );
 		} else {
 			delete_post_meta( $target_id, Tribe__Tickets__Attendance::DELETED_ATTENDEES_COUNT );
 			WP_CLI::log( 'Deleted attendees count reset to 0' );
@@ -669,7 +676,9 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		$backup_key  = Meta_Keys::$stock_backup_meta_key;
 		$saved_stock = get_post_meta( $ticket_id, $backup_key, true );
 		if ( '' === $saved_stock ) {
-			update_post_meta( $ticket_id, $backup_key, get_post_meta( $ticket_id, '_stock', true ) );
+			$stock = (int) get_post_meta( $ticket_id, '_stock', true );
+			WP_CLI::log( "Backing up the ticket stock, currently {$stock}" );
+			update_post_meta( $ticket_id, $backup_key, $stock );
 		}
 	}
 }
