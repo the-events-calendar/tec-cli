@@ -346,7 +346,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		$backup_key        = Meta_Keys::$total_sales_backup_meta_key;
 		$saved_total_sales = get_post_meta( $ticket_id, $backup_key, true );
 		if ( '' === $saved_total_sales ) {
-			update_post_meta( $ticket_id, $backup_key, get_post_meta( $ticket_id, 'total_sales', true ) );
+			update_post_meta( $ticket_id, $backup_key, (int) get_post_meta( $ticket_id, 'total_sales', true ) );
 		}
 	}
 
@@ -529,7 +529,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 
 		$target_id = $is_ticket ? $related_post_id : $post_id;
 
-		if ( ! $assoc_args['reset-deleted-attendees'] ) {
+		if ( ! isset( $assoc_args['reset-deleted-attendees'] ) ) {
 			if ( 0 === $pre_deleted_attendees_count ) {
 				delete_post_meta( $target_id, Tribe__Tickets__Attendance::DELETED_ATTENDEES_COUNT );
 			}
