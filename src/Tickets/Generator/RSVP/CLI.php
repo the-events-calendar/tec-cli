@@ -118,7 +118,7 @@ class Tribe__Cli__Tickets__Generator__RSVP__CLI {
 					Tribe__Tickets__RSVP::ATTENDEE_PRODUCT_KEY => $ticket_id,
 					Tribe__Tickets__RSVP::ATTENDEE_EVENT_KEY   => $post_id,
 					Tribe__Tickets__RSVP::ATTENDEE_RSVP_KEY    => $rsvp_status,
-					$tickets->security_code                    => $tickets->generate_security_code( $attendee_id ),
+					$tickets->security_code                    => $this->generate_security_code( $attendee_id ),
 					$tickets->order_key                        => $order_id,
 					Tribe__Tickets__RSVP::ATTENDEE_OPTOUT_KEY  => '',
 					$tickets->full_name                        => $attendee_name,
@@ -201,4 +201,18 @@ class Tribe__Cli__Tickets__Generator__RSVP__CLI {
 			update_post_meta( $ticket, 'total_sales', 0 );
 		}
 	}
+
+    /**
+     * Generates a security code for the atteendee.
+     *
+     * A copy of the `Tribe__Tickets__Tickets::generate_security_code` method to
+     * "internalize" the dependency and avoid having to make said method public.
+     *
+     * @param int $attendee_id
+     *
+     * @return bool|string
+     */
+    protected function generate_security_code($attendee_id) {
+        return substr(md5(rand() . '_' . $attendee_id), 0, 10);
+    }
 }

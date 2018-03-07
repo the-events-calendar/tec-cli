@@ -152,6 +152,9 @@ Our Premium Plugins:
 
 == Changelog ==
 
+= [0.2.3] 2017-03-07 =
+* Fix support for new and old versions of Event Tickets and Event Tickets Plus by internalizing the `Tribe__Tickets__RSVP::generate_security_code` method
+
 = [0.2.2] 2017-02-19 =
 * Add support for the `--reset-total-sales` flag to the `reset-paypal-orders` command
 
