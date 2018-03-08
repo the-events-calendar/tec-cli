@@ -45,6 +45,7 @@ function tribe_cli_init() {
 	$container->register( 'Tribe__Cli__Service_Providers__Tickets' );
 	$container->register( 'Tribe__Cli__Service_Providers__Tribe_Commerce' );
 	$container->register( 'Tribe__Cli__Service_Providers__Tickets_Plus' );
+	$container->register( 'Tribe__Cli__Service_Providers__Utils' );
 }
 
 include_once(dirname(__FILE__) . '/src/functions/template.php');
