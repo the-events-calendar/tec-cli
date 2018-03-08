@@ -154,6 +154,7 @@ Our Premium Plugins:
 
 = [0.2.4] 2017-03-08 =
 * Added support for post transients deletion
+* Changed the name of the command to generate events from `tribe-events-generator` to `tribe events-generator`
 
 = [0.2.3] 2017-03-07 =
 * Fix support for new and old versions of Event Tickets and Event Tickets Plus by internalizing the `Tribe__Tickets__RSVP::generate_security_code` method
