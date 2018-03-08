@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class Tribe__Cli__Utils__Post_Transients
+ *
+ * @since 0.2.4
+ */
 class Tribe__Cli__Utils__Post_Transients extends WP_CLI_Command {
 
 	/**
@@ -54,7 +59,7 @@ class Tribe__Cli__Utils__Post_Transients extends WP_CLI_Command {
 	 *
 	 * @subcommand delete
 	 *
-	 * @since      0.1.0
+	 * @since      0.2.4
 	 */
 	public function delete( array $args = [], array $assoc_args = [] ) {
 		$key = isset( $args[0] ) ? $args[0] : false;
@@ -96,9 +101,13 @@ class Tribe__Cli__Utils__Post_Transients extends WP_CLI_Command {
 	}
 
 	/**
+	 * Validates the post ID provided by the user, if any.
+	 *
+	 * @since 0.2.4
+	 *
 	 * @param array $assoc_args
 	 *
-	 * @return mixed
+	 * @return int
 	 */
 	protected function check_post_id( array $assoc_args ) {
 		$post_id = filter_var( $assoc_args['post_id'], FILTER_VALIDATE_INT );
@@ -110,6 +119,10 @@ class Tribe__Cli__Utils__Post_Transients extends WP_CLI_Command {
 	}
 
 	/**
+	 * Validates the post if the user provided a post ID.
+	 *
+	 * @since 0.2.4
+	 *
 	 * @param $post_id
 	 */
 	protected function check_post( $post_id ) {
@@ -121,7 +134,13 @@ class Tribe__Cli__Utils__Post_Transients extends WP_CLI_Command {
 	}
 
 	/**
+	 * Validates the post type if provided by the user.
+	 *
+	 * @since 0.2.4
+	 *
 	 * @param array $assoc_args
+	 *
+	 * @return string
 	 */
 	protected function check_post_type( array $assoc_args ) {
 		$post_type = $assoc_args['post_type'];
@@ -137,11 +156,15 @@ class Tribe__Cli__Utils__Post_Transients extends WP_CLI_Command {
 	}
 
 	/**
-	 * @param $key
-	 * @param $post_id
-	 * @param $post_type
-	 * @param $all
-	 * @param $expired
+	 * Validates the command argument combination to make sure it makes sense.
+	 *
+	 * @since 0.2.4
+	 *
+	 * @param string $key
+	 * @param int    $post_id
+	 * @param string $post_type
+	 * @param bool   $all
+	 * @param bool   $expired
 	 */
 	protected function check_argument_combinations( $key, $post_id, $post_type, $all, $expired ) {
 		$bitmask = (int) ( (bool) $key ) * 10000
@@ -152,7 +175,7 @@ class Tribe__Cli__Utils__Post_Transients extends WP_CLI_Command {
 
 		switch ( $bitmask ) {
 			case 0:
-				WP_CLI::error( __( 'Provide at least one parameter.', 'tribe-cli' ) );
+				WP_CLI::error( __( 'Provide at least one parameter; use `--help` to know more.', 'tribe-cli' ) );
 				break;
 			case 11111:
 			case 10011:
@@ -162,7 +185,7 @@ class Tribe__Cli__Utils__Post_Transients extends WP_CLI_Command {
 			case 1011:
 			case 111:
 			case 11:
-				WP_CLI::error( __( 'Either delete all transients or just the expired ones', 'tribe-cli' ) );
+				WP_CLI::error( __( 'Either delete all transients (using `--all`) or just the expired ones (using `--expired`).', 'tribe-cli' ) );
 				break;
 			case 11010:
 			case 11110:
@@ -175,14 +198,33 @@ class Tribe__Cli__Utils__Post_Transients extends WP_CLI_Command {
 	}
 
 	/**
+	 * Deletes a post transient stored in the object cache.
+	 *
+	 * @since 0.2.4
+	 *
 	 * @param string $key
 	 * @param int    $post_id
+	 *
+	 * @return bool
 	 */
-	protected function delete_from_object_cache( $key = null, $post_id = null ) {
+	protected function delete_from_object_cache( $key, $post_id ) {
 		return wp_cache_delete( "tribe_{$key}-{$post_id}", "tribe_post_meta_transient-{$post_id}" );
 	}
 
-	protected function delete_from_database( $key, $post_id, $post_type, $all, $expired ) {
+	/**
+	 * Deletes a post transient stored in the database.
+	 *
+	 * @since 0.2.4
+	 *
+	 * @param string $key
+	 * @param int    $post_id
+	 * @param string $post_type
+	 * @param bool   $all
+	 * @param bool   $expired
+	 *
+	 * @return false|int False if the post transient(s) could not be delted, the number of deleted post transients otherwise.
+	 */
+	protected function delete_from_database( $key = null, $post_id = null, $post_type = null, $all = null, $expired = null ) {
 		/** @var wpdb $wpdb */
 		global $wpdb;
 

@@ -1,8 +1,16 @@
 <?php
+
+/**
+ * Class Tribe__Cli__Service_Providers__Utils
+ *
+ * @since 0.2.4
+ */
 class Tribe__Cli__Service_Providers__Utils extends Tribe__Cli__Service_Providers__Base {
 
 	/**
 	 * Returns each plugin required by this one to run
+	 *
+	 * @since 0.2.4
 	 *
 	 * @return array {
 	 *      List of required plugins.
@@ -22,6 +30,8 @@ class Tribe__Cli__Service_Providers__Utils extends Tribe__Cli__Service_Providers
 	/**
 	 * Returns the display name of this functionality.
 	 *
+	 * @since 0.2.4
+	 *
 	 * @return string
 	 */
 	protected function get_display_name() {
@@ -30,6 +40,8 @@ class Tribe__Cli__Service_Providers__Utils extends Tribe__Cli__Service_Providers
 
 	/**
 	 * Binds and sets up implementations.
+	 *
+	 * @since 0.2.4
 	 */
 	public function register() {
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
