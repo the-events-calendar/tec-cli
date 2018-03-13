@@ -23,7 +23,7 @@ This command will generate dummy events for TEC using the TEC API function: `tri
 #### Example
 
 ```bash
-$ wp tribe-events-generator generate --count=1000
+$ wp tribe events-generator generate --count=1000
 ```
 
 ### Reset events
@@ -33,7 +33,7 @@ This command will reset all events in TEC. It deletes ALL Events, Organizers, an
 #### Example
 
 ```bash
-$ wp tribe-events-generator reset
+$ wp tribe events-generator reset
 ```
 
 ## Tickets
