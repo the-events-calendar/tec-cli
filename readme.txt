@@ -3,7 +3,7 @@
 Contributors: ModernTribe, barry.hughes, bordoni, borkweb, brianjessee, brook-tribe, faction23, geoffgraham, ggwicz, jazbek, jbrinley, joshlimecuda, leahkoerper, lucatume, mastromktg, mat-lipe, mdbitz, neillmcshea, nicosantos, peterchester, reid.peifer, roblagatta, ryancurban, shane.pearlman, thatdudebutch,  zbtirrell
 Tags: widget, events, simple, tooltips, grid, month, list, calendar, event, venue, community, registration, api, dates, date, plugin, posts, sidebar, template, theme, time, google maps, google, maps, conference, workshop, concert, meeting, seminar, summit, forum, shortcode, The Events Calendar, The Events Calendar PRO, Community Events, tickets, RSVP, registration
 Requires at least: 3.9
-Stable tag: 4.4.4
+Stable tag: 0.2.4
 Tested up to: 4.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -152,24 +152,24 @@ Our Premium Plugins:
 
 == Changelog ==
 
-= [0.2.4] 2017-03-08 =
+= [0.2.4] 2018-03-08 =
 * Added support for post transients deletion
 * Changed the name of the command to generate events from `tribe-events-generator` to `tribe events-generator`
 
-= [0.2.3] 2017-03-07 =
+= [0.2.3] 2018-03-07 =
 * Fix support for new and old versions of Event Tickets and Event Tickets Plus by internalizing the `Tribe__Tickets__RSVP::generate_security_code` method
 
-= [0.2.2] 2017-02-19 =
+= [0.2.2] 2018-02-19 =
 * Add support for the `--reset-total-sales` flag to the `reset-paypal-orders` command
 
-= [0.2.1] 2017-02-18 =
+= [0.2.1] 2018-02-18 =
 
 * Add support for the `--reset-deleted-attendees` flag to the `reset-paypal-orders` command
 * Add support for the `--dont-send-emails` flag to the `generate-paypal-orders` and `update-paypal-order-status` commands
 * Change default behaviour of generation and update commands to send emails
 * Fix an issue where the ticket `_stock` meta would be screwed up when removing generated orders
 
-= [0.2.0] 2017-01-19 =
+= [0.2.0] 2018-01-19 =
 
 * Add PayPal ticket generation support
 
