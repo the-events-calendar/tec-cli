@@ -2,7 +2,7 @@
 /*
 Plugin Name: Tribe CLI
 Description: A collection of WP-CLI utilities for testing and maintenance purposes.
-Version: 0.1
+Version: 0.2.4
 Author: Modern Tribe, Inc.
 Author URI: http://m.tri.be/21
 Text Domain: tribe-cli
