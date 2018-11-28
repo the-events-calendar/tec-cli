@@ -56,7 +56,7 @@ class Tribe__Cli__Commerce__Command extends WP_CLI_Command {
 	 * default: completed
 	 * options:
 	 *      - completed
-	 *      - pending
+	 *      - pending-payment
 	 *      - denied
 	 *      - refunded
 	 * ---
