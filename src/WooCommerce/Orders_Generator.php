@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * Class Tribe__CLI__WooCommerce__Orders_Generator
  *
@@ -7,10 +8,11 @@
  *
  * A modified version of the class found in 75nineteen/order-simulator-woocommerce
  *
- * @link https://github.com/75nineteen/order-simulator-woocommerce
- * @link https://raw.githubusercontent.com/75nineteen/order-simulator-woocommerce/master/woocommerce-order-simulator.php
+ * @link  https://github.com/75nineteen/order-simulator-woocommerce
+ * @link  https://raw.githubusercontent.com/75nineteen/order-simulator-woocommerce/master/woocommerce-order-simulator.php
  */
 class Tribe__Cli__WooCommerce__Orders_Generator {
+
 	protected $users = array();
 
 	/**
@@ -70,7 +72,7 @@ class Tribe__Cli__WooCommerce__Orders_Generator {
 			$payment_method     = array_rand( $available_gateways );
 
 			// process checkout
-			$data           = array(
+			$data     = array(
 				'billing_country'    => get_user_meta( $user_id, 'billing_country', true ),
 				'billing_first_name' => get_user_meta( $user_id, 'billing_first_name', true ),
 				'billing_last_name'  => get_user_meta( $user_id, 'billing_last_name', true ),
@@ -152,12 +154,26 @@ class Tribe__Cli__WooCommerce__Orders_Generator {
 		$faker->addProvider( new Faker\Provider\en_US\Address( $faker ) );
 		$faker->addProvider( new Faker\Provider\en_US\PhoneNumber( $faker ) );
 
-		$user = array(
-			'user_login' => $faker->userName,
-			'user_pass'  => 'password',
-			'user_email' => $faker->email,
+		//set user from Faker Press and use in all fields to keep the user the same
+		$user_default = array(
+			'login'      => $faker->userName,
+			'email'      => $faker->email,
 			'first_name' => $faker->firstName,
 			'last_name'  => $faker->lastName,
+			'country'    => $faker->country,
+			'address_1'  => $faker->streetAddress,
+			'city'       => $faker->city,
+			'state'      => $faker->state,
+			'postcode'   => $faker->postcode,
+			'phone'      => $faker->phoneNumber,
+		);
+
+		$user = array(
+			'user_login' => $user_default['login'],
+			'user_pass'  => 'password',
+			'user_email' => $user_default['email'],
+			'first_name' => $user_default['first_name'],
+			'last_name'  => $user_default['last_name'],
 			'role'       => 'customer',
 		);
 
@@ -165,24 +181,24 @@ class Tribe__Cli__WooCommerce__Orders_Generator {
 
 		// billing/shipping address
 		$meta = array(
-			'billing_country'                          => $faker->country,
-			'billing_first_name'                       => $faker->firstName,
-			'billing_last_name'                        => $faker->lastName,
-			'billing_address_1'                        => $faker->streetAddress,
-			'billing_city'                             => $faker->city,
-			'billing_state'                            => $faker->state,
-			'billing_postcode'                         => $faker->postcode,
-			'billing_email'                            => $faker->email,
-			'billing_phone'                            => $faker->phoneNumber,
-			'shipping_country'                         => $faker->country,
-			'shipping_first_name'                      => $faker->firstName,
-			'shipping_last_name'                       => $faker->lastName,
-			'shipping_address_1'                       => $faker->streetAddress,
-			'shipping_city'                            => $faker->city,
-			'shipping_state'                           => $faker->state,
-			'shipping_postcode'                        => $faker->postcode,
-			'shipping_email'                           => $faker->email,
-			'shipping_phone'                           => $faker->phoneNumber,
+			'billing_country'                          => $user_default['country'],
+			'billing_first_name'                       => $user_default['first_name'],
+			'billing_last_name'                        => $user_default['last_name'],
+			'billing_address_1'                        => $user_default['address_1'],
+			'billing_city'                             => $user_default['city'],
+			'billing_state'                            => $user_default['state'],
+			'billing_postcode'                         => $user_default['postcode'],
+			'billing_email'                            => $user_default['email'],
+			'billing_phone'                            => $user_default['phone'],
+			'shipping_country'                         => $user_default['country'],
+			'shipping_first_name'                      => $user_default['first_name'],
+			'shipping_last_name'                       => $user_default['last_name'],
+			'shipping_address_1'                       => $user_default['address_1'],
+			'shipping_city'                            => $user_default['city'],
+			'shipping_state'                           => $user_default['state'],
+			'shipping_postcode'                        => $user_default['postcode'],
+			'shipping_email'                           => $user_default['email'],
+			'shipping_phone'                           => $user_default['phone'],
 			Tribe__Cli__Meta_Keys::$generated_meta_key => 1,
 		);
 
