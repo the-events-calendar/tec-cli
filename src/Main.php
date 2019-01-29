@@ -12,7 +12,7 @@ class Tribe__Cli__Main extends tad_DI52_ServiceProvider {
 	 *
 	 * @var string
 	 */
-	const VERSION = '0.1';
+	const VERSION = '0.2.5';
 
 	/**
 	 * Plugin directory name.
