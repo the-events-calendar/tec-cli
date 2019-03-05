@@ -6,11 +6,11 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit279034159ae6a4223c698d91ae2015c0
 {
-    public static $files = array (
-        'db55a5d2075a78823410bce38fbc4326' => __DIR__ . '/../..' . '/autoload.php',
-    );
-
     public static $prefixLengthsPsr4 = array (
+        'T' => 
+        array (
+            'Tribe\\CLI\\' => 10,
+        ),
         'F' => 
         array (
             'Faker\\' => 6,
@@ -18,6 +18,10 @@ class ComposerStaticInit279034159ae6a4223c698d91ae2015c0
     );
 
     public static $prefixDirsPsr4 = array (
+        'Tribe\\CLI\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
+        ),
         'Faker\\' => 
         array (
             0 => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker',

@@ -1,11 +1,12 @@
 <?php
+namespace Tribe\CLI\Service_Providers;
 
 /**
  * Class Tribe__Cli__Service_Providers__Utils
  *
  * @since 0.2.4
  */
-class Tribe__Cli__Service_Providers__Utils extends Tribe__Cli__Service_Providers__Base {
+class Utils extends Base {
 
 	/**
 	 * Returns each plugin required by this one to run
@@ -45,7 +46,7 @@ class Tribe__Cli__Service_Providers__Utils extends Tribe__Cli__Service_Providers
 	 */
 	public function register() {
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			WP_CLI::add_command( 'tribe post-transient', $this->container->make( 'Tribe__Cli__Utils__Post_Transients' ) );
+			\WP_CLI::add_command( 'tribe post-transient', $this->container->make( 'Tribe\\CLI\\Utils\\Post_Transients' ) );
 		}
 	}
 }

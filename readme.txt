@@ -152,6 +152,9 @@ Our Premium Plugins:
 
 == Changelog ==
 
+= [0.2.6] TBD =
+* Add phpdoc-parser command
+
 = [0.2.5] TBD =
 * Fix in Woocommerce user generation to set the faker data once and add it throughout the user meta instead of in each field [121365]
 

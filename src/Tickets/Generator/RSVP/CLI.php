@@ -1,11 +1,17 @@
 <?php
+namespace Tribe\CLI\Tickets\Generator\RSVP;
+
+use Faker;
+use Tribe\CLI\Meta_Keys;
+use Tribe__Tickets__RSVP;
+use WP_CLI;
 
 /**
- * Class Tribe__Cli__Tickets__Generator__RSVP__CLI
+ * Class CLI
  *
  * @since 0.1.0
  */
-class Tribe__Cli__Tickets__Generator__RSVP__CLI {
+class CLI {
 
 	/**
 	 * Generates a number of random RSVP attendees for a post.
@@ -85,7 +91,7 @@ class Tribe__Cli__Tickets__Generator__RSVP__CLI {
 
 		$counts_sum = array_sum( $counts );
 
-		$progress_bar = \WP_CLI\Utils\make_progress_bar(
+		$progress_bar = WP_CLI\Utils\make_progress_bar(
 			sprintf( __( 'Generating %1$d RSVP attendees for post %2$d', 'tribe-cli' ), $counts_sum, $post_id ), $counts_sum
 		);
 
@@ -125,7 +131,7 @@ class Tribe__Cli__Tickets__Generator__RSVP__CLI {
 					$tickets->email                            => $attendee_email,
 					'_tribe_tickets_attendee_user_id'          => 0,
 					'_tribe_rsvp_attendee_ticket_sent'         => 1,
-					Tribe__Cli__Meta_Keys::$generated_meta_key => 1,
+					Meta_Keys::$generated_meta_key => 1,
 				);
 
 				foreach ( $meta as $key => $value ) {

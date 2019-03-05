@@ -40,12 +40,12 @@ if ( version_compare( PHP_VERSION, '5.3.0', ">=" ) ) {
 function tribe_cli_init() {
 	$container = new tad_DI52_Container();
 
-	$container->register( 'Tribe__Cli__Main' );
-	$container->register( 'Tribe__Cli__Service_Providers__Events' );
-	$container->register( 'Tribe__Cli__Service_Providers__Tickets' );
-	$container->register( 'Tribe__Cli__Service_Providers__Tribe_Commerce' );
-	$container->register( 'Tribe__Cli__Service_Providers__Tickets_Plus' );
-	$container->register( 'Tribe__Cli__Service_Providers__Utils' );
+	$container->register( 'Tribe\\CLI\\Main' );
+	$container->register( 'Tribe\\CLI\\Service_Providers\\Events' );
+	$container->register( 'Tribe\\CLI\\Service_Providers\\Tickets' );
+	$container->register( 'Tribe\\CLI\\Service_Providers\\Tribe_Commerce' );
+	$container->register( 'Tribe\\CLI\\Service_Providers\\Tickets_Plus' );
+	$container->register( 'Tribe\\CLI\\Service_Providers\\Utils' );
 }
 
 include_once(dirname(__FILE__) . '/src/functions/template.php');

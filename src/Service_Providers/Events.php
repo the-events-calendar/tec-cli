@@ -1,11 +1,12 @@
 <?php
+namespace Tribe\CLI\Service_Providers;
 
 /**
- * Class Tribe__Cli__Service_Providers__Events
+ * Class Events
  *
  * @since 0.1.0
  */
-class Tribe__Cli__Service_Providers__Events extends Tribe__Cli__Service_Providers__Base {
+class Events extends Base {
 	/**
 	 * Required Events Calendar Version.
 	 *
@@ -65,7 +66,7 @@ class Tribe__Cli__Service_Providers__Events extends Tribe__Cli__Service_Provider
 		}
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			WP_CLI::add_command( 'tribe events-generator', $this->container->make( 'Tribe__Cli__Events__Generator__CLI' ), array( 'shortdesc' => $this->get_display_name() ) );
+			\WP_CLI::add_command( 'tribe events-generator', $this->container->make( 'Tribe\\CLI\\Events\\Generator\\CLI' ), array( 'shortdesc' => $this->get_display_name() ) );
 		}
 	}
 }

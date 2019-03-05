@@ -1,17 +1,21 @@
 <?php
+namespace Tribe\CLI\Commerce\Generator\PayPal;
 
-use Tribe__Cli__Meta_Keys as Meta_Keys;
+use Faker;
+use Tribe\Cli\Meta_Keys;
 use Tribe__Tickets__Commerce__PayPal__Order as Order;
 use Tribe__Tickets__Commerce__PayPal__Stati as Stati;
+use Tribe__Tickets__Attendance as Attendance;
+use WP_CLI;
 use function WP_CLI\Utils\format_items;
 use function WP_CLI\Utils\make_progress_bar;
 
 /**
- * Class Tribe__Cli__Commerce__Generator__PayPal__CLI
+ * Class CLI
  *
  * @since 0.2.0
  */
-class Tribe__Cli__Commerce__Generator__PayPal__CLI {
+class CLI {
 
 	/**
 	 * @var bool Whether emails should be sent while during the command execution or not.
@@ -449,13 +453,13 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 			$is_ticket = false;
 			WP_CLI::log( "Removing generated PayPal orders from post {$post_id}" );
 			$orders = Order::find_by( array( 'post_id' => $post_id, 'posts_per_page' => - 1 ) );
-			$pre_deleted_attendees_count = (int) get_post_meta( $post_id, Tribe__Tickets__Attendance::DELETED_ATTENDEES_COUNT, true );
+			$pre_deleted_attendees_count = (int) get_post_meta( $post_id, Attendance::DELETED_ATTENDEES_COUNT, true );
 		} else {
 			$ticket_id = $post_id;
 			WP_CLI::log( "Removing generated PayPal orders for ticket {$post_id}" );
 			$orders                      = Order::find_by( array( 'ticket_id' => $post_id, 'posts_per_page' => - 1 ) );
 			$related_post_id             = get_post_meta( $ticket_id, $paypal->event_key, true );
-			$pre_deleted_attendees_count = (int) get_post_meta( $related_post_id, Tribe__Tickets__Attendance::DELETED_ATTENDEES_COUNT, true );
+			$pre_deleted_attendees_count = (int) get_post_meta( $related_post_id, Attendance::DELETED_ATTENDEES_COUNT, true );
 		}
 
 		if ( empty( $orders ) ) {
@@ -536,13 +540,13 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		if ( ! isset( $assoc_args['reset-deleted-attendees'] ) ) {
 
 			if ( 0 === $pre_deleted_attendees_count ) {
-				delete_post_meta( $target_id, Tribe__Tickets__Attendance::DELETED_ATTENDEES_COUNT );
+				delete_post_meta( $target_id, Attendance::DELETED_ATTENDEES_COUNT );
 			}
 
-			update_post_meta( $target_id, Tribe__Tickets__Attendance::DELETED_ATTENDEES_COUNT, $pre_deleted_attendees_count );
+			update_post_meta( $target_id, Attendance::DELETED_ATTENDEES_COUNT, $pre_deleted_attendees_count );
 			WP_CLI::log( "Restored deleted attendees count to its previous value of {$pre_deleted_attendees_count}" );
 		} else {
-			delete_post_meta( $target_id, Tribe__Tickets__Attendance::DELETED_ATTENDEES_COUNT );
+			delete_post_meta( $target_id, Attendance::DELETED_ATTENDEES_COUNT );
 			WP_CLI::log( 'Deleted attendees count reset to 0' );
 		}
 
@@ -574,7 +578,7 @@ class Tribe__Cli__Commerce__Generator__PayPal__CLI {
 		// willingly let orders be created for posts on which Tickets might not be enabled
 		// but avoid nonsense
 		$forbidden_post_types = array(
-			Tribe__Tickets__Commerce__PayPal__Main::ATTENDEE_OBJECT,
+			\Tribe__Tickets__Commerce__PayPal__Main::ATTENDEE_OBJECT,
 		);
 
 		if ( in_array( $post->post_type, $forbidden_post_types ) ) {
