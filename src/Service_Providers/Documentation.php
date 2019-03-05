@@ -16,7 +16,7 @@ class Documentation extends Base {
 	 * @return string
 	 */
 	public function get_display_name() {
-		return 'Plugin Documentation Generator';
+		return 'Tribe Documentation Generator';
 	}
 
 	/**
@@ -35,7 +35,14 @@ class Documentation extends Base {
 	 * }
 	 */
 	protected function get_requisite_plugins() {
-		return [];
+		return [
+			[
+				'short_name'        => 'WP Parser',
+				'class'             => 'WP_Parser\\Plugin',
+				'thickbox_url'      => 'https://github.com/WordPress/phpdoc-parser',
+				'external_download' => true,
+			],
+		];
 	}
 
 	/**
