@@ -3,7 +3,7 @@ namespace Tribe\CLI\Tickets\Generator\RSVP;
 
 use Faker;
 use Tribe\CLI\Meta_Keys;
-use Tribe__Tickets__RSVP;
+use Tribe__Tickets__RSVP as RSVP;
 use WP_CLI;
 
 /**
@@ -54,7 +54,7 @@ class CLI {
 			WP_CLI::error( __( 'Ticket status must be "yes", "no" or be omitted.', 'tribe-cli' ) );
 		}
 
-		$tickets      = Tribe__Tickets__RSVP::get_instance();
+		$tickets      = RSVP::get_instance();
 		$post_tickets = $tickets->get_tickets_ids( $post_id );
 
 		if (
@@ -109,7 +109,7 @@ class CLI {
 					'comment_status' => 'closed',
 					'ping_status'    => 'closed',
 					'post_name'      => sanitize_title( $attendee_name ),
-					'post_type'      => Tribe__Tickets__RSVP::ATTENDEE_OBJECT,
+					'post_type'      => RSVP::ATTENDEE_OBJECT,
 				);
 
 				$attendee_id = wp_insert_post( $postarr );
@@ -121,12 +121,12 @@ class CLI {
 				$order_id = md5( time() . rand() );
 
 				$meta = array(
-					Tribe__Tickets__RSVP::ATTENDEE_PRODUCT_KEY => $ticket_id,
-					Tribe__Tickets__RSVP::ATTENDEE_EVENT_KEY   => $post_id,
-					Tribe__Tickets__RSVP::ATTENDEE_RSVP_KEY    => $rsvp_status,
+					RSVP::ATTENDEE_PRODUCT_KEY => $ticket_id,
+					RSVP::ATTENDEE_EVENT_KEY   => $post_id,
+					RSVP::ATTENDEE_RSVP_KEY    => $rsvp_status,
 					$tickets->security_code                    => $this->generate_security_code( $attendee_id ),
 					$tickets->order_key                        => $order_id,
-					Tribe__Tickets__RSVP::ATTENDEE_OPTOUT_KEY  => '',
+					RSVP::ATTENDEE_OPTOUT_KEY  => '',
 					$tickets->full_name                        => $attendee_name,
 					$tickets->email                            => $attendee_email,
 					'_tribe_tickets_attendee_user_id'          => 0,
@@ -173,7 +173,7 @@ class CLI {
 			WP_CLI::error( sprintf( __( 'Post with ID %d does not exist.', 'tribe-cli' ), $post_id ) );
 		}
 
-		$tickets      = Tribe__Tickets__RSVP::get_instance();
+		$tickets      = RSVP::get_instance();
 		$post_tickets = $tickets->get_tickets_ids( $post_id );
 
 		if ( empty( $post_tickets ) ) {
@@ -193,7 +193,7 @@ class CLI {
 
 		$attendees = $tickets->get_attendees_by_id( $post_id );
 
-		$progress_bar = \WP_CLI\Utils\make_progress_bar( sprintf( __( 'Deleting RSVP attendees', 'tribe-cli' ) ),
+		$progress_bar = WP_CLI\Utils\make_progress_bar( sprintf( __( 'Deleting RSVP attendees', 'tribe-cli' ) ),
 			count( $attendees ) );
 
 		foreach ( $post_tickets as $ticket ) {

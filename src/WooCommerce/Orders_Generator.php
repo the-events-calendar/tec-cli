@@ -119,7 +119,7 @@ class Orders_Generator {
 				update_post_meta( $order_id, '_shipping_method_title', 'Free Shipping' );
 
 				update_post_meta( $order_id, '_customer_user', absint( $user_id ) );
-				update_post_meta( $order_id, Tribe__Cli__Meta_Keys::$generated_meta_key, 1 );
+				update_post_meta( $order_id, Meta_Keys::$generated_meta_key, 1 );
 
 				foreach ( $data as $key => $value ) {
 					update_post_meta( $order_id, '_' . $key, $value );

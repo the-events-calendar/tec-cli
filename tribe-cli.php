@@ -30,17 +30,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 define( 'TRIBE_CLI_DIR', dirname( __FILE__ ) );
 define( 'TRIBE_CLI_FILE', __FILE__ );
 
-// Composer managed PHP 5.2 compatible autoloader, will include our autoloader too
-if ( version_compare( PHP_VERSION, '5.3.0', ">=" ) ) {
-	include dirname( __FILE__ ) . '/vendor/autoload.php';
-} else {
-	include dirname( __FILE__ ) . '/vendor/autoload_52.php';
-}
+include dirname( __FILE__ ) . '/vendor/autoload.php';
 
 function tribe_cli_init() {
 	$container = new tad_DI52_Container();
 
 	$container->register( 'Tribe\\CLI\\Main' );
+	$container->register( 'Tribe\\CLI\\Service_Providers\\Documentation' );
 	$container->register( 'Tribe\\CLI\\Service_Providers\\Events' );
 	$container->register( 'Tribe\\CLI\\Service_Providers\\Tickets' );
 	$container->register( 'Tribe\\CLI\\Service_Providers\\Tribe_Commerce' );

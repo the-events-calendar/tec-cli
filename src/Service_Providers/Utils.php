@@ -2,7 +2,7 @@
 namespace Tribe\CLI\Service_Providers;
 
 /**
- * Class Tribe__Cli__Service_Providers__Utils
+ * Class Utils
  *
  * @since 0.2.4
  */

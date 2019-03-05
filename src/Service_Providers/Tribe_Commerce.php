@@ -67,7 +67,7 @@ class Tribe_Commerce extends Base  {
 
 			$command = $this->container->make( 'Tribe\\CLI\\Commerce\\Command' );
 
-			\WP_CLI::add_command( 'commerce', $command, array( 'shortdesc' => $this->get_display_name() ) );
+			\WP_CLI::add_command( 'tribe commerce', $command, array( 'shortdesc' => $this->get_display_name() ) );
 		}
 	}
 }

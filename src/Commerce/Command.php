@@ -1,5 +1,5 @@
 <?php
-use Tribe\CLI\Commerce;
+namespace Tribe\CLI\Commerce;
 
 /**
  * Class Tribe__Cli__Commerce__Command
@@ -67,15 +67,15 @@ class Command extends \WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *      wp commerce generate-paypal-orders 23
-	 *      wp commerce generate-paypal-orders 23,89
-	 *      wp commerce generate-paypal-orders 23,89,31
-	 *      wp commerce generate-paypal-orders 23 --count=89
-	 *      wp commerce generate-paypal-orders 23,31 --count=89
-	 *      wp commerce generate-paypal-orders 23 --attendees_min=3
-	 *      wp commerce generate-paypal-orders 23 --attendees_min=3 --attendees_max=10
-	 *      wp commerce generate-paypal-orders 23 --attendees_min=3 --attendees_max=10 --order_status=denied
-	 *      wp commerce generate-paypal-orders 23,31 --count=89 --dont-send-emails
+	 *      wp tribe commerce generate-paypal-orders 23
+	 *      wp tribe commerce generate-paypal-orders 23,89
+	 *      wp tribe commerce generate-paypal-orders 23,89,31
+	 *      wp tribe commerce generate-paypal-orders 23 --count=89
+	 *      wp tribe commerce generate-paypal-orders 23,31 --count=89
+	 *      wp tribe commerce generate-paypal-orders 23 --attendees_min=3
+	 *      wp tribe commerce generate-paypal-orders 23 --attendees_min=3 --attendees_max=10
+	 *      wp tribe commerce generate-paypal-orders 23 --attendees_min=3 --attendees_max=10 --order_status=denied
+	 *      wp tribe commerce generate-paypal-orders 23,31 --count=89 --dont-send-emails
 	 *
 	 * @subcommand generate-paypal-orders
 	 *

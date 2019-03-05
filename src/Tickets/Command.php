@@ -65,12 +65,12 @@ class Command extends \WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *      wp event-tickets generate-rsvp-attendees 23
-	 *      wp event-tickets generate-rsvp-attendees 23 --count=89
-	 *      wp event-tickets generate-rsvp-attendees 23 --tickets_min=3
-	 *      wp event-tickets generate-rsvp-attendees 23 --tickets_min=3 --tickets_max=10
-	 *      wp event-tickets generate-rsvp-attendees 23 --tickets_min=3 --tickets_max=10 --ticket_status=no
-	 *      wp event-tickets generate-rsvp-attendees 23 --ticket_id=89
+	 *      wp tribe event-tickets generate-rsvp-attendees 23
+	 *      wp tribe event-tickets generate-rsvp-attendees 23 --count=89
+	 *      wp tribe event-tickets generate-rsvp-attendees 23 --tickets_min=3
+	 *      wp tribe event-tickets generate-rsvp-attendees 23 --tickets_min=3 --tickets_max=10
+	 *      wp tribe event-tickets generate-rsvp-attendees 23 --tickets_min=3 --tickets_max=10 --ticket_status=no
+	 *      wp tribe event-tickets generate-rsvp-attendees 23 --ticket_id=89
 	 *
 	 * @subcommand generate-rsvp-attendees
 	 *
