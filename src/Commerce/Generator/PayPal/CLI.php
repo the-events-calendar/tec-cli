@@ -2,7 +2,7 @@
 namespace Tribe\CLI\Commerce\Generator\PayPal;
 
 use Faker;
-use Tribe\Cli\Meta_Keys;
+use Tribe\CLI\Meta_Keys;
 use Tribe__Tickets__Commerce__PayPal__Order as Order;
 use Tribe__Tickets__Commerce__PayPal__Stati as Stati;
 use Tribe__Tickets__Attendance as Attendance;
