@@ -13,8 +13,7 @@ class Build_Docs extends Abstract_Doc_Command {
 	 */
 	public function build( array $args = null, array $assoc_args = null ) {
 		if ( ! function_exists( '\WP_Parser\parse_files' ) ) {
-			WP_CLI::error( __( 'Please install and activate WP Parser from https://github.com/WordPress/phpdoc-parser before building documentation.', 'bigcommerce' ) );
-			die;
+			WP_CLI::error( __( 'Please install and activate WP Parser from https://github.com/WordPress/phpdoc-parser before building documentation.', 'tribe-cli' ) );
 		}
 
 		$plugin      = $this->parse_plugin( $args );
@@ -25,22 +24,20 @@ class Build_Docs extends Abstract_Doc_Command {
 		WP_CLI::line();
 
 		if ( false === $result ) {
-			WP_CLI::error( sprintf( 'Problem writing %1$s bytes of data to %2$s', strlen( $json ), $output_file ) );
-			die;
+			WP_CLI::error( sprintf( __( 'Problem writing %1$s bytes of data to %2$s', 'tribe-cli' ), strlen( $json ), $output_file ) );
 		}
 
-		WP_CLI::success( sprintf( 'Data exported to %1$s', $output_file ) );
+		WP_CLI::success( sprintf( __( 'Data exported to %1$s', 'tribe-cli' ), $output_file ) );
 		WP_CLI::line();
 	}
 
 	private function get_data() {
 
-		WP_CLI::line( sprintf( 'Extracting PHPDoc from %1$s. This may take a few minutes...', $this->plugin_dir ) );
+		WP_CLI::line( sprintf( __( 'Extracting PHPDoc from %1$s. This may take a few minutes...', 'tribe-cli' ), $this->plugin_dir ) );
 		$files = $this->collect_files();
 
 		if ( $files instanceof \WP_Error ) {
-			WP_CLI::error( sprintf( 'Problem with %1$s: %2$s', $this->plugin_dir, $files->get_error_message() ) );
-			die;
+			WP_CLI::error( sprintf( __( 'Problem with %1$s: %2$s', 'tribe-cli' ), $this->plugin_dir, $files->get_error_message() ) );
 		}
 
 		$output = \WP_Parser\parse_files( $files, $this->plugin_dir );
@@ -91,7 +88,7 @@ class Build_Docs extends Abstract_Doc_Command {
 		} catch ( \UnexpectedValueException $exc ) {
 			return new \WP_Error(
 				'unexpected_value_exception',
-				sprintf( 'Directory [%s] contained a directory we can not recurse into', $directory )
+				sprintf( __( 'Directory [%s] contained a directory we can not recurse into', 'tribe-cli' ), $directory )
 			);
 		}
 
@@ -108,7 +105,7 @@ class Build_Docs extends Abstract_Doc_Command {
 	 */
 	private function parse_file( string $plugin, array $assoc_args ) {
 		if ( ! isset( $assoc_args['output'] ) ) {
-			return "/tmp/{$plugin}.json";
+			return sys_get_temp_dir() . "/{$plugin}.json";
 		}
 
 		return $assoc_args['output'];

@@ -14,15 +14,13 @@ class Import_Docs extends Abstract_Doc_Command {
 	 */
 	public function import( array $args = null, array $assoc_args = null ) {
 		if ( ! function_exists( '\WP_Parser\parse_files' ) ) {
-			WP_CLI::error( __( 'Please install and activate WP Parser from https://github.com/WordPress/phpdoc-parser before building documentation.', 'bigcommerce' ) );
-			die;
+			WP_CLI::error( __( 'Please install and activate WP Parser from https://github.com/WordPress/phpdoc-parser before building documentation.', 'tribe-cli' ) );
 		}
 
 		WP_CLI::line();
 
 		if ( ! class_exists( '\WP_Parser\Importer' ) ) {
-			WP_CLI::error( __( 'Please install and activate WP Parser from https://github.com/WordPress/phpdoc-parser before importing documentation.', 'bigcommerce' ) );
-			exit;
+			WP_CLI::error( __( 'Please install and activate WP Parser from https://github.com/WordPress/phpdoc-parser before importing documentation.', 'tribe-cli' ) );
 		}
 
 		$plugin = $this->parse_plugin( $args );
@@ -35,15 +33,13 @@ class Import_Docs extends Abstract_Doc_Command {
 		}
 
 		if ( ! $phpdoc ) {
-			WP_CLI::error( sprintf( "Can't read %1\$s. Does the file exist?", $file ) );
-			exit;
+			WP_CLI::error( sprintf( __( "Can't read %1\$s. Does the file exist?", 'tribe-cli' ), $file ) );
 		}
 
 		$phpdoc = json_decode( $phpdoc, true );
 
 		if ( is_null( $phpdoc ) ) {
-			WP_CLI::error( sprintf( "JSON in %1\$s can't be decoded", $file ) );
-			exit;
+			WP_CLI::error( sprintf( __( "JSON in %1\$s can't be decoded", 'tribe-cli' ), $file ) );
 		}
 
 		// Import data
@@ -52,8 +48,7 @@ class Import_Docs extends Abstract_Doc_Command {
 
 	private function run_import( $data ) {
 		if ( ! wp_get_current_user()->exists() ) {
-			WP_CLI::error( 'Please specify a valid user: --user=<id|login>' );
-			exit;
+			WP_CLI::error( __( 'Please specify a valid user: --user=<id|login>', 'tribe-cli' ) );
 		}
 
 		// Run the importer
