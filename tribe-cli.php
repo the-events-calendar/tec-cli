@@ -36,6 +36,7 @@ function tribe_cli_init() {
 	$container = new tad_DI52_Container();
 
 	$container->register( 'Tribe\\CLI\\Main' );
+	$container->register( 'Tribe\\CLI\\Service_Providers\\Documentation' );
 	$container->register( 'Tribe\\CLI\\Service_Providers\\Events' );
 	$container->register( 'Tribe\\CLI\\Service_Providers\\Tickets' );
 	$container->register( 'Tribe\\CLI\\Service_Providers\\Tribe_Commerce' );

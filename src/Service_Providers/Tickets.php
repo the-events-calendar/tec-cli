@@ -65,7 +65,7 @@ class Tickets extends Base {
 		}
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			\WP_CLI::add_command( 'event-tickets', $this->container->make( 'Tribe\\CLI\\Tickets\\Command' ), array( 'shortdesc' => $this->get_display_name() ) );
+			\WP_CLI::add_command( 'tribe event-tickets', $this->container->make( 'Tribe\\CLI\\Tickets\\Command' ), array( 'shortdesc' => $this->get_display_name() ) );
 		}
 	}
 }

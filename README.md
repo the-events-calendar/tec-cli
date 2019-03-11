@@ -9,6 +9,9 @@ WP-CLI tools for Modern Tribe plugins.
 * [Tickets](#tickets)
     * [RSVP tickets attendees generator](#rsvp-tickets-attendees-generator)
     * [Reset RSVP tickets](#reset-rsvp-tickets)
+* [Docs](#docs)
+    * [Build Docs](#build-docs)
+    * [Import Docs](#import-docs)
 
 ## Events
 
@@ -54,12 +57,12 @@ This command will generate attendees for a post with RSVP tickets.
 #### Example
 
 ```bash
-$ wp event-tickets generate-rsvp-attendees 23
-$ wp event-tickets generate-rsvp-attendees 23 --count=89
-$ wp event-tickets generate-rsvp-attendees 23 --tickets_min=3
-$ wp event-tickets generate-rsvp-attendees 23 --tickets_min=3 --tickets_max=10
-$ wp event-tickets generate-rsvp-attendees 23 --tickets_min=3 --tickets_max=10 --ticket_status=no
-$ wp event-tickets generate-rsvp-attendees 23 --ticket_id=89
+$ wp tribe event-tickets generate-rsvp-attendees 23
+$ wp tribe event-tickets generate-rsvp-attendees 23 --count=89
+$ wp tribe event-tickets generate-rsvp-attendees 23 --tickets_min=3
+$ wp tribe event-tickets generate-rsvp-attendees 23 --tickets_min=3 --tickets_max=10
+$ wp tribe event-tickets generate-rsvp-attendees 23 --tickets_min=3 --tickets_max=10 --ticket_status=no
+$ wp tribe event-tickets generate-rsvp-attendees 23 --ticket_id=89
 ```
 
 ### Reset RSVP tickets
@@ -74,9 +77,45 @@ This command will reset attendees for RSVP tickets assigned to a post.
 #### Example
 
 ```bash
-$ wp event-tickets reset-rsvp-attendees 23
-$ wp event-tickets reset-rsvp-attendees 23 --ticket_id=89
+$ wp tribe event-tickets reset-rsvp-attendees 23
+$ wp tribe event-tickets reset-rsvp-attendees 23 --ticket_id=89
 ```
+
+## Docs
+
+### Build Docs
+Requires [WP Parser][2209-0003] installed and active.
+This command will build a JSON file for the purposes of importing into a WP Parser-active site.
+
+#### Arguments
+
+* `plugin` - string - plugin directory name in wp-plugins that will be parsed
+* `output` - string - file path of the resulting JSON file
+
+#### Example
+
+```bash
+$ wp tribe doc build the-events-calendar
+$ wp tribe doc build tribe-common --output=/tmp/tribe-common.json
+```
+
+### Import Docs
+
+This command will import the output of the doc build command.
+
+#### Arguments
+
+* `plugin` - string - plugin directory name in wp-plugins that will be parsed
+* `file` - string - file path of the JSON file used during import
+
+#### Example
+
+```bash
+$ wp tribe doc import the-events-calendar /tmp/the-events-calendar.json --user=1
+$ wp tribe doc import tribe-common /tmp/tribe-common.json --user=1
+```
+
 
 [2209-0001]: https://wordpress.org/plugins/the-events-calendar/
 [2209-0002]: https://wordpress.org/plugins/event-tickets/
+[2209-0003]: https://github.com/WordPress/phpdoc-parser

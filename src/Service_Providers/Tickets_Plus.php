@@ -65,7 +65,7 @@ class Tickets_Plus extends Base {
 		}
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			\WP_CLI::add_command( 'event-tickets-plus', $this->container->make( 'Tribe\\CLI\\Tickets_Plus\\Command' ), array( 'shortdesc' => $this->get_display_name() ) );
+			\WP_CLI::add_command( 'tribe event-tickets-plus', $this->container->make( 'Tribe\\CLI\\Tickets_Plus\\Command' ), array( 'shortdesc' => $this->get_display_name() ) );
 		}
 
 		// avoid sending emails for fake orders
