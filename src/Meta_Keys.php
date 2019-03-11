@@ -1,11 +1,12 @@
 <?php
+namespace Tribe\CLI;
 
 /**
- * Class Tribe__Cli__Meta_keys
+ * Class Meta_keys
  *
  * @since 0.1.0
  */
-class Tribe__Cli__Meta_Keys {
+class Meta_Keys {
 	/**
 	 * Meta key used to track CLI generated posts
 	 *

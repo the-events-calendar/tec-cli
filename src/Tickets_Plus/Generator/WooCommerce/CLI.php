@@ -1,25 +1,32 @@
 <?php
+namespace Tribe\CLI\Tickets_Plus\Generator\WooCommerce;
+
+use Tribe\CLI\Meta_Keys;
+use Tribe\CLI\Tickets\Generator\RSVP\CLI as RSVP_CLI;
+use Tribe\CLI\WooCommerce\Orders_Generator;
+use Tribe__Tickets_Plus__Commerce__WooCommerce__Main;
+use WP_CLI;
 
 /**
- * Class Tribe__Cli__Tickets_Plus__Generator__WooCommerce__CLI
+ * Class CLI
  *
  * @since 0.1.0
  */
-class Tribe__Cli__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__Cli__Tickets__Generator__RSVP__CLI {
+class CLI extends RSVP_CLI {
 
 	/**
-	 * @var \Tribe__Cli__WooCommerce__Orders_Generator
+	 * @var Orders_Generator
 	 */
 	protected $orders_generator;
 
 	/**
-	 * Tribe__Cli__Tickets_Plus__Generator__WooCommerce__CLI constructor.
+	 * CLI constructor.
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param \Tribe__Cli__WooCommerce__Orders_Generator $orders_generator
+	 * @param Orders_Generator $orders_generator
 	 */
-	public function __construct( Tribe__Cli__WooCommerce__Orders_Generator $orders_generator ) {
+	public function __construct( Orders_Generator $orders_generator ) {
 		$this->orders_generator = $orders_generator;
 	}
 
@@ -101,7 +108,7 @@ class Tribe__Cli__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__Cli__
 
 		$counts_sum = array_sum( $counts );
 
-		$progress_bar = \WP_CLI\Utils\make_progress_bar(
+		$progress_bar = WP_CLI\Utils\make_progress_bar(
 			sprintf( __( 'Generating %1$d ticket orders for post %2$d', 'tribe-cli' ), $counts_sum, $post_id ), $counts_sum
 		);
 
@@ -163,13 +170,13 @@ class Tribe__Cli__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__Cli__
 
 		$attendees = $tickets->get_attendees_by_id( $post_id );
 
-		$progress_bar = \WP_CLI\Utils\make_progress_bar( sprintf( __( 'Deleting WooCommerce tickets orders', 'tribe-cli' ) ),
+		$progress_bar = WP_CLI\Utils\make_progress_bar( sprintf( __( 'Deleting WooCommerce tickets orders', 'tribe-cli' ) ),
 			count( $attendees ) );
 
 		foreach ( $post_tickets as $ticket ) {
 			$this_ticket_attendees = array_filter( $attendees, function ( array $attendee ) use ( $ticket ) {
 				$for_this_ticket = isset( $attendee['product_id'] ) && $attendee['product_id'] == $ticket;
-				$generated       = ! empty( get_post_meta( $attendee['order_id'], Tribe__Cli__Meta_Keys::$generated_meta_key, true ) );
+				$generated       = ! empty( get_post_meta( $attendee['order_id'], Meta_Keys::$generated_meta_key, true ) );
 
 				return $for_this_ticket && $generated;
 			} );
@@ -180,9 +187,9 @@ class Tribe__Cli__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__Cli__
 			}
 		}
 
-		$user_query = new WP_User_Query( array(
+		$user_query = new \WP_User_Query( array(
 			'role'       => 'customer',
-			'meta_key'   => Tribe__Cli__Meta_Keys::$generated_meta_key,
+			'meta_key'   => Meta_Keys::$generated_meta_key,
 			'meta_value' => 1,
 			'fields'     => 'ID',
 			'paged'      => false,
@@ -191,7 +198,7 @@ class Tribe__Cli__Tickets_Plus__Generator__WooCommerce__CLI extends Tribe__Cli__
 		$users = $user_query->get_results();
 
 		if ( ! empty( $users ) ) {
-			$progress_bar = \WP_CLI\Utils\make_progress_bar( sprintf( __( 'Deleting the random users', 'tribe-cli' ) ),
+			$progress_bar = WP_CLI\Utils\make_progress_bar( sprintf( __( 'Deleting the random users', 'tribe-cli' ) ),
 				count( $users ) );
 			foreach ( $users as $user_id ) {
 				wp_delete_user( $user_id );

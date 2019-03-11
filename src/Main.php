@@ -1,11 +1,14 @@
 <?php
+namespace Tribe\CLI;
+
+use Tribe__Main;
 
 /**
- * Class Tribe__Cli__Main
+ * Class Main
  *
  * @since 0.1.0
  */
-class Tribe__Cli__Main extends tad_DI52_ServiceProvider {
+class Main extends \tad_DI52_ServiceProvider {
 
 	/**
 	 * The current version of Event Generator.

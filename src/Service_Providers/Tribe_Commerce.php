@@ -1,11 +1,12 @@
 <?php
+namespace Tribe\CLI\Service_Providers;
 
 /**
- * Class Tribe__Cli__Service_Providers__Tribe_Commerce
+ * Class Tribe_Commerce
  *
  * @since 0.2.0
  */
-class Tribe__Cli__Service_Providers__Tribe_Commerce extends Tribe__Cli__Service_Providers__Base  {
+class Tribe_Commerce extends Base  {
 
 	const REQUIRED_TICKETS_VERSION = '4.7dev';
 
@@ -61,12 +62,12 @@ class Tribe__Cli__Service_Providers__Tribe_Commerce extends Tribe__Cli__Service_
 		}
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			$this->container->when( 'Tribe__Cli__Commerce__Command' )
-				->give( 'Tribe__Cli__Commerce__Generator__PayPal__CLI' );
+			$this->container->when( 'Tribe\\CLI\\Commerce\\Command' )
+				->give( 'Tribe\\CLI\\Commerce\\Generator\\PayPal\\CLI' );
 
-			$command = $this->container->make( 'Tribe__Cli__Commerce__Command' );
+			$command = $this->container->make( 'Tribe\\CLI\\Commerce\\Command' );
 
-			WP_CLI::add_command( 'commerce', $command, array( 'shortdesc' => $this->get_display_name() ) );
+			\WP_CLI::add_command( 'commerce', $command, array( 'shortdesc' => $this->get_display_name() ) );
 		}
 	}
 }

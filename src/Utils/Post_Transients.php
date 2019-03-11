@@ -1,11 +1,14 @@
 <?php
+namespace Tribe\CLI\Utils;
+
+use WP_CLI;
 
 /**
- * Class Tribe__Cli__Utils__Post_Transients
+ * Class Post_Transients
  *
  * @since 0.2.4
  */
-class Tribe__Cli__Utils__Post_Transients extends WP_CLI_Command {
+class Post_Transients extends \WP_CLI_Command {
 
 	/**
 	 * Deletes post transients created by Modern Tribe code.

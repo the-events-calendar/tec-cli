@@ -1,11 +1,15 @@
 <?php
+namespace Tribe\CLI\Events\Generator;
+
+use Faker;
+use Tribe\CLI\Meta_Keys as Meta_Keys;
 
 /**
- * Class Tribe__Cli__Events__Generator__API
+ * Class API
  *
  * @since 0.1.0
  */
-class Tribe__Cli__Events__Generator__API {
+class API {
 	/**
 	 * Generate multiple events at once.
 	 *
@@ -164,9 +168,9 @@ class Tribe__Cli__Events__Generator__API {
 		$event_id = tribe_create_event( $args );
 
 		// mark event, venue, and organizers as generated from tribe-cli
-		add_post_meta( $event_id, Tribe__Cli__Meta_Keys::$generated_meta_key, 1 );
-		add_post_meta( $venue, Tribe__Cli__Meta_Keys::$generated_meta_key, 1 );
-		add_post_meta( $organizer, Tribe__Cli__Meta_Keys::$generated_meta_key, 1 );
+		add_post_meta( $event_id, Meta_Keys::$generated_meta_key, 1 );
+		add_post_meta( $venue, Meta_Keys::$generated_meta_key, 1 );
+		add_post_meta( $organizer, Meta_Keys::$generated_meta_key, 1 );
 
 		return $event_id;
 

@@ -1,25 +1,29 @@
 <?php
+namespace Tribe\CLI\Events\Generator;
+
+use Tribe\CLI\Meta_Keys;
+use Tribe__Events__Main;
 
 /**
- * Class Tribe__Cli__Events__Generator__CLI
+ * Class CLI
  *
  * @since 0.1.0
  */
-class Tribe__Cli__Events__Generator__CLI extends WP_CLI_Command {
+class CLI extends \WP_CLI_Command {
 
 	/**
-	 * @var \Tribe__Cli__Events__Generator__API
+	 * @var API
 	 */
 	protected $api;
 
 	/**
-	 * Tribe__CLI__Events__Generator__CLI constructor.
+	 * CLI constructor.
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param \Tribe__Cli__Events__Generator__API $api
+	 * @param API $api
 	 */
-	public function __construct( Tribe__Cli__Events__Generator__API $api ) {
+	public function __construct( API $api ) {
 		parent::__construct();
 		$this->api = $api;
 	}
@@ -90,7 +94,7 @@ class Tribe__Cli__Events__Generator__CLI extends WP_CLI_Command {
 		$options = [];
 
 		if ( ! isset( $assoc_args['all'] ) ) {
-			$options['meta_key'] = Tribe__Cli__Meta_Keys::$generated_meta_key;
+			$options['meta_key'] = Meta_Keys::$generated_meta_key;
 			$options['meta_value'] = 1;
 		}
 
@@ -124,7 +128,7 @@ class Tribe__Cli__Events__Generator__CLI extends WP_CLI_Command {
 
 		$post_type_obj = get_post_type_object( $post_type );
 
-		$query = new WP_Query( $args );
+		$query = new \WP_Query( $args );
 
 		$total_found = $query->found_posts;
 

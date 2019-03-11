@@ -152,7 +152,10 @@ Our Premium Plugins:
 
 == Changelog ==
 
-= [0.2.5] TBD =
+= [0.2.6] TBD =
+* Switch to using proper namespacing for classes
+
+= [0.2.5] 2019-01-29 =
 * Fix in Woocommerce user generation to set the faker data once and add it throughout the user meta instead of in each field [121365]
 
 = [0.2.4] 2018-03-08 =

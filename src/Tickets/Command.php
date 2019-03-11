@@ -1,25 +1,26 @@
 <?php
+namespace Tribe\CLI\Tickets;
 
 /**
- * Class Tribe__Cli__Tickets__Command
+ * Class Command
  *
  * @since 0.1.0
  */
-class Tribe__Cli__Tickets__Command extends WP_CLI_Command {
+class Command extends \WP_CLI_Command {
 
 	/**
-	 * @var \Tribe__Cli__Tickets__Generator__RSVP__CLI
+	 * @var Generator\RSVP\CLI
 	 */
 	protected $rsvp;
 
 	/**
-	 * Tribe__CLI__Tickets__Command constructor.
+	 * Command constructor.
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param \Tribe__Cli__Tickets__Generator__RSVP__CLI $paypal
+	 * @param Generator\RSVP\CLI $paypal
 	 */
-	public function __construct( Tribe__Cli__Tickets__Generator__RSVP__CLI $paypal ) {
+	public function __construct( Generator\RSVP\CLI $paypal ) {
 		parent::__construct();
 		$this->rsvp = $paypal;
 	}

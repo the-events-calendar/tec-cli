@@ -1,8 +1,13 @@
 <?php
+namespace Tribe\CLI\WooCommerce;
 
+use Faker;
+use Tribe\CLI\Meta_Keys;
+use WC;
+use WP_CLI;
 
 /**
- * Class Tribe__CLI__WooCommerce__Orders_Generator
+ * Class Orders_Generator
  *
  * @since 0.1.0
  *
@@ -11,7 +16,7 @@
  * @link  https://github.com/75nineteen/order-simulator-woocommerce
  * @link  https://raw.githubusercontent.com/75nineteen/order-simulator-woocommerce/master/woocommerce-order-simulator.php
  */
-class Tribe__Cli__WooCommerce__Orders_Generator {
+class Orders_Generator {
 
 	protected $users = array();
 
@@ -31,15 +36,15 @@ class Tribe__Cli__WooCommerce__Orders_Generator {
 
 		// Class instances
 		require_once WC()->plugin_path() . '/includes/abstracts/abstract-wc-session.php';
-		$woocommerce->session  = new WC_Session_Handler();
-		$woocommerce->cart     = new WC_Cart();                                    // Cart class, stores the cart contents
-		$woocommerce->customer = new WC_Customer();                                // Customer class, handles data such as customer location
+		$woocommerce->session  = new \WC_Session_Handler();
+		$woocommerce->cart     = new \WC_Cart();                                    // Cart class, stores the cart contents
+		$woocommerce->customer = new \WC_Customer();                                // Customer class, handles data such as customer location
 
-		$woocommerce->countries = new WC_Countries();
-		$woocommerce->checkout  = new WC_Checkout();
+		$woocommerce->countries = new \WC_Countries();
+		$woocommerce->checkout  = new \WC_Checkout();
 		//$woocommerce->product_factory = new WC_Product_Factory();                      // Product Factory to create new product instances
-		$woocommerce->order_factory = new WC_Order_Factory();                        // Order Factory to create new order instances
-		$woocommerce->integrations  = new WC_Integrations();                         // Integrations class
+		$woocommerce->order_factory = new \WC_Order_Factory();                        // Order Factory to create new order instances
+		$woocommerce->integrations  = new \WC_Integrations();                         // Integrations class
 
 
 		// clear cart
@@ -100,7 +105,7 @@ class Tribe__Cli__WooCommerce__Orders_Generator {
 				'shipping_phone'      => get_user_meta( $user_id, 'shipping_phone', true ),
 
 			);
-			$checkout = new WC_Checkout();
+			$checkout = new \WC_Checkout();
 
 			$woocommerce->cart->calculate_totals();
 
@@ -114,7 +119,7 @@ class Tribe__Cli__WooCommerce__Orders_Generator {
 				update_post_meta( $order_id, '_shipping_method_title', 'Free Shipping' );
 
 				update_post_meta( $order_id, '_customer_user', absint( $user_id ) );
-				update_post_meta( $order_id, Tribe__Cli__Meta_Keys::$generated_meta_key, 1 );
+				update_post_meta( $order_id, Meta_Keys::$generated_meta_key, 1 );
 
 				foreach ( $data as $key => $value ) {
 					update_post_meta( $order_id, '_' . $key, $value );
@@ -122,7 +127,7 @@ class Tribe__Cli__WooCommerce__Orders_Generator {
 
 				do_action( 'woocommerce_checkout_order_processed', $order_id, $data );
 
-				$order = new WC_Order( $order_id );
+				$order = new \WC_Order( $order_id );
 
 				$status = $args['ticket_status'];
 
@@ -199,7 +204,7 @@ class Tribe__Cli__WooCommerce__Orders_Generator {
 			'shipping_postcode'                        => $user_default['postcode'],
 			'shipping_email'                           => $user_default['email'],
 			'shipping_phone'                           => $user_default['phone'],
-			Tribe__Cli__Meta_Keys::$generated_meta_key => 1,
+			Meta_Keys::$generated_meta_key => 1,
 		);
 
 		foreach ( $meta as $key => $value ) {
