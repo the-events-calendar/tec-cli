@@ -99,8 +99,8 @@ class Command extends \WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *      wp event-tickets-plus reset-wc-orders 23
-	 *      wp event-tickets-plus reset-wc-orders 23 --ticket_id=89
+	 *      wp tribe event-tickets-plus reset-wc-orders 23
+	 *      wp tribe event-tickets-plus reset-wc-orders 23 --ticket_id=89
 	 *
 	 * @subcommand reset-wc-orders
 	 *

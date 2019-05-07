@@ -103,11 +103,11 @@ class Command extends \WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *      wp commerce reset-paypal-orders 23
-	 *      wp commerce reset-paypal-orders 23 --reset-deleted-attendees
-	 *      wp commerce reset-paypal-orders 23 --reset-total-sales
-	 *      wp commerce reset-paypal-orders 23 --reset-total-sales=3
-	 *      wp commerce reset-paypal-orders 23 --reset-total-sales=3 --reset-deleted-attendees
+	 *      wp tribe commerce reset-paypal-orders 23
+	 *      wp tribe commerce reset-paypal-orders 23 --reset-deleted-attendees
+	 *      wp tribe commerce reset-paypal-orders 23 --reset-total-sales
+	 *      wp tribe commerce reset-paypal-orders 23 --reset-total-sales=3
+	 *      wp tribe commerce reset-paypal-orders 23 --reset-total-sales=3 --reset-deleted-attendees
 	 *
 	 * @subcommand reset-paypal-orders
 	 *
@@ -141,11 +141,11 @@ class Command extends \WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *      wp commerce update-paypal-order-status 23 --order_status=completed
-	 *      wp commerce update-paypal-order-status 23 --order_status=pending
-	 *      wp commerce update-paypal-order-status 23 --order_status=denied
-	 *      wp commerce update-paypal-order-status 23 --order_status=refunded
-	 *      wp commerce update-paypal-order-status 23 --order_status=completed --dont-send-emails
+	 *      wp tribe commerce update-paypal-order-status 23 --order_status=completed
+	 *      wp tribe commerce update-paypal-order-status 23 --order_status=pending
+	 *      wp tribe commerce update-paypal-order-status 23 --order_status=denied
+	 *      wp tribe commerce update-paypal-order-status 23 --order_status=refunded
+	 *      wp tribe commerce update-paypal-order-status 23 --order_status=completed --dont-send-emails
 	 *
 	 * @subcommand update-paypal-order-status
 	 *
