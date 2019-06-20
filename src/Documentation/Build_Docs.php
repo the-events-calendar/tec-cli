@@ -26,6 +26,10 @@ class Build_Docs extends Abstract_Doc_Command {
 			'tribe-common',
 		];
 
+		if ( isset( $assoc_args['plugin'] ) ) {
+			$plugins = [ $assoc_args['plugin'] ];
+		}
+
 		wp_set_current_user( 1 );
 
 		$temp_dir = sys_get_temp_dir();

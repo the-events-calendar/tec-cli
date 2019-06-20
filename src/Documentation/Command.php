@@ -16,13 +16,13 @@ class Command extends \WP_CLI_Command {
 	 *
 	 * ## OPTIONS
 	 *
-	 * [--user=<user-id>]
-	 * : ID of the user to associate the imported posts with
+	 * [--plugin=<plugin>]
+	 * : Optional plugin to scan/import
 	 *
 	 * ## EXAMPLES
 	 *
 	 *      wp tribe doc build
-	 *      wp tribe doc build --user=1
+	 *      wp tribe doc build --plugin=the-events-calendar
 	 *
 	 * @subcommand build
 	 *

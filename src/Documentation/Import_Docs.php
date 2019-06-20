@@ -57,8 +57,9 @@ class Import_Docs extends Abstract_Doc_Command {
 			WP_CLI::error( sprintf( __( "JSON in %1\$s can't be decoded", 'tribe-cli' ), $file ) );
 		}
 
-		add_action( 'wp_parser_import_item', [ $this, 'wp_parser_import_item' ], 10, 2 );
 		add_filter( 'wp_parser_pre_import_file', [ $this, 'wp_parser_pre_import_file' ], 10 ,2 );
+		add_filter( 'wp_parser_pre_import_item', [ $this, 'wp_parser_pre_import_item' ], 10, 5 );
+		add_action( 'wp_parser_import_item', [ $this, 'wp_parser_import_item' ], 10, 2 );
 
 		// Import data
 		$this->run_import( $phpdoc );
@@ -180,6 +181,29 @@ class Import_Docs extends Abstract_Doc_Command {
 
 			return $plugin_data;
 		}
+	}
+
+	/**
+	 * Decide which import items to process and which ones to ignore.
+	 *
+	 * @param $return
+	 * @param $data
+	 * @param $parent_post_id
+	 * @param $import_internal
+	 * @param $arg_overrides
+	 *
+	 * @return bool
+	 */
+	public function wp_parser_pre_import_item( $return, $data, $parent_post_id, $import_internal, $arg_overrides ) {
+		if ( isset( $data['doc']['tags'] ) ) {
+			foreach ( $data['doc']['tags'] as $tag ) {
+				if ( 'deprecated' === $tag['name'] ) {
+					return false;
+				}
+			}
+		}
+
+		return $return;
 	}
 
 	/**
