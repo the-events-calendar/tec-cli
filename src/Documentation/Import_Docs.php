@@ -195,9 +195,10 @@ class Import_Docs extends Abstract_Doc_Command {
 	 * @return bool
 	 */
 	public function wp_parser_pre_import_item( $return, $data, $parent_post_id, $import_internal, $arg_overrides ) {
+
 		if ( isset( $data['doc']['tags'] ) ) {
 			foreach ( $data['doc']['tags'] as $tag ) {
-				if ( 'deprecated' === $tag['name'] ) {
+				if ( 'deprecated' === trim( $tag['name'] ) ) {
 					return false;
 				}
 			}

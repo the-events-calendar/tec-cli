@@ -69,6 +69,10 @@ class Scan_Docs extends Abstract_Doc_Command {
 				] );
 			}
 
+			if ( false !== strstr( $current->getFilename(), 'deprecated' ) ) {
+				return false;
+			}
+
 			return $current->getExtension() === 'php';
 		} );
 
