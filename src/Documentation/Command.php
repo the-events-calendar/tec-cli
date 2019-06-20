@@ -3,6 +3,7 @@ namespace Tribe\CLI\Documentation;
 
 use WP_CLI;
 
+
 /**
  * Class Command
  *
@@ -11,7 +12,31 @@ use WP_CLI;
 class Command extends \WP_CLI_Command {
 
 	/**
-	 * Builds WP PHPDoc json file
+	 * Scan and import for all plugins
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--user=<user-id>]
+	 * : ID of the user to associate the imported posts with
+	 *
+	 * ## EXAMPLES
+	 *
+	 *      wp tribe doc build
+	 *      wp tribe doc build --user=1
+	 *
+	 * @subcommand build
+	 *
+	 * @param $args
+	 * @param $assoc_args
+	 * @throws WP_CLI\ExitException
+	 */
+	public function build( array $args = null, array $assoc_args = null ) {
+		$build_docs = new Build_Docs();
+		$build_docs->build( $args, $assoc_args );
+	}
+
+	/**
+	 * Scan a plugin and generate WP PHPDoc json file
 	 *
 	 * ## OPTIONS
 	 *
@@ -23,18 +48,18 @@ class Command extends \WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *      wp tribe doc build the-events-calendar
-	 *      wp tribe doc build event-tickets --file=/tmp/whatever.json
+	 *      wp tribe doc scan the-events-calendar
+	 *      wp tribe doc scan event-tickets --file=/tmp/whatever.json
 	 *
-	 * @subcommand build
+	 * @subcommand scan
 	 *
 	 * @param $args
 	 * @param $assoc_args
 	 * @throws WP_CLI\ExitException
 	 */
-	public function build( array $args = null, array $assoc_args = null ) {
-		$build_docs = new Build_Docs();
-		$build_docs->build( $args, $assoc_args );
+	public function scan( array $args = null, array $assoc_args = null ) {
+		$scan_docs = new Scan_Docs();
+		$scan_docs->scan( $args, $assoc_args );
 	}
 
 	/**
