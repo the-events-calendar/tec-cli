@@ -19,6 +19,9 @@ class Scan_Docs extends Abstract_Doc_Command {
 		$plugin      = $this->parse_plugin( $args );
 		$output_file = $this->parse_file( $plugin, $assoc_args );
 		$data        = $this->get_data();
+
+		$data = $this->recursively_update_since( $data, $plugin );
+
 		$json        = json_encode( $data, JSON_PRETTY_PRINT );
 		$result      = file_put_contents( $output_file, $json );
 		WP_CLI::line();
@@ -29,6 +32,52 @@ class Scan_Docs extends Abstract_Doc_Command {
 
 		WP_CLI::success( sprintf( __( 'Data exported to %1$s', 'tribe-cli' ), $output_file ) );
 		WP_CLI::line();
+	}
+
+	private function recursively_update_since( $items, $plugin ) {
+		$go_deeper = [
+			'classes',
+			'methods',
+			'functions',
+			'hooks',
+			'properties',
+		];
+
+		foreach ( $items as &$item ) {
+			if ( isset( $item['doc'] ) && isset( $item['doc']['tags'] ) ) {
+				foreach ( $item['doc']['tags'] as &$tag ) {
+					if ( 'since' === $tag['name'] ) {
+						$tag['content'] = "{$plugin}:{$tag['content']}";
+					}
+
+					if ( 'version' === $tag['name'] ) {
+						$tag['content'] = "{$plugin}:{$tag['content']}";
+					}
+				}
+			}
+
+			if ( isset( $item['file'] ) && isset( $item['file']['tags'] ) ) {
+				foreach ( $item['file']['tags'] as &$tag ) {
+					if ( 'since' === $tag['name'] ) {
+						$tag['content'] = "{$plugin}:{$tag['content']}";
+					}
+
+					if ( 'version' === $tag['name'] ) {
+						$tag['content'] = "{$plugin}:{$tag['content']}";
+					}
+				}
+			}
+
+			foreach ( $go_deeper as $key ) {
+				if ( ! isset( $item[ $key ] ) ) {
+					continue;
+				}
+
+				$item[ $key ] = $this->recursively_update_since( $item[ $key ], $plugin );
+			}
+		}
+
+		return $items;
 	}
 
 	private function get_data() {

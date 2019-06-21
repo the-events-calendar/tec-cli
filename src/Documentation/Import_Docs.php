@@ -122,7 +122,7 @@ class Import_Docs extends Abstract_Doc_Command {
 			return;
 		}
 
-		// connect the item with all the relevent category terms.
+		// connect the item with all the relevant category terms.
 		// This is more or less copied from wp-parser class-importer.php import_item()
 		foreach ( $categories as $category ) {
 			$term = $this->insert_term( $category['content'], 'wp-parser-category' );
