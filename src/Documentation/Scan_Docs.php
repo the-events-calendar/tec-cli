@@ -53,6 +53,10 @@ class Scan_Docs extends Abstract_Doc_Command {
 					if ( 'version' === $tag['name'] ) {
 						$tag['content'] = "{$plugin}:{$tag['content']}";
 					}
+
+					if ( 'deprecated' === $tag['name'] ) {
+						$tag['content'] = "{$plugin}:{$tag['content']}";
+					}
 				}
 			}
 
@@ -63,6 +67,10 @@ class Scan_Docs extends Abstract_Doc_Command {
 					}
 
 					if ( 'version' === $tag['name'] ) {
+						$tag['content'] = "{$plugin}:{$tag['content']}";
+					}
+
+					if ( 'deprecated' === $tag['name'] ) {
 						$tag['content'] = "{$plugin}:{$tag['content']}";
 					}
 				}
