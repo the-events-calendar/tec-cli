@@ -95,7 +95,7 @@ class CLI {
 
 		if ( empty( $assoc_args['status'] ) ) {
 			$assoc_args['status'] = 'random';
-		} elseif ( ! in_array( $assoc_args['status'], $legit_stati ) ) {
+		} elseif ( ! in_array( $assoc_args['status'], $legit_stati, true ) ) {
 			WP_CLI::error( __( 'Status must be a valid Payouts status or be omitted.', 'tribe-cli' ) );
 		}
 
@@ -113,7 +113,7 @@ class CLI {
 			isset( $assoc_args['ticket_id'] )
 			&& (
 				! filter_var( $assoc_args['ticket_id'], FILTER_VALIDATE_INT )
-				|| ! in_array( $assoc_args['ticket_id'], $post_tickets )
+				|| ! in_array( $assoc_args['ticket_id'], $post_tickets, true )
 			)
 		) {
 			WP_CLI::error( __( 'The specified ticket ID does not exist, is not associated to the specified event or is not a valid value.' ) );
@@ -202,7 +202,7 @@ class CLI {
 			WP_CLI::error( __( 'The specified ticket ID does not exist.', 'tribe-cli' ) );
 		}
 
-		if ( isset( $assoc_args['ticket_id'] ) && ! in_array( $assoc_args['ticket_id'], $post_tickets ) ) {
+		if ( isset( $assoc_args['ticket_id'] ) && ! in_array( $assoc_args['ticket_id'], $post_tickets, true ) ) {
 			WP_CLI::error( __( 'The specified ticket ID is not assigned to the specified post.', 'tribe-cli' ) );
 		}
 
