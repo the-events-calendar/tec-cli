@@ -41,6 +41,7 @@ function tribe_cli_init() {
 	$container->register( 'Tribe\\CLI\\Service_Providers\\Tickets' );
 	$container->register( 'Tribe\\CLI\\Service_Providers\\Tribe_Commerce' );
 	$container->register( 'Tribe\\CLI\\Service_Providers\\Tickets_Plus' );
+	$container->register( 'Tribe\\CLI\\Service_Providers\\Payouts' );
 	$container->register( 'Tribe\\CLI\\Service_Providers\\Utils' );
 }
 
