@@ -39,16 +39,14 @@ class CLI {
 		$wc_emails = \WC_Emails::instance();
 
 		foreach ( $wc_emails->get_emails() as $email_id => $email ) {
+			$key   = 'woocommerce_' . $email->id . '_settings';
+			$value = get_option( $key );
 
-		$key = 'woocommerce_' . $email->id . '_settings';
-		$value = get_option( $key );
+			if ( isset( $value['enabled'] ) ) {
+				$value['enabled'] = 'no';
 
-		if ( isset( $value['enabled'] ) ) {
-			$value['enabled'] = 'no';
-		}
-
-		update_option( $key, $value );
-
+				update_option( $key, $value );
+			}
 		}
 	}
 
