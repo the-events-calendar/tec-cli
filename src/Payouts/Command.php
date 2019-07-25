@@ -64,21 +64,21 @@ class Command extends \WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *      wp tribe payouts generate-payouts 23
-	 *      wp tribe payouts generate-payouts 23,89
-	 *      wp tribe payouts generate-payouts 23,89,31
-	 *      wp tribe payouts generate-payouts 23 ---count=5
-	 *      wp tribe payouts generate-payouts 23,31 ---count=5
-	 *      wp tribe payouts generate-payouts 23 --ticket_id=89
-	 *      wp tribe payouts generate-payouts 23  --count=5 --ticket_id=89
-	 *      wp tribe payouts generate-payouts 23 --count=5 --ticket_id=89 --status=pending
+	 *      wp tribe payouts generate 23
+	 *      wp tribe payouts generate 23,89
+	 *      wp tribe payouts generate 23,89,31
+	 *      wp tribe payouts generate 23 ---count=5
+	 *      wp tribe payouts generate 23,31 ---count=5
+	 *      wp tribe payouts generate 23 --ticket_id=89
+	 *      wp tribe payouts generate 23  --count=5 --ticket_id=89
+	 *      wp tribe payouts generate 23 --count=5 --ticket_id=89 --status=pending
 	 *
-	 * @subcommand generate-payouts
+	 * @subcommand generate
 	 *
 	 * @since TBD
 	 *
 	 */
-	public function generate_payouts( array $args = null, array $assoc_args = null ) {
+	public function generate( array $args = null, array $assoc_args = null ) {
 		$this->payout_generator->generate_payouts( $args, $assoc_args );
 	}
 
@@ -92,14 +92,14 @@ class Command extends \WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *      wp tribe payouts reset-payouts 23
+	 *      wp tribe payouts reset 23
 	 *
-	 * @subcommand reset-payouts
+	 * @subcommand reset
 	 *
 	 * @since TBD
 	 *
 	 */
-	public function reset_payouts( array $args = null, array $assoc_args = null ) {
+	public function reset( array $args = null, array $assoc_args = null ) {
 		$this->payout_generator->reset_payouts( $args, $assoc_args );
 	}
 }

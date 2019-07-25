@@ -113,13 +113,18 @@ class CLI {
 			isset( $assoc_args['ticket_id'] )
 			&& (
 				! filter_var( $assoc_args['ticket_id'], FILTER_VALIDATE_INT )
-				|| ! in_array( $assoc_args['ticket_id'], $post_tickets, true )
+				|| ! in_array( (int) $assoc_args['ticket_id'], $post_tickets, true )
 			)
 		) {
+			error_log(print_r([
+				gettype( $assoc_args['ticket_id'] ),
+				$post_tickets
+			]
+			, true));
 			WP_CLI::error( __( 'The specified ticket ID does not exist, is not associated to the specified event or is not a valid value.' ) );
 		}
 
-		$create_users = isset( $assoc_args['no_create_users'] ) ? falswe  : true;
+		$create_users = isset( $assoc_args['no_create_users'] ) ? false  : true;
 
 		$post_tickets = isset( $assoc_args['ticket_id'] )
 			? [ (int) $assoc_args['ticket_id'] ]
@@ -171,7 +176,7 @@ class CLI {
 		add_filter( 'tribe_community_tickets_add_fee_to_all_tickets', '__return_false' );
 
 		// Payouts are generated automatically when the orders are
-		WP_CLI::success( sprintf( __( 'Generated %1$d Orders with Payouts for post %2$d', 'tribe-cli' ), $counts_sum, $post_id ) );
+		WP_CLI::success( sprintf( __( 'Generated %1$d Orders for post %2$d if Payouts are enabled, they will be generated as well.', 'tribe-cli' ), $counts_sum, $post_id ) );
 	}
 
 	/**
