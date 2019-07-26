@@ -5,7 +5,7 @@ namespace Tribe\CLI\Payouts;
 /**
  * Class Command
  *
- * @since TBD
+ * @since 0.2.8
  */
 class Command extends \WP_CLI_Command {
 
@@ -17,7 +17,7 @@ class Command extends \WP_CLI_Command {
 	/**
 	 * Command constructor.
 	 *
-	 * @since TBD
+	 * @since 0.2.8
 	 *
 	 * @param Generator $payout_generator
 	 */
@@ -86,7 +86,7 @@ class Command extends \WP_CLI_Command {
 	 *
 	 * @subcommand generate
 	 *
-	 * @since TBD
+	 * @since 0.2.8
 	 *
 	 */
 	public function generate( array $args = null, array $assoc_args = null ) {
@@ -107,7 +107,7 @@ class Command extends \WP_CLI_Command {
 	 *
 	 * @subcommand reset
 	 *
-	 * @since TBD
+	 * @since 0.2.8
 	 *
 	 */
 	public function reset( array $args = null, array $assoc_args = null ) {

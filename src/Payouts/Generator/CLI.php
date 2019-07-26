@@ -11,7 +11,7 @@ use WP_CLI;
 /**
  * Class CLI
  *
- * @since TBD
+ * @since 0.2.8
  */
 class CLI {
 
@@ -25,7 +25,7 @@ class CLI {
 	/**
 	 * CLI constructor.
 	 *
-	 * @since TBD
+	 * @since 0.2.8
 	 */
 	public function __construct() {
 
@@ -46,7 +46,7 @@ class CLI {
 	/**
 	 * Generate WC orders with payouts
 	 *
-	 * @since TBD
+	 * @since 0.2.8
 	 *
 	 * @param array $generator_args
 	 * @param array $assoc_args
@@ -172,7 +172,7 @@ class CLI {
 	/**
 	 * Remove payouts, orders, generated users, and attendees/tickets for a specified event
 	 *
-	 * @since TBD
+	 * @since 0.2.8
 	 *
 	 * @param array $args An array of arguments, most importantly the post ID.
 	 * @param array $assoc_args
@@ -306,7 +306,7 @@ class CLI {
 	/**
 	 * Deletes payouts associated with an order
 	 *
-	 * @since TBD
+	 * @since 0.2.8
 	 *
 	 * @param int $order_id
 	 */
@@ -330,7 +330,7 @@ class CLI {
 	/**
 	 * Generates a number of orders for the specified WooCommerce product IDs.
 	 *
-	 * @since TBD
+	 * @since 0.2.8
 	 */
 	public function generate_orders( $count, array $product_ids, array $args ) {
 		/** @var WooCommerce $woocommerce */
@@ -461,7 +461,7 @@ class CLI {
 	/**
 	 * Inserts a random customer user in the database.
 	 *
-	 * @since TBD
+	 * @since 0.2.8
 	 *
 	 * @return int|\WP_Error
 	 */
@@ -528,7 +528,7 @@ class CLI {
 	/**
 	 * Returns the ID of a random subscriber user from the database.
 	 *
-	 * @since TBD
+	 * @since 0.2.8
 	 *
 	 * @return int
 	 */
