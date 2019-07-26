@@ -43,7 +43,7 @@ class Command extends \WP_CLI_Command {
 	 * : PayPal orders will be attached to this ticket(s); either a ticket post ID or a CSV list of ticket post IDs
 	 *
 	 * [--count=<count>]
-	 * : the number of Payouts to generate
+	 * : the number of Orders, and thus Payouts to generate
 	 * ---
 	 * default: 10
 	 * ---
@@ -51,11 +51,22 @@ class Command extends \WP_CLI_Command {
 	 * [--status=<status>]
 	 * : the status of the Payouts  - order status will be matched to this
 	 * ---
-	 * default: pending
 	 * options:
-	 *      - pending
-	 *      - paid
 	 *      - failed
+	 *      - paid
+	 *      - pending
+	 * ---
+	 *
+	 * [--tickets_min=<tickets_min>]
+	 * : the minimum number of tickets per order
+	 * ---
+	 * default: 1
+	 * ---
+	 *
+	 * [--tickets_max=<tickets_max>]
+	 * : the maximum number of tickets per order
+	 * ---
+	 * default: 3
 	 * ---
 	 *
 	 * [--ticket_id=<ticket_id>]
