@@ -139,7 +139,7 @@ class CLI {
 		$counts_sum = array_sum( $counts );
 
 		$progress_bar = WP_CLI\Utils\make_progress_bar(
-			sprintf( __( 'Generating %1$d orders for post %2$d', 'tribe-cli' ), $counts_sum, $post_id ), $counts_sum
+			sprintf( __( 'Generating %1$d orders for post %2$d', 'tribe-cli' ), $count, $post_id ), $counts
 		);
 
 		$generator_args = [
@@ -148,8 +148,8 @@ class CLI {
 		];
 
 		add_filter( 'tribe_community_tickets_add_fee_to_all_tickets', '__return_true', 23 );
-		add_filter( 'tribe_ticket_generation_delay', function( $delay, $order_id) { return 'now'; }, 20, 2 );
-		$order_count = [];
+		add_filter( 'tribe_ticket_generation_delay', function( $delay, $order_id ) { return 'now'; }, 20, 2 );
+		$order_count = 0;
 		foreach ( $counts as $n => $tickets_count ) {
 			$this_args = $generator_args;
 
@@ -166,7 +166,7 @@ class CLI {
 		remove_filter( 'tribe_community_tickets_add_fee_to_all_tickets', '__return_true', 23 );
 
 		// Payouts are generated automatically when the orders are
-		WP_CLI::success( sprintf( __( 'Generated %1$d Orders for post %2$d if Payouts are enabled, they will be generated as well.', 'tribe-cli' ), $counts_sum, $post_id ) );
+		WP_CLI::success( sprintf( __( 'Generated %1$d Tickets %2$d in Orders for post %3$d if Payouts are enabled, they will be generated as well.', 'tribe-cli' ), $count_sum, $order_count, $post_id ) );
 	}
 
 	/**
