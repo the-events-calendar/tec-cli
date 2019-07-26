@@ -43,7 +43,7 @@ class Command extends \WP_CLI_Command {
 	 * : PayPal orders will be attached to this ticket(s); either a ticket post ID or a CSV list of ticket post IDs
 	 *
 	 * [--count=<count>]
-	 * : the number of Payouts to generate
+	 * : the number of Orders, and thus Payouts to generate
 	 * ---
 	 * default: 10
 	 * ---
@@ -51,11 +51,22 @@ class Command extends \WP_CLI_Command {
 	 * [--status=<status>]
 	 * : the status of the Payouts  - order status will be matched to this
 	 * ---
-	 * default: pending
 	 * options:
-	 *      - pending
-	 *      - paid
 	 *      - failed
+	 *      - paid
+	 *      - pending
+	 * ---
+	 *
+	 * [--tickets_min=<tickets_min>]
+	 * : the minimum number of tickets per order
+	 * ---
+	 * default: 1
+	 * ---
+	 *
+	 * [--tickets_max=<tickets_max>]
+	 * : the maximum number of tickets per order
+	 * ---
+	 * default: 3
 	 * ---
 	 *
 	 * [--ticket_id=<ticket_id>]
@@ -64,21 +75,21 @@ class Command extends \WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *      wp tribe payouts generate-payouts 23
-	 *      wp tribe payouts generate-payouts 23,89
-	 *      wp tribe payouts generate-payouts 23,89,31
-	 *      wp tribe payouts generate-payouts 23 ---count=5
-	 *      wp tribe payouts generate-payouts 23,31 ---count=5
-	 *      wp tribe payouts generate-payouts 23 --ticket_id=89
-	 *      wp tribe payouts generate-payouts 23  --count=5 --ticket_id=89
-	 *      wp tribe payouts generate-payouts 23 --count=5 --ticket_id=89 --status=pending
+	 *      wp tribe payouts generate 23
+	 *      wp tribe payouts generate 23,89
+	 *      wp tribe payouts generate 23,89,31
+	 *      wp tribe payouts generate 23 ---count=5
+	 *      wp tribe payouts generate 23,31 ---count=5
+	 *      wp tribe payouts generate 23 --ticket_id=89
+	 *      wp tribe payouts generate 23  --count=5 --ticket_id=89
+	 *      wp tribe payouts generate 23 --count=5 --ticket_id=89 --status=pending
 	 *
-	 * @subcommand generate-payouts
+	 * @subcommand generate
 	 *
 	 * @since TBD
 	 *
 	 */
-	public function generate_payouts( array $args = null, array $assoc_args = null ) {
+	public function generate( array $args = null, array $assoc_args = null ) {
 		$this->payout_generator->generate_payouts( $args, $assoc_args );
 	}
 
@@ -92,14 +103,14 @@ class Command extends \WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *      wp tribe payouts reset-payouts 23
+	 *      wp tribe payouts reset 23
 	 *
-	 * @subcommand reset-payouts
+	 * @subcommand reset
 	 *
 	 * @since TBD
 	 *
 	 */
-	public function reset_payouts( array $args = null, array $assoc_args = null ) {
+	public function reset( array $args = null, array $assoc_args = null ) {
 		$this->payout_generator->reset_payouts( $args, $assoc_args );
 	}
 }

@@ -1,10 +1,11 @@
 <?php
 namespace Tribe\CLI\Payouts\Generator;
 
-use Tribe\CLI\Meta_Keys;
-use Tribe\CLI\WooCommerce\Orders_Generator;
 use Tribe__Events__Community__Tickets__Main;
 use Tribe__Tickets_Plus__Commerce__WooCommerce__Main;
+use Tribe\CLI\Meta_Keys;
+use Faker;
+use WC;
 use WP_CLI;
 
 /**
@@ -13,11 +14,6 @@ use WP_CLI;
  * @since TBD
  */
 class CLI {
-
-	/**
-	 * @var Orders_Generator
-	 */
-	protected $orders_generator;
 
 	/**
 	 * Array of generated users
@@ -30,14 +26,11 @@ class CLI {
 	 * CLI constructor.
 	 *
 	 * @since TBD
-	 *
-	 * @param Orders_Generator $orders_generator
 	 */
-	public function __construct( Orders_Generator $orders_generator ) {
-		$this->orders_generator = $orders_generator;
+	public function __construct() {
 
 		$wc_emails = \WC_Emails::instance();
-
+		// disable all emails
 		foreach ( $wc_emails->get_emails() as $email_id => $email ) {
 			$key   = 'woocommerce_' . $email->id . '_settings';
 			$value = get_option( $key );
@@ -93,17 +86,23 @@ class CLI {
 
 		$legit_stati = [ 'paid', 'pending', 'failed' ];
 
-		if ( empty( $assoc_args['status'] ) ) {
-			$assoc_args['status'] = 'random';
-		} elseif ( ! in_array( $assoc_args['status'], $legit_stati, true ) ) {
+		if ( ! empty( $assoc_args['status'] ) && ! in_array( $assoc_args['status'], $legit_stati, true ) ) {
 			WP_CLI::error( __( 'Status must be a valid Payouts status or be omitted.', 'tribe-cli' ) );
 		}
 
-		$order_stati = [
-			'paid' => 'completed',
+		$order_stati_map = [
+			'paid'    => 'completed',
 			'pending' => 'processing',
-			'failed' => 'failed',
+			'failed'  => 'failed',
 		];
+
+		if ( empty( $assoc_args['status'] ) ) {
+			$rand = array_rand( $legit_stati );
+			$rand_status = $legit_stati[ $rand ];
+			$status = $order_stati_map[ $rand_status ];
+		} else  {
+			$status = $order_stati_map[ $assoc_args['status'] ];
+		}
 
 		// Generate orders
 		$tickets      = Tribe__Tickets_Plus__Commerce__WooCommerce__Main::get_instance();
@@ -113,13 +112,13 @@ class CLI {
 			isset( $assoc_args['ticket_id'] )
 			&& (
 				! filter_var( $assoc_args['ticket_id'], FILTER_VALIDATE_INT )
-				|| ! in_array( $assoc_args['ticket_id'], $post_tickets, true )
+				|| ! in_array( (int) $assoc_args['ticket_id'], $post_tickets, true )
 			)
 		) {
 			WP_CLI::error( __( 'The specified ticket ID does not exist, is not associated to the specified event or is not a valid value.' ) );
 		}
 
-		$create_users = isset( $assoc_args['no_create_users'] ) ? falswe  : true;
+		$create_users = isset( $assoc_args['no_create_users'] ) ? false  : true;
 
 		$post_tickets = isset( $assoc_args['ticket_id'] )
 			? [ (int) $assoc_args['ticket_id'] ]
@@ -131,10 +130,6 @@ class CLI {
 
 		$tickets_min   = (int) $assoc_args['tickets_min'];
 		$tickets_max   = (int) $assoc_args['tickets_max'];
-		$assoc_args['ticket_status'] = empty( $assoc_args['ticket_status'] ) ? 'random' : $assoc_args['ticket_status'];
-		$ticket_status = 'random' === $assoc_args['ticket_status']
-			? $legit_stati[ array_rand( $legit_stati ) ]
-			: $assoc_args['ticket_status'];
 
 		$counts = [];
 		for ( $i = 0; $i < $count; $i ++ ) {
@@ -144,7 +139,7 @@ class CLI {
 		$counts_sum = array_sum( $counts );
 
 		$progress_bar = WP_CLI\Utils\make_progress_bar(
-			sprintf( __( 'Generating %1$d ticket orders for post %2$d', 'tribe-cli' ), $counts_sum, $post_id ), $counts_sum
+			sprintf( __( 'Generating %1$d orders for post %2$d', 'tribe-cli' ), $count, $post_id ), $counts
 		);
 
 		$generator_args = [
@@ -152,26 +147,26 @@ class CLI {
 			'payment_method' => 'PayPal',
 		];
 
-		add_filter( 'tribe_community_tickets_add_fee_to_all_tickets', '__return_true' );
-		add_filter( 'tribe_ticket_generation_delay', function( $delay, $order_id) { return 'now'; }, 20, 2 );
+		add_filter( 'tribe_community_tickets_add_fee_to_all_tickets', '__return_true', 23 );
+		add_filter( 'tribe_ticket_generation_delay', function( $delay, $order_id ) { return 'now'; }, 20, 2 );
+		$order_count = 0;
 		foreach ( $counts as $n => $tickets_count ) {
 			$this_args = $generator_args;
 
-			$this_args['ticket_status'] = $ticket_status;
-			$this_args['tickets_min']   = $tickets_count;
-			$this_args['tickets_max']   = $tickets_count;
+			$this_args['status']      = $status;
+			$this_args['tickets_min'] = $tickets_count;
+			$this_args['tickets_max'] = $tickets_count;
 
 			$ticket_id     = $post_tickets[ array_rand( $post_tickets ) ];
-			$ticket_status = ! empty( $ticket_status ) ? $ticket_status : $legit_stati[ array_rand( $legit_stati ) ];
 
-			$order_ids = $this->orders_generator->generate_orders( 1, [ $ticket_id ], $this_args );
-
-			$progress_bar->tick( $tickets_count );
+			$orders = $this->generate_orders( 1, [ $ticket_id ], $this_args );
+			$order_count += count($orders);
+			$progress_bar->tick( $order_count );
 		}
-		add_filter( 'tribe_community_tickets_add_fee_to_all_tickets', '__return_false' );
+		remove_filter( 'tribe_community_tickets_add_fee_to_all_tickets', '__return_true', 23 );
 
 		// Payouts are generated automatically when the orders are
-		WP_CLI::success( sprintf( __( 'Generated %1$d Orders with Payouts for post %2$d', 'tribe-cli' ), $counts_sum, $post_id ) );
+		WP_CLI::success( sprintf( __( 'Generated %1$d Tickets %2$d in Orders for post %3$d if Payouts are enabled, they will be generated as well.', 'tribe-cli' ), $count_sum, $order_count, $post_id ) );
 	}
 
 	/**
@@ -368,6 +363,7 @@ class CLI {
 		$woocommerce->cart->empty_cart();
 
 		for ( $x = 0; $x < $count; $x ++ ) {
+			$status             = $args['status'];
 			$order_min_quantity = $args['tickets_min'];
 			$order_max_quantity = $args['tickets_max'];
 			$num_products       = mt_rand( $order_min_quantity, $order_max_quantity );
@@ -387,7 +383,7 @@ class CLI {
 			}
 
 			$available_gateways = $woocommerce->payment_gateways()->get_available_payment_gateways();
-			$payment_method     = emnpty($args['gateway'] ) ? array_rand( $available_gateways ) : $args['gateway'];
+			$payment_method     = empty($args['gateway'] ) ? array_rand( $available_gateways ) : $args['gateway'];
 
 			// process checkout
 			$data     = [
@@ -436,14 +432,9 @@ class CLI {
 				foreach ( $data as $key => $value ) {
 					update_post_meta( $order_id, '_' . $key, $value );
 				}
-
-				do_action( 'woocommerce_checkout_order_processed', $order_id, $data );
-				// This triggers both attendee and payout generation!
-				do_action( 'woocommerce_order_status_changed', $order_id );
-
 				$order = new \WC_Order( $order_id );
 
-				$status = $args['status'];
+				do_action( 'woocommerce_checkout_order_processed', $order_id, $data );
 
 				// avoid sending emails
 				update_post_meta( $order_id, '_tribe_mail_sent', true );
@@ -454,6 +445,8 @@ class CLI {
 					$order->payment_complete();
 					$order->update_status( $status );
 				}
+				// This triggers both attendee and payout generation!
+				//do_action( 'woocommerce_order_status_changed', $order_id, 'processing', $status, $order );
 
 				$order_ids[] = $order_id;
 			}

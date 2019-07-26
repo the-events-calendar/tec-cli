@@ -31,7 +31,7 @@ class Command extends \WP_CLI_Command {
 	 * ## OPTIONS
 	 *
 	 * <post_id>
-	 * : orders ill be attached to this post
+	 * : orders will be attached to this post
 	 *
 	 * [--count=<count>]
 	 * : the number of orders to generate
