@@ -354,7 +354,7 @@ class CLI {
 		}
 
 		if ( empty( $status ) ) {
-			WP_CLI::error( sprintf( __( 'A status to update to is required.', 'tribe-cli' ) ) );
+			WP_CLI::error( __( 'A status to update to is required.', 'tribe-cli' ) );
 		}
 
 		$stati_map = [
@@ -370,15 +370,12 @@ class CLI {
 		$found = $repository->found();
 
 		if ( 0 >= $found ) {
-			error_log('none found');
-			return;
+			WP_CLI::error( __( 'No payouts were found to be updated.', 'tribe-cli' ) );
 		}
 
 		$ids = $repository->get_ids();
 
-		foreach( $ids as $id ) {
-			$repository->set( 'post_status', $stati_map[ $status ] );
-		}
+		$repository->set( 'post_status', $stati_map[ $status ] );
 
 		$repository->save();
 	}
