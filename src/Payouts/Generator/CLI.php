@@ -517,12 +517,13 @@ class CLI {
 				// avoid sending emails
 				update_post_meta( $order_id, '_tribe_mail_sent', true );
 
-				if ( $status == 'completed' ) {
+				if ( 'completed' === $status ) {
 					$order->payment_complete();
 					$order->update_status( $status );
 				} else {
 					$order->update_status( $status );
 				}
+
 				// This triggers both attendee and payout generation!
 				do_action( 'woocommerce_order_status_changed', $order_id, 'processing', $status, $order );
 
