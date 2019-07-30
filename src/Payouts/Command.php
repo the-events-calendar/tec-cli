@@ -118,6 +118,27 @@ class Command extends \WP_CLI_Command {
 	}
 
 	/**
+	 * Delete a payout based on an order ID
+	 *
+	 * ## OPTIONS
+	 *
+	 * <post_id>
+	 * : All payouts associated with this order ID will be removed
+	 *
+	 * ## EXAMPLES
+	 *
+	 *      wp tribe payouts delete 23
+	 *
+	 * @subcommand delete
+	 *
+	 * @since TBD
+	 *
+	 */
+	public function delete( array $args = null, array $assoc_args = null ) {
+		$this->payout_generator->delete_payout( $args, $assoc_args );
+	}
+
+	/**
 	 * Update a payout based on an order ID
 	 *
 	 * ## OPTIONS
@@ -130,7 +151,7 @@ class Command extends \WP_CLI_Command {
 	 * ---
 	 * options:
 	 *      - pending
-	 *      - pending_order
+	 *      - pending-order
 	 *      - paid
 	 *      - failed
 	 * ---

@@ -4,7 +4,7 @@ namespace Tribe\CLI\Payouts\Generator;
 //use Tribe__Events__Community__Tickets__Main;
 use Tribe__Tickets_Plus__Commerce__WooCommerce__Main;
 use Tribe\CLI\Meta_Keys;
-use Tribe\Payouts;
+use Tribe\Community\Tickets\Payouts;
 use Faker;
 //use WC;
 use WP_CLI;
@@ -49,8 +49,8 @@ class CLI {
 	 *
 	 * @since 0.2.8
 	 *
-	 * @param array $generator_args
-	 * @param array $assoc_args
+	 * @param array $generator_args An array of arguments, most importantly the post ID.
+	 * @param array $assoc_args (currently unused) additional passed arguments
 	 * @return void
 	 */
 	public function generate_payouts( array $generator_args = null, array $assoc_args = null ) {
@@ -185,7 +185,7 @@ class CLI {
 	 * @since 0.2.8
 	 *
 	 * @param array $args An array of arguments, most importantly the post ID.
-	 * @param array $assoc_args
+	 * @param array $assoc_args (currently unused) additional passed arguments
 	 */
 	public function reset_payouts( array $args = null, array $assoc_args = null ) {
 		$post_id = $args[0];
@@ -316,6 +316,71 @@ class CLI {
 			$progress_bar->finish();
 		}
 
+	}
+
+	/**
+	 * Remove payouts, for a specified order
+	 *
+	 * @since TBD
+	 *
+	 * @param array $args An array of arguments, most importantly the order (post) ID.
+	 * @param array $assoc_args (currently unused) additional passed arguments
+	 */
+	public function delete_payouts( array $args = null, array $assoc_args = null ) {
+		$order_id    = $args[0];
+
+		if ( empty( $order_id ) ) {
+			WP_CLI::error( sprintf( __( 'Order with ID %d does not exist.', 'tribe-cli' ), $order_id ) );
+		}
+
+		$this->delete_payout( $order_id );
+	}
+
+	/**
+	 * Update payouts, for a specified order.
+	 * Currently only updates status.
+	 *
+	 * @since TBD
+	 *
+	 * @param array $args An array of arguments, most importantly the order (post) ID.
+	 * @param array $assoc_args additional passed arguments
+	 */
+	public function update_payouts( array $args = null, array $assoc_args = null ) {
+		$order_id    = $args[0];
+		$status = $assoc_args['status'];
+
+		if ( empty( $order_id ) ) {
+			WP_CLI::error( sprintf( __( 'Order with ID %d does not exist.', 'tribe-cli' ), $order_id ) );
+		}
+
+		if ( empty( $status ) ) {
+			WP_CLI::error( sprintf( __( 'A status to update to is required.', 'tribe-cli' ) ) );
+		}
+
+		$stati_map = [
+			'pending' => Payouts::STATUS_PENDING,
+	 		'pending-order' => Payouts::STATUS_PENDING_ORDER,
+	 		'paid' => Payouts::STATUS_PAID,
+	 		'failed' => Payouts::STATUS_FAILED,
+		];
+
+		$repository = tribe_payouts();
+		$repository->by( 'order', $order_id );
+		$repository->set_found_rows( true );
+		$found = $repository->found();
+
+		if ( 0 >= $found ) {
+			error_log('none found');
+			return;
+		}
+
+		$ids = $repository->get_ids();
+
+		foreach( $ids as $id ) {
+			$repository->set( 'post_status', $stati_map[ $status ] );
+		}
+
+		$repository->save();
 	}
 
 	/**

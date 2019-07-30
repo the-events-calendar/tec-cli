@@ -28,16 +28,22 @@ WP-CLI tools for Modern Tribe plugins.
     - [Payouts generator](#payouts-generator)
       - [Arguments](#arguments-5)
       - [Example](#example-6)
-  - [Reset Payouts](#reset-payouts)
+  - [Delete Payouts](#delete-payouts)
       - [Arguments](#arguments-6)
       - [Example](#example-7)
-  - [Docs](#docs)
-    - [Build Docs](#build-docs)
+  - [Update Payouts](#update-payouts)
       - [Arguments](#arguments-7)
       - [Example](#example-8)
-    - [Import Docs](#import-docs)
+  - [Reset Payouts](#reset-payouts)
       - [Arguments](#arguments-8)
       - [Example](#example-9)
+  - [Docs](#docs)
+    - [Build Docs](#build-docs)
+      - [Arguments](#arguments-9)
+      - [Example](#example-10)
+    - [Import Docs](#import-docs)
+      - [Arguments](#arguments-10)
+      - [Example](#example-11)
 
 ## Events
 
@@ -156,22 +162,53 @@ This command will generate orders for a post with tickets. Payouts will be gener
 #### Arguments
 
 * `post_id` - integer - orders and payouts will be assigned to tickets on this post.
-* `count` - integer - the number of orders to generate.
+* `count` - integer - the number of orders to generate. Defaults to 10.
 * `tickets_min` - integer - the minimum number of tickets to assign for each order.
 * `tickets_max` - integer - the maximum number of tickets to assign for each order.
 * `ticket_id` - integer - only generate orders for a specific ticket assigned to the post.
-* * `status` - string - the order status of the orders; Must be a valid WC order status (chosen randomly if left out).
+* `status` - string - the order status of the orders; Must be a valid WC order status (chosen randomly if left out).
 
 #### Example
 
 ```bash
 $ wp tribe payouts generate 23
-$ wp tribe payouts generate 23 --count=89
+$ wp tribe payouts generate 23 --count=9
 $ wp tribe payouts generate 23 --tickets_min=3
 $ wp tribe payouts generate 23 --tickets_min=3 --tickets_max=10
-$ wp tribe payouts generate 23 --tickets_min=3 --tickets_max=10
+$ wp tribe payouts generate 23 --status=processing
+$ wp tribe payouts generate 23 --count=8 --status=processing
 $ wp tribe payouts generate 23 --ticket_id=89
 ```
+
+## Delete Payouts
+
+Removes all Payouts from a WooCommerce order. Does NOT delete the order, use `reset()` (below) for that!.
+
+#### Arguments
+
+* `post_id` - integer - payouts will be removed from this order.
+
+#### Example
+
+```bash
+$ wp tribe payouts delete 23
+```
+
+## Update Payouts
+
+Updates all Payouts associated wth a WooCommerce order .
+
+#### Arguments
+
+* `post_id` - integer - orders will be removed from this ticketed post.
+* `status` - string - the desired order status of the payouts; Must be a valid Payout status.
+
+#### Example
+
+```bash
+$ wp tribe payouts update 23 --status=paid
+```
+
 
 ## Reset Payouts
 
