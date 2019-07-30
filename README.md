@@ -196,7 +196,8 @@ $ wp tribe payouts delete 23
 
 ## Update Payouts
 
-Updates all Payouts associated wth a WooCommerce order .
+Updates all Payouts associated wth a WooCommerce order.
+Currently only handles status changes!
 
 #### Arguments
 
