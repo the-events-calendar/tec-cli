@@ -49,12 +49,15 @@ class Command extends \WP_CLI_Command {
 	 * ---
 	 *
 	 * [--status=<status>]
-	 * : the status of the Payouts  - order status will be matched to this
+	 * : the status of the order  - Payout status will be matched to this
 	 * ---
 	 * options:
-	 *      - failed
-	 *      - paid
 	 *      - pending
+	 *      - processing
+	 *      - completed
+	 *      - cancelled
+	 *      - refunded
+	 *      - failed
 	 * ---
 	 *
 	 * [--tickets_min=<tickets_min>]
@@ -112,5 +115,57 @@ class Command extends \WP_CLI_Command {
 	 */
 	public function reset( array $args = null, array $assoc_args = null ) {
 		$this->payout_generator->reset_payouts( $args, $assoc_args );
+	}
+
+	/**
+	 * Delete a payout based on an order ID
+	 *
+	 * ## OPTIONS
+	 *
+	 * <post_id>
+	 * : All payouts associated with this order ID will be removed
+	 *
+	 * ## EXAMPLES
+	 *
+	 *      wp tribe payouts delete 23
+	 *
+	 * @subcommand delete
+	 *
+	 * @since TBD
+	 *
+	 */
+	public function delete( array $args = null, array $assoc_args = null ) {
+		$this->payout_generator->delete_payout( $args, $assoc_args );
+	}
+
+	/**
+	 * Update a payout based on an order ID
+	 *
+	 * ## OPTIONS
+	 *
+	 * <post_id>
+	 * : PayPal orders will be removed from this post or for this ticket ID
+	 *
+	 * [--status=<status>]
+	 * : the status of the order  - Payout status will be matched to this
+	 * ---
+	 * options:
+	 *      - pending
+	 *      - pending-order
+	 *      - paid
+	 *      - failed
+	 * ---
+	 *
+	 * ## EXAMPLES
+	 *
+	 *      wp tribe payouts update 23 --status=failed
+	 *
+	 * @subcommand update
+	 *
+	 * @since TBD
+	 *
+	 */
+	public function update( array $args = null, array $assoc_args = null ) {
+		$this->payout_generator->update_payouts( $args, $assoc_args );
 	}
 }

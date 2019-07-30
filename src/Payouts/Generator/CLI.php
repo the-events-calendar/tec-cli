@@ -1,11 +1,12 @@
 <?php
 namespace Tribe\CLI\Payouts\Generator;
 
-use Tribe__Events__Community__Tickets__Main;
+//use Tribe__Events__Community__Tickets__Main;
 use Tribe__Tickets_Plus__Commerce__WooCommerce__Main;
 use Tribe\CLI\Meta_Keys;
+use Tribe\Community\Tickets\Payouts;
 use Faker;
-use WC;
+//use WC;
 use WP_CLI;
 
 /**
@@ -48,8 +49,8 @@ class CLI {
 	 *
 	 * @since 0.2.8
 	 *
-	 * @param array $generator_args
-	 * @param array $assoc_args
+	 * @param array $generator_args An array of arguments, most importantly the post ID.
+	 * @param array $assoc_args (currently unused) additional passed arguments
 	 * @return void
 	 */
 	public function generate_payouts( array $generator_args = null, array $assoc_args = null ) {
@@ -84,24 +85,24 @@ class CLI {
 			$assoc_args['tickets_max'] = $assoc_args['tickets_min'];
 		}
 
-		$legit_stati = [ 'paid', 'pending', 'failed' ];
+		$legit_stati = [
+			'pending',
+			'processing',
+			'completed',
+			'cancelled',
+			'refunded',
+			'failed',
+		];
 
 		if ( ! empty( $assoc_args['status'] ) && ! in_array( $assoc_args['status'], $legit_stati, true ) ) {
-			WP_CLI::error( __( 'Status must be a valid Payouts status or be omitted.', 'tribe-cli' ) );
+			WP_CLI::error( __( 'Status must be a valid WC Order status or be omitted.', 'tribe-cli' ) );
 		}
-
-		$order_stati_map = [
-			'paid'    => 'completed',
-			'pending' => 'processing',
-			'failed'  => 'failed',
-		];
 
 		if ( empty( $assoc_args['status'] ) ) {
 			$rand = array_rand( $legit_stati );
-			$rand_status = $legit_stati[ $rand ];
-			$status = $order_stati_map[ $rand_status ];
+			$status = $legit_stati[ $rand ];
 		} else  {
-			$status = $order_stati_map[ $assoc_args['status'] ];
+			$status = $assoc_args['status'];
 		}
 
 		// Generate orders
@@ -150,6 +151,7 @@ class CLI {
 		add_filter( 'tribe_community_tickets_add_fee_to_all_tickets', '__return_true', 23 );
 		add_filter( 'tribe_ticket_generation_delay', function( $delay, $order_id ) { return 'now'; }, 20, 2 );
 		$order_count = 0;
+		$ticket_count = 0;
 		foreach ( $counts as $n => $tickets_count ) {
 			$this_args = $generator_args;
 
@@ -160,13 +162,21 @@ class CLI {
 			$ticket_id     = $post_tickets[ array_rand( $post_tickets ) ];
 
 			$orders = $this->generate_orders( 1, [ $ticket_id ], $this_args );
-			$order_count += count($orders);
+			$order_count++;
+			$ticket_count += $tickets_count;
 			$progress_bar->tick( $order_count );
 		}
 		remove_filter( 'tribe_community_tickets_add_fee_to_all_tickets', '__return_true', 23 );
 
 		// Payouts are generated automatically when the orders are
-		WP_CLI::success( sprintf( __( 'Generated %1$d Tickets %2$d in Orders for post %3$d if Payouts are enabled, they will be generated as well.', 'tribe-cli' ), $count_sum, $order_count, $post_id ) );
+		WP_CLI::success(
+			sprintf(
+				__( 'Generated %1$d Tickets %2$d in Orders for post %3$d if Payouts are enabled, they will be generated as well.', 'tribe-cli' ),
+				$ticket_count,
+				$order_count,
+				$post_id
+				)
+			);
 	}
 
 	/**
@@ -175,7 +185,7 @@ class CLI {
 	 * @since 0.2.8
 	 *
 	 * @param array $args An array of arguments, most importantly the post ID.
-	 * @param array $assoc_args
+	 * @param array $assoc_args (currently unused) additional passed arguments
 	 */
 	public function reset_payouts( array $args = null, array $assoc_args = null ) {
 		$post_id = $args[0];
@@ -228,6 +238,11 @@ class CLI {
 				$progress_bar->tick();
 			}
 		}
+
+		$delete_count = absint( get_post_meta( $post->ID, '_tribe_deleted_attendees_count', true ) );
+		$delete_count = $delete_count - count( $post_tickets );
+		update_post_meta( $post->ID, '_tribe_deleted_attendees_count', $delete_count);
+
 		$progress_bar->finish();
 
 		// Due to optional delayed generation, attendees may not have been created yet.
@@ -301,6 +316,68 @@ class CLI {
 			$progress_bar->finish();
 		}
 
+	}
+
+	/**
+	 * Remove payouts, for a specified order
+	 *
+	 * @since TBD
+	 *
+	 * @param array $args An array of arguments, most importantly the order (post) ID.
+	 * @param array $assoc_args (currently unused) additional passed arguments
+	 */
+	public function delete_payouts( array $args = null, array $assoc_args = null ) {
+		$order_id    = $args[0];
+
+		if ( empty( $order_id ) ) {
+			WP_CLI::error( sprintf( __( 'Order with ID %d does not exist.', 'tribe-cli' ), $order_id ) );
+		}
+
+		$this->delete_payout( $order_id );
+	}
+
+	/**
+	 * Update payouts, for a specified order.
+	 * Currently only updates status.
+	 *
+	 * @since TBD
+	 *
+	 * @param array $args An array of arguments, most importantly the order (post) ID.
+	 * @param array $assoc_args additional passed arguments
+	 */
+	public function update_payouts( array $args = null, array $assoc_args = null ) {
+		$order_id    = $args[0];
+		$status = $assoc_args['status'];
+
+		if ( empty( $order_id ) ) {
+			WP_CLI::error( sprintf( __( 'Order with ID %d does not exist.', 'tribe-cli' ), $order_id ) );
+		}
+
+		if ( empty( $status ) ) {
+			WP_CLI::error( __( 'A status to update to is required.', 'tribe-cli' ) );
+		}
+
+		$stati_map = [
+			'pending' => Payouts::STATUS_PENDING,
+	 		'pending-order' => Payouts::STATUS_PENDING_ORDER,
+	 		'paid' => Payouts::STATUS_PAID,
+	 		'failed' => Payouts::STATUS_FAILED,
+		];
+
+		$repository = tribe_payouts();
+		$repository->by( 'order', $order_id );
+		$repository->set_found_rows( true );
+		$found = $repository->found();
+
+		if ( 0 >= $found ) {
+			WP_CLI::error( __( 'No payouts were found to be updated.', 'tribe-cli' ) );
+		}
+
+		$ids = $repository->get_ids();
+
+		$repository->set( 'post_status', $stati_map[ $status ] );
+
+		$repository->save();
 	}
 
 	/**
@@ -432,6 +509,7 @@ class CLI {
 				foreach ( $data as $key => $value ) {
 					update_post_meta( $order_id, '_' . $key, $value );
 				}
+
 				$order = new \WC_Order( $order_id );
 
 				do_action( 'woocommerce_checkout_order_processed', $order_id, $data );
@@ -439,14 +517,15 @@ class CLI {
 				// avoid sending emails
 				update_post_meta( $order_id, '_tribe_mail_sent', true );
 
-				if ( $status == 'failed' ) {
-					$order->update_status( $status );
-				} else {
+				if ( 'completed' === $status ) {
 					$order->payment_complete();
 					$order->update_status( $status );
+				} else {
+					$order->update_status( $status );
 				}
+
 				// This triggers both attendee and payout generation!
-				//do_action( 'woocommerce_order_status_changed', $order_id, 'processing', $status, $order );
+				do_action( 'woocommerce_order_status_changed', $order_id, 'processing', $status, $order );
 
 				$order_ids[] = $order_id;
 			}
