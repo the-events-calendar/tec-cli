@@ -69,5 +69,24 @@ class Payouts extends Base {
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			\WP_CLI::add_command( 'tribe payouts', $this->container->make( Command::class ), array( 'shortdesc' => $this->get_display_name() ) );
 		}
+
+		// avoid sending emails for fake orders
+		add_filter( 'woocommerce_email_classes', array( $this, 'filter_woocommerce_email_classes' ), 999 );
+	}
+
+	/**
+	 * Filters the classes of emails WooCommerce will send to avoid sending tickets confirmations
+	 * for generated tickets.
+	 *
+	 * @since TBD
+	 *
+	 * @param array $classes An array of classes that WooCommerce will call to send confirmation emails.
+	 *
+	 * @return array The filtered classes array
+	 */
+	public function filter_woocommerce_email_classes( $classes ) {
+		unset( $classes['Tribe__Tickets__Woo__Email'] );
+
+		return $classes;
 	}
 }
