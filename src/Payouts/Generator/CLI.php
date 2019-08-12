@@ -104,7 +104,6 @@ class CLI {
 		} else  {
 			$status = $assoc_args['status'];
 		}
-		error_log($status);
 
 		// Generate orders
 		$tickets      = Tribe__Tickets_Plus__Commerce__WooCommerce__Main::get_instance();
