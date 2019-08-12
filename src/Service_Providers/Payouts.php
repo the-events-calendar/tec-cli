@@ -68,6 +68,8 @@ class Payouts extends Base {
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			\WP_CLI::add_command( 'tribe payouts', $this->container->make( Command::class ), array( 'shortdesc' => $this->get_display_name() ) );
+		} else {
+			return;
 		}
 
 		// avoid sending emails for fake orders
@@ -92,11 +94,12 @@ class Payouts extends Base {
 	}
 
 	/**
-	 * Unhook all WC emails
+	 * Unhook all WC emails - we manipulate order status a lot - it creates a lot of emails.
 	 * Taken straight from the WC documentation: https://docs.woocommerce.com/document/unhookremove-woocommerce-emails/
 	 *
+	 * @since TBD
+	 *
 	 * @param \WC_Emails $email_class
-	 * @return void
 	 */
 	function unhook_alltheemails( $email_class ) {
 
