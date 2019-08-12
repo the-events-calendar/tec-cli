@@ -72,6 +72,7 @@ class Payouts extends Base {
 
 		// avoid sending emails for fake orders
 		add_filter( 'woocommerce_email_classes', array( $this, 'filter_woocommerce_email_classes' ), 999 );
+		add_action( 'woocommerce_email', 'unhook_alltheemails' );
 	}
 
 	/**
@@ -89,4 +90,39 @@ class Payouts extends Base {
 
 		return $classes;
 	}
+
+	/**
+	 * Unhook all WC emails
+	 * Taken straight from the WC documentation: https://docs.woocommerce.com/document/unhookremove-woocommerce-emails/
+	 *
+	 * @param \WC_Emails $email_class
+	 * @return void
+	 */
+	function unhook_alltheemails( $email_class ) {
+
+		/**
+		 * Hooks for sending emails during store events
+		 **/
+		remove_action( 'woocommerce_low_stock_notification', array( $email_class, 'low_stock' ) );
+		remove_action( 'woocommerce_no_stock_notification', array( $email_class, 'no_stock' ) );
+		remove_action( 'woocommerce_product_on_backorder_notification', array( $email_class, 'backorder' ) );
+
+		// New order emails
+		remove_action( 'woocommerce_order_status_pending_to_processing_notification', array( $email_class->emails['WC_Email_New_Order'], 'trigger' ) );
+		remove_action( 'woocommerce_order_status_pending_to_completed_notification', array( $email_class->emails['WC_Email_New_Order'], 'trigger' ) );
+		remove_action( 'woocommerce_order_status_pending_to_on-hold_notification', array( $email_class->emails['WC_Email_New_Order'], 'trigger' ) );
+		remove_action( 'woocommerce_order_status_failed_to_processing_notification', array( $email_class->emails['WC_Email_New_Order'], 'trigger' ) );
+		remove_action( 'woocommerce_order_status_failed_to_completed_notification', array( $email_class->emails['WC_Email_New_Order'], 'trigger' ) );
+		remove_action( 'woocommerce_order_status_failed_to_on-hold_notification', array( $email_class->emails['WC_Email_New_Order'], 'trigger' ) );
+
+		// Processing order emails
+		remove_action( 'woocommerce_order_status_pending_to_processing_notification', array( $email_class->emails['WC_Email_Customer_Processing_Order'], 'trigger' ) );
+		remove_action( 'woocommerce_order_status_pending_to_on-hold_notification', array( $email_class->emails['WC_Email_Customer_Processing_Order'], 'trigger' ) );
+
+		// Completed order emails
+		remove_action( 'woocommerce_order_status_completed_notification', array( $email_class->emails['WC_Email_Customer_Completed_Order'], 'trigger' ) );
+
+		// Note emails
+		remove_action( 'woocommerce_new_customer_note_notification', array( $email_class->emails['WC_Email_Customer_Note'], 'trigger' ) );
+}
 }

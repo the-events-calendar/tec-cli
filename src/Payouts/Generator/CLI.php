@@ -86,12 +86,12 @@ class CLI {
 		}
 
 		$legit_stati = [
+			'cancelled',
+			'completed',
+			'failed',
 			'pending',
 			'processing',
-			'completed',
-			'cancelled',
 			'refunded',
-			'failed',
 		];
 
 		if ( ! empty( $assoc_args['status'] ) && ! in_array( $assoc_args['status'], $legit_stati, true ) ) {
@@ -104,6 +104,7 @@ class CLI {
 		} else  {
 			$status = $assoc_args['status'];
 		}
+		error_log($status);
 
 		// Generate orders
 		$tickets      = Tribe__Tickets_Plus__Commerce__WooCommerce__Main::get_instance();
