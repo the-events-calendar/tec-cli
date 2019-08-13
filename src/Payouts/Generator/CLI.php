@@ -28,25 +28,7 @@ class CLI {
 	 *
 	 * @since 0.2.8
 	 */
-	public function __construct() {
-
-		// don't run if we're not using the CLI!
-		if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
-			return;
-		}
-
-		$wc_emails = \WC_Emails::instance();
-
-		// disable all emails
-		foreach ( $wc_emails->get_emails() as $email_id => $email ) {
-			$key   = 'woocommerce_' . $email->id . '_settings';
-			$value = get_option( $key );
-			// disable proactively
-			$value['enabled'] = 'no';
-
-			add_filter( 'option_' . $key, '__return_false__' );
-		}
-	}
+	public function __construct() {}
 
 	/**
 	 * Generate WC orders with payouts
@@ -191,6 +173,7 @@ class CLI {
 	 * @param array $assoc_args (currently unused) additional passed arguments
 	 */
 	public function reset_payouts( array $args = null, array $assoc_args = null ) {
+		$this->prep();
 		$post_id = $args[0];
 		$post    = get_post( absint( $post_id ) );
 
@@ -330,6 +313,7 @@ class CLI {
 	 * @param array $assoc_args (currently unused) additional passed arguments
 	 */
 	public function delete_payouts( array $args = null, array $assoc_args = null ) {
+		$this->prep();
 		$order_id    = $args[0];
 
 		if ( empty( $order_id ) ) {
@@ -349,6 +333,7 @@ class CLI {
 	 * @param array $assoc_args additional passed arguments
 	 */
 	public function update_payouts( array $args = null, array $assoc_args = null ) {
+		$this->prep();
 		$order_id    = $args[0];
 		$status = $assoc_args['status'];
 
@@ -391,6 +376,7 @@ class CLI {
 	 * @param int $order_id
 	 */
 	public function delete_payout( $order_id ) {
+		$this->prep();
 		$repository = tribe_payouts();
 		$repository->by( 'order', $order_id );
 		$repository->set_found_rows( true );
@@ -412,7 +398,8 @@ class CLI {
 	 *
 	 * @since 0.2.8
 	 */
-	public function generate_orders( $count, array $product_ids, array $args ) {
+	private function generate_orders( $count, array $product_ids, array $args ) {
+		$this->prep();
 		/** @var WooCommerce $woocommerce */
 		global $woocommerce;
 		$order_ids = [];
@@ -547,7 +534,7 @@ class CLI {
 	 *
 	 * @return int|\WP_Error
 	 */
-	public function create_user() {
+	private function create_user() {
 		$faker = Faker\Factory::create();
 		$faker->addProvider( new Faker\Provider\en_US\Address( $faker ) );
 		$faker->addProvider( new Faker\Provider\en_US\PhoneNumber( $faker ) );
@@ -614,7 +601,7 @@ class CLI {
 	 *
 	 * @return int
 	 */
-	public function get_random_user() {
+	private function get_random_user() {
 		if ( ! $this->users ) {
 			$this->users = get_users( [ 'role' => 'Subscriber', 'fields' => 'ID' ] );
 		}
@@ -627,5 +614,45 @@ class CLI {
 		$idx    = rand( 0, $length - 1 );
 
 		return $this->users[ $idx ];
+	}
+
+	private function prep() {
+		// can't be too careful!
+		if ( !defined( 'WP_CLI' ) || ! WP_CLI ) {
+			return;
+		}
+
+		error_log('prep');
+
+		// avoid sending emails for fake orders
+		add_filter( 'woocommerce_email_classes', [ $this, 'filter_woocommerce_email_classes' ], 999 );
+
+		$wc_emails = \WC_Emails::instance();
+
+		// disable all emails
+		foreach ( $wc_emails->get_emails() as $email_id => $email ) {
+			$key   = 'woocommerce_' . $email->id . '_settings';
+			$value = get_option( $key );
+			// disable proactively
+			$value['enabled'] = 'no';
+
+			add_filter( 'option_' . $key, '__return_false__' );
+		}
+	}
+
+	/**
+	 * Filters the classes of emails WooCommerce will send to avoid sending tickets confirmations
+	 * for generated tickets.
+	 *
+	 * @since TBD
+	 *
+	 * @param array $classes An array of classes that WooCommerce will call to send confirmation emails.
+	 *
+	 * @return array The filtered classes array
+	 */
+	private function filter_woocommerce_email_classes( $classes ) {
+		unset( $classes['Tribe__Tickets__Woo__Email'] );
+
+		return [];
 	}
 }
