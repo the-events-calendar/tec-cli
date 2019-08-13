@@ -44,7 +44,7 @@ class CLI {
 			// disable proactively
 			$value['enabled'] = 'no';
 
-			//add_filter( 'option_' . $key, '__return_false__' );
+			add_filter( 'option_' . $key, '__return_false__' );
 		}
 	}
 
