@@ -622,8 +622,6 @@ class CLI {
 			return;
 		}
 
-		error_log('prep');
-
 		// avoid sending emails for fake orders
 		add_filter( 'woocommerce_email_classes', [ $this, 'filter_woocommerce_email_classes' ], 999 );
 
