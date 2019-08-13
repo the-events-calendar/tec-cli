@@ -30,17 +30,21 @@ class CLI {
 	 */
 	public function __construct() {
 
+		// don't run if we're not using the CLI!
+		if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
+			return;
+		}
+
 		$wc_emails = \WC_Emails::instance();
+
 		// disable all emails
 		foreach ( $wc_emails->get_emails() as $email_id => $email ) {
 			$key   = 'woocommerce_' . $email->id . '_settings';
 			$value = get_option( $key );
+			// disable proactively
+			$value['enabled'] = 'no';
 
-			if ( isset( $value['enabled'] ) ) {
-				$value['enabled'] = 'no';
-
-				update_option( $key, $value );
-			}
+			//add_filter( 'option_' . $key, '__return_false__' );
 		}
 	}
 
@@ -104,8 +108,6 @@ class CLI {
 		} else  {
 			$status = $assoc_args['status'];
 		}
-		error_log($status);
-
 		// Generate orders
 		$tickets      = Tribe__Tickets_Plus__Commerce__WooCommerce__Main::get_instance();
 		$post_tickets = $tickets->get_tickets_ids( $post_id );
