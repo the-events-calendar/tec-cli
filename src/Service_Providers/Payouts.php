@@ -1,4 +1,5 @@
 <?php
+
 namespace Tribe\CLI\Service_Providers;
 
 use Tribe\CLI\Payouts\Command;
@@ -24,28 +25,30 @@ class Payouts extends Base {
 	 * @return array {
 	 *      List of required plugins.
 	 *
-	 * @param string $short_name   Shortened title of the plugin
-	 * @param string $class        Main PHP class
-	 * @param string $thickbox_url URL to download plugin
-	 * @param string $min_version  Optional. Minimum version of plugin needed.
-	 * @param string $ver_compare  Optional. Constant that stored the currently active version.
-	 *                             }
+	 *      @type string $short_name   Shortened title of the plugin.
+	 *      @type string $class        Main PHP class.
+	 *      @type string $thickbox_url URL to download plugin.
+	 *      @type string $min_version  Optional. Minimum version of plugin needed.
+	 *      @type string $ver_compare  Optional. Constant that stored the currently active version.
+	 * }
 	 */
 	protected function get_requisite_plugins() {
-		return array(
-			array(
+		return [
+			[
 				'short_name'        => 'The Events Calendar: Community Events Tickets',
 				'class'             => 'Tribe__Events__Community__Tickets__Main',
 				'external_download' => true,
 				'thickbox_url'      => 'https://theeventscalendar.com/product/community-tickets/',
 				'min_version'       => self::REQUIRED_COMMUNITY_TICKETS_VERSION,
 				'ver_compare'       => 'Tribe__Events__Community__Tickets__Main::VERSION',
-			),
-		);
+			],
+		];
 	}
 
 	/**
 	 * Returns the display name of this functionality.
+	 *
+	 * @since TBD
 	 *
 	 * @return string
 	 */
@@ -61,7 +64,7 @@ class Payouts extends Base {
 	public function register() {
 		if ( ! $this->should_run() ) {
 			// Display notice indicating which plugins are required
-			add_action( 'admin_notices', array( $this, 'admin_notices' ) );
+			add_action( 'admin_notices', [ $this, 'admin_notices' ] );
 
 			return;
 		}
@@ -69,5 +72,6 @@ class Payouts extends Base {
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			\WP_CLI::add_command( 'tribe payouts', $this->container->make( Command::class ), array( 'shortdesc' => $this->get_display_name() ) );
 		}
+
 	}
 }
