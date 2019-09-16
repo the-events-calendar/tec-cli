@@ -6,6 +6,21 @@ use WP_CLI;
 
 class Import_Docs extends Abstract_Doc_Command {
 	/**
+	 * @var string Plugin
+	 */
+	private $plugin;
+
+	/**
+	 * @var string Products taxonomy
+	 */
+	private $products_taxonomy = 'tribe_products';
+
+	/**
+	 * @var array Inserted terms
+	 */
+	private $inserted_terms;
+
+	/**
 	 * Imports WP PHPDoc json file
 	 *
 	 * @param $args
@@ -42,10 +57,21 @@ class Import_Docs extends Abstract_Doc_Command {
 			WP_CLI::error( sprintf( __( "JSON in %1\$s can't be decoded", 'tribe-cli' ), $file ) );
 		}
 
+		add_filter( 'wp_parser_pre_import_file', [ $this, 'wp_parser_pre_import_file' ], 10 ,2 );
+		add_filter( 'wp_parser_pre_import_item', [ $this, 'wp_parser_pre_import_item' ], 10, 5 );
+		add_action( 'wp_parser_import_item', [ $this, 'wp_parser_import_item' ], 10, 2 );
+
 		// Import data
 		$this->run_import( $phpdoc );
 	}
 
+	/**
+	 * Runs the import
+	 *
+	 * @param $data
+	 *
+	 * @throws WP_CLI\ExitException
+	 */
 	private function run_import( $data ) {
 		if ( ! wp_get_current_user()->exists() ) {
 			WP_CLI::error( __( 'Please specify a valid user: --user=<id|login>', 'tribe-cli' ) );
@@ -72,5 +98,176 @@ class Import_Docs extends Abstract_Doc_Command {
 		}
 
 		return $args[1];
+	}
+
+	/**
+	 * Preps a parser item for import
+	 *
+	 * @param $id
+	 * @param $data
+	 */
+	public function wp_parser_import_item( $id, $data ) {
+		if ( $this->plugin ) {
+			$term = $this->insert_term( $this->plugin['Name'], $this->products_taxonomy, [ 'description' => $this->plugin['Description'] ] );
+			if ( ! is_wp_error( $term ) ) {
+				wp_set_object_terms( $id, (int) $term['term_id'], $this->products_taxonomy );
+			}
+		}
+
+		// use category as a taxonomy
+		$categories = $this->get_category( $data );
+
+		// If no doc pages are found then we're done with this item.
+		if ( empty( $categories ) ) {
+			return;
+		}
+
+		// connect the item with all the relevant category terms.
+		// This is more or less copied from wp-parser class-importer.php import_item()
+		foreach ( $categories as $category ) {
+			$term = $this->insert_term( $category['content'], 'wp-parser-category' );
+			if ( ! is_wp_error( $term ) ) {
+				wp_set_object_terms( $id, (int) $term['term_id'], 'wp-parser-category' );
+			}
+		}
+	}
+
+	/**
+	 * Given a folder path to a plugin, locate the main plugin file and get the header info.
+	 *
+	 * @param $plugin_base_path
+	 *
+	 * @return array|bool
+	 */
+	private function get_plugin_info( $plugin_base_path ) {
+
+		// Scan the directory for php files.
+		$plugin_files = [];
+		$plugin_dir   = @opendir( $plugin_base_path );
+
+		if ( $plugin_dir ) {
+			while ( ( $plugin_file = readdir( $plugin_dir ) ) !== false ) {
+				if ( substr( $plugin_file, 0, 1 ) == '.' ) {
+					continue;
+				}
+
+				if ( substr( $plugin_file, -4 ) == '.php' ) {
+					$plugin_files[] = "{$plugin_base_path}/{$plugin_file}";
+				}
+			}
+
+			closedir( $plugin_dir );
+		}
+
+		// No php files found. Return false.
+		if ( empty( $plugin_files ) ) {
+			return false;
+		}
+
+		// Find the php file with a plugin header
+		foreach ( $plugin_files as $plugin_file ) {
+			if ( ! is_readable( $plugin_file ) ) {
+				continue;
+			}
+
+			$plugin_data = get_plugin_data( $plugin_file, false, false ); //Do not apply markup/translate as it'll be cached.
+
+			if ( empty ( $plugin_data['Name'] ) ) {
+				continue;
+			}
+
+			$plugin_data['Name'] = str_replace( 'The Events Calendar: ', '', $plugin_data['Name'] );
+			$plugin_data['Name'] = str_replace( 'Event Tickets: ', '', $plugin_data['Name'] );
+
+			return $plugin_data;
+		}
+	}
+
+	/**
+	 * Decide which import items to process and which ones to ignore.
+	 *
+	 * @param $return
+	 * @param $data
+	 * @param $parent_post_id
+	 * @param $import_internal
+	 * @param $arg_overrides
+	 *
+	 * @return bool
+	 */
+	public function wp_parser_pre_import_item( $return, $data, $parent_post_id, $import_internal, $arg_overrides ) {
+
+		if ( isset( $data['doc']['tags'] ) ) {
+			foreach ( $data['doc']['tags'] as $tag ) {
+				if ( 'deprecated' === trim( $tag['name'] ) ) {
+					return false;
+				}
+			}
+		}
+
+		return $return;
+	}
+
+	/**
+	 * Intercept file handling in the parser to learn more about the plugin currently being processed.
+	 *
+	 * @param $return
+	 * @param $file
+	 *
+	 * @return mixed
+	 */
+	public function wp_parser_pre_import_file( $return, $file ) {
+
+		// get plugin info. Create term with plugin name. Apply term to all posts created in this batch.
+
+		// File scanner based on include/plugin.php
+		if ( ! isset( $this->plugin ) ) {
+			$this->plugin = $this->get_plugin_info( $file['root'] );
+		}
+
+		if ( ! $this->plugin ) {
+			wp_die( "Fatal Error: Cannot get plugin info for {$file['root']}." );
+		}
+
+		return $return;
+	}
+
+	/**
+	 * Insert term function copied from wp-parser class-importer.php
+	 *
+	 * @param       $term
+	 * @param       $taxonomy
+	 * @param array $args
+	 *
+	 * @return array|mixed|WP_Error
+	 */
+	protected function insert_term( $term, $taxonomy, $args = [] ) {
+		if ( isset( $this->inserted_terms[ $taxonomy ][ $term ] ) ) {
+			return $this->inserted_terms[ $taxonomy ][ $term ];
+		}
+
+		$parent = isset( $args['parent'] ) ? $args['parent'] : 0;
+		if ( ! $inserted_term = term_exists( $term, $taxonomy, $parent ) ) {
+			$inserted_term = wp_insert_term( $term, $taxonomy, $args );
+		}
+
+		if ( ! is_wp_error( $inserted_term ) ) {
+			$this->inserted_terms[ $taxonomy ][ $term ] = $inserted_term;
+		} else {
+			WP_CLI::warning( "\tCannot set {$taxonomy} term: " . $term->get_error_message() );
+		}
+
+		return $inserted_term;
+	}
+
+
+	/**
+	 * Attempt to identify @category tag in php docbloc data.
+	 *
+	 * @param array $data
+	 *
+	 * @return array
+	 */
+	private function get_category( $data = [] ) {
+		return wp_list_filter( $data['doc']['tags'], [ 'name' => 'category' ] );
 	}
 }
