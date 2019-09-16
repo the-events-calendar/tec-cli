@@ -2,7 +2,7 @@
 /*
 Plugin Name: Tribe CLI
 Description: A collection of WP-CLI utilities for testing and maintenance purposes.
-Version: 0.2.5
+Version: 0.2.9
 Author: Modern Tribe, Inc.
 Author URI: http://m.tri.be/21
 Text Domain: tribe-cli
@@ -41,6 +41,7 @@ function tribe_cli_init() {
 	$container->register( 'Tribe\\CLI\\Service_Providers\\Tickets' );
 	$container->register( 'Tribe\\CLI\\Service_Providers\\Tribe_Commerce' );
 	$container->register( 'Tribe\\CLI\\Service_Providers\\Tickets_Plus' );
+	$container->register( 'Tribe\\CLI\\Service_Providers\\Payouts' );
 	$container->register( 'Tribe\\CLI\\Service_Providers\\Utils' );
 }
 

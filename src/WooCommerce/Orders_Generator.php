@@ -74,7 +74,7 @@ class Orders_Generator {
 			}
 
 			$available_gateways = $woocommerce->payment_gateways()->get_available_payment_gateways();
-			$payment_method     = array_rand( $available_gateways );
+			$payment_method     = empty( $args['payment_method'] ) ? array_rand( $available_gateways ) : $args['payment_method'];
 
 			// process checkout
 			$data     = array(
@@ -112,6 +112,7 @@ class Orders_Generator {
 			$order_id = $checkout->create_order( $data );
 
 			if ( $order_id ) {
+				$order = new \WC_Order( $order_id );
 				update_post_meta( $order_id, '_payment_method', 'bacs' );
 				update_post_meta( $order_id, '_payment_method_title', 'Bacs' );
 
@@ -126,8 +127,6 @@ class Orders_Generator {
 				}
 
 				do_action( 'woocommerce_checkout_order_processed', $order_id, $data );
-
-				$order = new \WC_Order( $order_id );
 
 				$status = $args['ticket_status'];
 

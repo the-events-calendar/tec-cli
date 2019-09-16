@@ -8,7 +8,7 @@ namespace Tribe\CLI\Service_Providers;
  */
 class Tribe_Commerce extends Base  {
 
-	const REQUIRED_TICKETS_VERSION = '4.7dev';
+	const REQUIRED_TICKETS_VERSION = '4.7';
 
 	/**
 	 * Returns each plugin required by this one to run
