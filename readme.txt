@@ -152,10 +152,10 @@ Our Premium Plugins:
 
 == Changelog ==
 
-+ [0.2.9] 2019-07-26 =
+= [0.2.9] 2019-07-26 =
 * Correct issue with emails being sent on payout generation
 
-+ [0.2.8] 2019-07-26 =
+= [0.2.8] 2019-07-26 =
 * Add support for payout creation
 * Add instructions for payouts and woocommerce ticket order generation
 
