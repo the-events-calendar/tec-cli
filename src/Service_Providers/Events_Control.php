@@ -1,4 +1,5 @@
 <?php
+
 namespace Tribe\CLI\Service_Providers;
 
 use WP_CLI;
@@ -6,9 +7,9 @@ use WP_CLI;
 /**
  * Class Events
  *
- * @since 0.1.0
+ * @since 0.2.10
  */
-class Events extends Base {
+class Events_Control extends Base {
 	/**
 	 * Required Events Calendar Version.
 	 *
@@ -19,28 +20,29 @@ class Events extends Base {
 	/**
 	 * Returns the display name of this functionality.
 	 *
-	 * @since 0.1.0
+	 * @since 0.2.10
 	 *
 	 * @return string
 	 */
 	public function get_display_name() {
-		return 'The Events Calendar: Event Generator';
+		return 'The Events Calendar: Event Rotate';
 	}
 
 	/**
 	 * Returns each plugin required by this one to run
 	 *
-	 * @since 0.1.0
+	 * @since 0.2.10
 	 *
 	 * @return array {
 	 *      List of required plugins.
 	 *
-	 *      @param string $short_name   Shortened title of the plugin
-	 *      @param string $class        Main PHP class
+	 *      @param string $short_name Shortened title of the plugin
+	 *      @param string $class Main PHP class
 	 *      @param string $thickbox_url URL to download plugin
-	 *      @param string $min_version  Optional. Minimum version of plugin needed.
-	 *      @param string $ver_compare  Optional. Constant that stored the currently active version.
+	 *      @param string $min_version Optional. Minimum version of plugin needed.
+	 *      @param string $ver_compare Optional. Constant that stored the currently active version.
 	 * }
+	 *
 	 */
 	protected function get_requisite_plugins() {
 		return [
@@ -48,7 +50,7 @@ class Events extends Base {
 				'short_name'   => 'The Events Calendar',
 				'class'        => 'Tribe__Events__Main',
 				'thickbox_url' => 'plugin-install.php?tab=plugin-information&plugin=the-events-calendar&TB_iframe=true',
-				'min_version'  => self::REQUIRED_TEC_VERSION,
+				'min_version'  => static::REQUIRED_TEC_VERSION,
 				'ver_compare'  => 'Tribe__Events__Main::VERSION',
 			],
 		];
@@ -57,7 +59,7 @@ class Events extends Base {
 	/**
 	 * Binds and sets up implementations.
 	 *
-	 * @since 0.1.0
+	 * @since 0.2.10
 	 */
 	public function register() {
 		if ( ! $this->should_run() ) {
@@ -71,6 +73,6 @@ class Events extends Base {
 			return;
 		}
 
-		WP_CLI::add_command( 'tribe events-generator', $this->container->make( 'Tribe\\CLI\\Events\\Generator\\CLI' ), [ 'shortdesc' => $this->get_display_name() ] );
+		WP_CLI::add_command( 'tribe events-control', $this->container->make( Tribe\CLI\Events\Control\CLI::class ), [ 'shortdesc' => $this->get_display_name() ] );
 	}
 }
