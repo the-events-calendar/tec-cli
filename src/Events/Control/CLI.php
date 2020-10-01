@@ -15,7 +15,7 @@ use WP_CLI;
 class CLI extends WP_CLI_Command {
 
 	/**
-	 * Generate events 100 at a time (default generates one).
+	 * Rotate Events dates for events found.
 	 *
 	 * ## OPTIONS
 	 *
