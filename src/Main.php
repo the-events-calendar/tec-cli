@@ -15,7 +15,7 @@ class Main extends \tad_DI52_ServiceProvider {
 	 *
 	 * @var string
 	 */
-	const VERSION = '0.2.5';
+	const VERSION = '0.2.10';
 
 	/**
 	 * Plugin directory name.
