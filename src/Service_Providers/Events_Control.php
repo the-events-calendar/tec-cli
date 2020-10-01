@@ -2,6 +2,7 @@
 
 namespace Tribe\CLI\Service_Providers;
 
+use Tribe\CLI\Events\Control;
 use WP_CLI;
 
 /**
@@ -73,6 +74,6 @@ class Events_Control extends Base {
 			return;
 		}
 
-		WP_CLI::add_command( 'tribe events-control', $this->container->make( Tribe\CLI\Events\Control\CLI::class ), [ 'shortdesc' => $this->get_display_name() ] );
+		WP_CLI::add_command( 'tribe events-control', $this->container->make( Control\CLI::class ), [ 'shortdesc' => $this->get_display_name() ] );
 	}
 }
