@@ -53,7 +53,10 @@ class CLI extends WP_CLI_Command {
 	 *
 	 * @subcommand rotate
 	 *
-	 * @since 0.1.0
+	 * @param array $args       Arguments that setup the rotation commands.
+	 * @param array $assoc_args Arguments that setup the rotation commands.
+	 *
+	 * @since 0.2.10
 	 */
 	public function rotate( $args, $assoc_args ) {
 		$start = $assoc_args['start'];
@@ -70,12 +73,12 @@ class CLI extends WP_CLI_Command {
 		}
 
 		foreach ( $events as $event ) {
-			if ( ! $is_subtraction ) {
-				list( $event_id, $new_start, $new_end ) = $this->move_event_forward( $event, $add );
-				WP_CLI::success( "Event (ID: {$event_id}) dates were increased by {$add} to Start Date '{$new_start}' and End Date '{$new_end}'." );
-			} else {
+			if ( $is_subtraction ) {
 				list( $event_id, $new_start, $new_end ) = $this->move_event_backward( $event, $sub );
 				WP_CLI::success( "Event (ID: {$event_id}) dates were decreased by {$sub} to Start Date '{$new_start}' and End Date '{$new_end}'." );
+			} else {
+				list( $event_id, $new_start, $new_end ) = $this->move_event_forward( $event, $add );
+				WP_CLI::success( "Event (ID: {$event_id}) dates were increased by {$add} to Start Date '{$new_start}' and End Date '{$new_end}'." );
 			}
 		}
 
@@ -106,8 +109,6 @@ class CLI extends WP_CLI_Command {
 	}
 
 	protected function find_events( $start, $end ) {
-		$events = tribe_events()->where( 'starts_between', $start, $end )->per_page( -1 )->all();
-
-		return $events;
+		return tribe_events()->where( 'starts_between', $start, $end )->per_page( -1 )->all();
 	}
 }
