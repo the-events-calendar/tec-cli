@@ -1,12 +1,12 @@
 {
-  "name": "moderntribe/tribe-cli",
+  "name": "the-events-calendar/tec-cli",
   "description": "A collection of WP-CLI utilities for testing and maintenance purposes.",
   "type": "wordpress-plugin",
   "license": "GPL-2.0",
   "authors": [
     {
-      "name": "Modern Tribe, Inc.",
-      "email": "tribe@tri.be"
+      "name": "The Events Calendar",
+      "email": "vendors@theeventscalendar.com"
     }
   ],
   "require": {
