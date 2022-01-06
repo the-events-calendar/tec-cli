@@ -21,6 +21,7 @@ class Build_Docs extends Abstract_Doc_Command {
 			'events-eventbrite',
 			'events-filterbar',
 			'events-pro',
+			'events-virtual',
 			'image-widget-plus',
 			'the-events-calendar',
 			'tribe-common',
