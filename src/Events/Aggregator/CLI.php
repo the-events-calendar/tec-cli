@@ -31,6 +31,10 @@ class CLI extends \WP_CLI_Command {
 
 			$schedules = $records->query( $args );
 
+			if ( empty( $schedules ) ) {
+				return;
+			}
+
 			WP_CLI::line( '****************************************' );
 			WP_CLI::line( get_option( 'blogname' ) . ' -> ' . get_option( 'siteurl' ) );
 			WP_CLI::line( '----------------------------------------' );
