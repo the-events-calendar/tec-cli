@@ -72,5 +72,6 @@ class Events extends Base {
 		}
 
 		WP_CLI::add_command( 'tribe events-generator', $this->container->make( 'Tribe\\CLI\\Events\\Generator\\CLI' ), [ 'shortdesc' => $this->get_display_name() ] );
+		WP_CLI::add_command( 'tribe events-aggregator', $this->container->make( 'Tribe\\CLI\\Events\\Aggregator\\CLI' ), [ 'shortdesc' => $this->get_display_name() ] );
 	}
 }

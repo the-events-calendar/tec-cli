@@ -1,16 +1,16 @@
 <?php
 /*
-Plugin Name: Tribe CLI
+Plugin Name: TEC CLI
 Description: A collection of WP-CLI utilities for testing and maintenance purposes.
 Version: 0.2.10
-Author: Modern Tribe, Inc.
-Author URI: http://m.tri.be/21
+Author: The Events Calendar
+Author URI: https://evnt.is/21
 Text Domain: tribe-cli
 License: GPLv2 or later
 */
 
 /*
-Copyright 2017 by Modern Tribe Inc and the contributors
+Copyright 2017 by The Events Calendar and the contributors
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
