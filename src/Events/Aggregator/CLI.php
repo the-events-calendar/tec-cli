@@ -31,7 +31,7 @@ class CLI extends \WP_CLI_Command {
 
 			$schedules = $records->query( $args );
 
-			if ( empty( $schedules ) ) {
+			if ( empty( $schedules->posts ) ) {
 				return;
 			}
 
