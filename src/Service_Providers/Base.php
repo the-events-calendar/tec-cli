@@ -64,6 +64,10 @@ abstract class Base extends \tad_DI52_ServiceProvider {
 			return;
 		}
 
+		if ( defined( 'TEC_CLI_SUPPRESS_REQUISITE_PLUGIN_WARNINGS' ) && TEC_CLI_SUPPRESS_REQUISITE_PLUGIN_WARNINGS ) {
+			return;
+		}
+
 		$links = array();
 
 		foreach ( $this->get_requisite_plugins() as $plugin ) {
