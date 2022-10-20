@@ -36,15 +36,13 @@ class CLI extends WP_CLI_Command {
 	 * ---
 	 *
 	 * [--add=<add>]
-	 * : Interval that should be added to the events found. Using DateInterval formatting.
-	 * (https://www.php.net/manual/en/dateinterval.format.php)
+	 * : Interval that should be added to the events found. Using DateInterval formatting. (https://www.php.net/manual/en/dateinterval.format.php)
 	 * ---
 	 * default: P7D
 	 * ---
 	 *
 	 * [--sub=<sub>]
-	 * : Interval that should be subtracted to the events found. Using DateInterval formatting.
-	 * (https://www.php.net/manual/en/dateinterval.format.php)
+	 * : Interval that should be subtracted to the events found. Using DateInterval formatting. (https://www.php.net/manual/en/dateinterval.format.php)
 	 * ---
 	 * default:
 	 * ---
