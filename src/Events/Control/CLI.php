@@ -5,6 +5,8 @@ namespace Tribe\CLI\Events\Control;
 use TEC\Events\Custom_Tables\V1\Models\Event;
 use TEC\Events_Pro\Custom_Tables\V1\Events\Provisional\ID_Generator;
 use TEC\Events_Pro\Custom_Tables\V1\Events\Recurrence;
+use TEC\Events_Pro\Custom_Tables\V1\Traits\With_Blocks_Editor_Recurrence;
+use TEC\Events_Pro\Custom_Tables\V1\Updates\Events;
 use WP_CLI_Command;
 use DateInterval;
 use WP_CLI;
@@ -16,7 +18,6 @@ use Tribe__Date_Utils as Dates;
  * @since 0.2.10
  */
 class CLI extends WP_CLI_Command {
-
 	/**
 	 * Rotate Events dates for events found.
 	 *
@@ -35,13 +36,15 @@ class CLI extends WP_CLI_Command {
 	 * ---
 	 *
 	 * [--add=<add>]
-	 * : Interval that should be added to the events found. Using DateInterval formatting. (https://www.php.net/manual/en/dateinterval.format.php)
+	 * : Interval that should be added to the events found. Using DateInterval formatting.
+	 * (https://www.php.net/manual/en/dateinterval.format.php)
 	 * ---
 	 * default: P7D
 	 * ---
 	 *
 	 * [--sub=<sub>]
-	 * : Interval that should be subtracted to the events found. Using DateInterval formatting. (https://www.php.net/manual/en/dateinterval.format.php)
+	 * : Interval that should be subtracted to the events found. Using DateInterval formatting.
+	 * (https://www.php.net/manual/en/dateinterval.format.php)
 	 * ---
 	 * default:
 	 * ---
@@ -124,13 +127,22 @@ class CLI extends WP_CLI_Command {
 		$interval = $is_subtraction ? new DateInterval( $sub ) : new DateInterval( $add );
 		$utc = new \DateTimeZone( 'UTC' );
 
+		// This will avoid using a possibly not defined trait on the CLI class.
+		$blocks_handler = new class {
+			use With_Blocks_Editor_Recurrence;
+
+			public function update_blocks_meta( int $post_id, array $recurrence_meta ): void {
+				$this->update_blocks_format_recurrence_meta( $post_id, $recurrence_meta );
+			}
+		};
+
 		foreach ( $event_post_ids as $event_post_id ) {
 			// Move the Event date meta.
 			$timezone = get_post_meta( $event_post_id, '_EventTimezone', true );
 			foreach (
 				[
-					'_EventStartDate'    => '_EventStartDateUTC',
-					'_EventEndDate'      => '_EventEndDateUTC',
+					'_EventStartDate' => '_EventStartDateUTC',
+					'_EventEndDate'   => '_EventEndDateUTC',
 				] as $meta_key => $meta_key_utc
 			) {
 				$moved = Dates::immutable( get_post_meta( $event_post_id, $meta_key, true ), $timezone );
@@ -151,25 +163,39 @@ class CLI extends WP_CLI_Command {
 			}
 
 			try {
-				// If the Event is recurring, then move the "On" limit of any recurrence or exclusion rule.
 				$recurrence = get_post_meta( $event_post_id, '_EventRecurrence', true );
+
+				/*
+				 * If the Event is recurring, then move the "On" limit of any recurrence or exclusion rule
+				 * and flag possible off-pattern DTSTART.
+				 */
 				if ( ! empty( $recurrence ) && is_array( $recurrence ) ) {
-					$move_on_limit = static function ( array $rule ) use ( $interval, $is_subtraction, $timezone ): array {
-						if ( ! ( isset( $rule['end-type'], $rule['end'] ) && $rule['end-type'] === 'On' ) ) {
-							return $rule;
+					$update_dates = static function ( array $rule ) use ( $event_post_id, $interval, $is_subtraction, $timezone ): array {
+						if ( isset( $rule['end-type'], $rule['end'] ) && $rule['end-type'] === 'On' ) {
+							$date_time_immutable = Dates::immutable( $rule['end'], $timezone );
+							$rule['end'] = $is_subtraction ?
+								$date_time_immutable->sub( $interval )->format( 'Y-m-d' )
+								: $date_time_immutable->add( $interval )->format( 'Y-m-d' );
 						}
 
-						$date_time_immutable = Dates::immutable( $rule['end'], $timezone );
-						$rule['end'] = $is_subtraction ?
-							$date_time_immutable->sub( $interval )->format( 'Y-m-d' )
-							: $date_time_immutable->add( $interval )->format( 'Y-m-d' );
+						// Prepare for the correct off-pattern DTSTART detection later.
+						$rule['EventStartDate'] = get_post_meta( $event_post_id, '_EventStartDate', true );
+						$rule['EventEndDate'] = get_post_meta( $event_post_id, '_EventEndDate', true );
+						unset( $rule['isOffStart'] );
 
 						return $rule;
 					};
 
-					$recurrence['rules'] = array_map( $move_on_limit, ( $recurrence['rules'] ?? [] ) );
-					$recurrence['exclusions'] = array_map( $move_on_limit, ( $recurrence['exclusions'] ?? [] ) );
+					$recurrence['rules'] = array_map( $update_dates, ( $recurrence['rules'] ?? [] ) );
+					$recurrence['exclusions'] = array_map( $update_dates, ( $recurrence['exclusions'] ?? [] ) );
+
+					// Add the off-pattern DTSTART flag, if required.
+					$recurrence = tribe( Events::class )->add_off_pattern_flag_to_meta_value( $recurrence, $event_post_id );
+
 					update_post_meta( $event_post_id, '_EventRecurrence', $recurrence );
+
+					// Update the Blocks Editor format recurrence rules and exclusion meta.
+					$blocks_handler->update_blocks_meta( $event_post_id, $recurrence );
 				}
 
 				// Refresh the Event model from the new post and meta data.
