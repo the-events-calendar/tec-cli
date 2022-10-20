@@ -122,25 +122,26 @@ class CLI extends WP_CLI_Command {
 		) ) );
 
 		$interval = $is_subtraction ? new DateInterval( $sub ) : new DateInterval( $add );
+		$utc = new \DateTimeZone( 'UTC' );
 
 		foreach ( $event_post_ids as $event_post_id ) {
 			// Move the Event date meta.
 			$timezone = get_post_meta( $event_post_id, '_EventTimezone', true );
 			foreach (
 				[
-					'_EventStartDate'    => $timezone,
-					'_EventEndDate'      => $timezone,
-					'_EventStartDateUTC' => 'UTC',
-					'_EventEndDateUTC'   => 'UTC',
-				] as $meta_key => $tz
+					'_EventStartDate'    => '_EventStartDateUTC',
+					'_EventEndDate'      => '_EventEndDateUTC',
+				] as $meta_key => $meta_key_utc
 			) {
-				$moved = Dates::immutable( get_post_meta( $event_post_id, $meta_key, true ), $tz );
-				if ( $is_subtraction ) {
-					$meta_value = $moved->sub( $interval )->format( Dates::DBDATETIMEFORMAT );
-				} else {
-					$meta_value = $moved->add( $interval )->format( Dates::DBDATETIMEFORMAT );
-				}
-				update_post_meta( $event_post_id, $meta_key, $meta_value );
+				$moved = Dates::immutable( get_post_meta( $event_post_id, $meta_key, true ), $timezone );
+				$moved = $is_subtraction ? $moved->sub( $interval ) : $moved->add( $interval );
+
+				// Update the timezone-based meta.
+				update_post_meta( $event_post_id, $meta_key, $moved->format( Dates::DBDATETIMEFORMAT ) );
+
+				// From the timezone-based meta work out the UTC time, taking daylight-saving into account.
+				$meta_value_utc = $moved->setTimezone( $utc )->format( Dates::DBDATETIMEFORMAT );
+				update_post_meta( $event_post_id, $meta_key_utc, $meta_value_utc );
 			}
 
 			$event_model = Event::find( $event_post_id, 'post_id' );
