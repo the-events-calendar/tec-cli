@@ -82,6 +82,9 @@ class CLI extends WP_CLI_Command {
 		} else {
 			$this->move_events( $events, $is_subtraction, $sub, $add );
 		}
+
+		// Flush the site object cache after the move: flushing only selected posts' cache would not work.
+		wp_cache_flush();
 	}
 
 	protected function move_event_forward( $event, $by ) {
