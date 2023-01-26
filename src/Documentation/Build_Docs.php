@@ -14,6 +14,7 @@ class Build_Docs extends Abstract_Doc_Command {
 	public function build( array $args = null, array $assoc_args = null ) {
 		$plugins = [
 			'advanced-post-manager',
+			'event-automator',
 			'event-tickets',
 			'event-tickets-plus',
 			'events-community',
