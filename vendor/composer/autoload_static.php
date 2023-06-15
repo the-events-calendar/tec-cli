@@ -7,9 +7,17 @@ namespace Composer\Autoload;
 class ComposerStaticInit279034159ae6a4223c698d91ae2015c0
 {
     public static $prefixLengthsPsr4 = array (
+        'l' => 
+        array (
+            'lucatume\\DI52\\' => 14,
+        ),
         'T' => 
         array (
             'Tribe\\CLI\\' => 10,
+        ),
+        'P' => 
+        array (
+            'Psr\\Container\\' => 14,
         ),
         'F' => 
         array (
@@ -18,9 +26,17 @@ class ComposerStaticInit279034159ae6a4223c698d91ae2015c0
     );
 
     public static $prefixDirsPsr4 = array (
+        'lucatume\\DI52\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/lucatume/di52/src',
+        ),
         'Tribe\\CLI\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
+        ),
+        'Psr\\Container\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/container/src',
         ),
         'Faker\\' => 
         array (
@@ -36,13 +52,10 @@ class ComposerStaticInit279034159ae6a4223c698d91ae2015c0
                 0 => __DIR__ . '/..' . '/xrstf/composer-php52/lib',
             ),
         ),
-        't' => 
-        array (
-            'tad_DI52_' => 
-            array (
-                0 => __DIR__ . '/..' . '/lucatume/di52/src',
-            ),
-        ),
+    );
+
+    public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
@@ -51,6 +64,7 @@ class ComposerStaticInit279034159ae6a4223c698d91ae2015c0
             $loader->prefixLengthsPsr4 = ComposerStaticInit279034159ae6a4223c698d91ae2015c0::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit279034159ae6a4223c698d91ae2015c0::$prefixDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInit279034159ae6a4223c698d91ae2015c0::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit279034159ae6a4223c698d91ae2015c0::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -11,7 +11,7 @@
   ],
   "require": {
     "xrstf/composer-php52": "^1.0",
-    "lucatume/di52": "~2.0",
+    "lucatume/di52": "~3.3.0",
     "fzaninotto/faker": "^1.7"
   },
   "autoload": {
