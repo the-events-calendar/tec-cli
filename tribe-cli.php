@@ -33,7 +33,7 @@ define( 'TRIBE_CLI_FILE', __FILE__ );
 include dirname( __FILE__ ) . '/vendor/autoload.php';
 
 function tribe_cli_init() {
-	$container = new tad_DI52_Container();
+	$container = new \lucatume\DI52\Container();
 
 	$container->register( 'Tribe\\CLI\\Main' );
 	$container->register( 'Tribe\\CLI\\Service_Providers\\Documentation' );

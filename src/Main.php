@@ -2,13 +2,14 @@
 namespace Tribe\CLI;
 
 use Tribe__Main;
+use lucatume\DI52\ServiceProvider;
 
 /**
  * Class Main
  *
  * @since 0.1.0
  */
-class Main extends \tad_DI52_ServiceProvider {
+class Main extends ServiceProvider {
 
 	/**
 	 * The current version of Event Generator.
