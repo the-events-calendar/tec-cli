@@ -3,7 +3,7 @@
 Contributors: ModernTribe, barry.hughes, bordoni, borkweb, brianjessee, brook-tribe, faction23, geoffgraham, ggwicz, jazbek, jbrinley, joshlimecuda, leahkoerper, lucatume, mastromktg, mat-lipe, mdbitz, neillmcshea, nicosantos, peterchester, reid.peifer, roblagatta, ryancurban, shane.pearlman, thatdudebutch,  zbtirrell
 Tags: widget, events, simple, tooltips, grid, month, list, calendar, event, venue, community, registration, api, dates, date, plugin, posts, sidebar, template, theme, time, google maps, google, maps, conference, workshop, concert, meeting, seminar, summit, forum, shortcode, The Events Calendar, The Events Calendar PRO, Community Events, tickets, RSVP, registration
 Requires at least: 3.9
-Stable tag: 0.2.11
+Stable tag: 0.3.0
 Tested up to: 5.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -151,6 +151,21 @@ Our Premium Plugins:
 * <a href="http://m.tri.be/18h9" target="_blank">The Events Calendar: iCal Importer</a>
 
 == Changelog ==
+
+= [0.3.0] 2023-11-17 =
+
+* Change the name of the plugin from Tribe CLI to TEC CLI
+* Updated version of Di52 from `2.X` to `3.X`.
+* Include plugin: `events-virtual`
+* Include plugin: `events-automator`
+* Include plugin: `event-tickets-wallet-plus`
+* Include plugin: `event-schedule-manager`
+* Add a command: `tribe events-aggregator`
+* Included a way to suppress requisite plugins with constant `TEC_CLI_SUPPRESS_REQUISITE_PLUGIN_WARNINGS`
+* Fix the events rotation command to properly rotate new CT1 compatible events.
+* Fix the handling of the rotation of events while Daylight savings is in place.
+* Ensure the cache is flushed after rotating events.
+* Removed `tad_DI52_*` classes and replaced with `\lucatume\DI52\` namespaced classes.
 
 = [0.2.10] 2020-10-01 =
 

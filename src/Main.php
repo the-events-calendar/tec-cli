@@ -16,7 +16,7 @@ class Main extends ServiceProvider {
 	 *
 	 * @var string
 	 */
-	const VERSION = '0.2.10';
+	const VERSION = '0.3.0';
 
 	/**
 	 * Plugin directory name.

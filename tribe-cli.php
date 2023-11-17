@@ -2,7 +2,7 @@
 /*
 Plugin Name: TEC CLI
 Description: A collection of WP-CLI utilities for testing and maintenance purposes.
-Version: 0.2.10
+Version: 0.3.0
 Author: The Events Calendar
 Author URI: https://evnt.is/21
 Text Domain: tribe-cli
