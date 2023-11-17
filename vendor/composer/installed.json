@@ -56,17 +56,17 @@
         },
         {
             "name": "lucatume/di52",
-            "version": "3.3.3",
-            "version_normalized": "3.3.3.0",
+            "version": "3.3.5",
+            "version_normalized": "3.3.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lucatume/di52.git",
-                "reference": "4185e21be2ac6c96bb1bb03970258352b6876bb2"
+                "reference": "d39d1cbbc57eb41c7aa21fab106e17b6938ec6b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lucatume/di52/zipball/4185e21be2ac6c96bb1bb03970258352b6876bb2",
-                "reference": "4185e21be2ac6c96bb1bb03970258352b6876bb2",
+                "url": "https://api.github.com/repos/lucatume/di52/zipball/d39d1cbbc57eb41c7aa21fab106e17b6938ec6b3",
+                "reference": "d39d1cbbc57eb41c7aa21fab106e17b6938ec6b3",
                 "shasum": ""
             },
             "require": {
@@ -77,7 +77,7 @@
             "require-dev": {
                 "phpunit/phpunit": "<10.0"
             },
-            "time": "2023-04-28T07:39:10+00:00",
+            "time": "2023-09-01T08:49:32+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -98,7 +98,7 @@
             "description": "A PHP 5.6 compatible dependency injection container.",
             "support": {
                 "issues": "https://github.com/lucatume/di52/issues",
-                "source": "https://github.com/lucatume/di52/tree/3.3.3"
+                "source": "https://github.com/lucatume/di52/tree/3.3.5"
             },
             "install-path": "../lucatume/di52"
         },

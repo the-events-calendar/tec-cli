@@ -1,7 +1,10 @@
 <?php
 namespace Tribe\CLI\Service_Providers;
 
-abstract class Base extends \tad_DI52_ServiceProvider {
+use lucatume\DI52\ServiceProvider;
+
+
+abstract class Base extends ServiceProvider {
 
 	/**
 	 * Returns each plugin required by this one to run
