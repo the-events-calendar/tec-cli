@@ -17,6 +17,7 @@ class Build_Docs extends Abstract_Doc_Command {
 			'event-automator',
 			'event-tickets',
 			'event-tickets-plus',
+			'event-tickets-wallet-plus',
 			'events-community',
 			'events-community-tickets',
 			'events-eventbrite',
